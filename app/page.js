@@ -725,10 +725,3 @@ export default function MultiSnapLister() {
     </>
   );
 }
-```
-
-**File → Save**, close Notepad, push:
-```
-git add .
-git commit -m "redesign UI to match SnapList style"
-git push
