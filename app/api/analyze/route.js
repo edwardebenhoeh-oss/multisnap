@@ -17,8 +17,15 @@ async function googleSearch(query) {
 }
 
 export async function POST(request) {
+  let body;
   try {
-    const { imageBase64, mediaType, mode, label, highResBase64, tone, seoOptimize } = await request.json();
+    body = await request.json();
+  } catch {
+    return Response.json({ error: "Invalid request body" }, { status: 400 });
+  }
+
+  try {
+    const { imageBase64, mediaType, mode, label, highResBase64, tone, seoOptimize, currentListing, currentTitle, rewriteTone } = body;
 
     if (mode === "detect") {
       const response = await client.messages.create({
@@ -38,7 +45,7 @@ Exclude: plain walls, floors, ceilings, windows, doors, sky, empty space.
 
 For each item provide a tight bounding box as image fractions (0.0 to 1.0).
 
-Return ONLY a valid JSON array, no markdown:
+Return ONLY a valid JSON array, no markdown, no extra text:
 [
   {
     "label": "specific item name",
@@ -71,7 +78,7 @@ Return between 1 and 10 items. Do not merge multiple items into one box.` }
             { type: "image", source: { type: "base64", media_type: "image/jpeg", data: imageData } },
             { type: "text", text: `You are a world-class resale appraiser. Identify this item with maximum precision.
 
-Item label hint: "${label}" — but verify visually, do not trust this blindly.
+Item label hint: "${label}" but verify visually, do not trust this blindly.
 
 Analyze every visual detail:
 - Shape, proportions, colors, materials, finish
@@ -92,7 +99,7 @@ Return ONLY valid JSON:
     { "name": "third option", "confidence": "low", "evidence": "evidence" }
   ],
   "category": "furniture|electronics|clothing|art|collectible|plant|animal|other",
-  "condition": "Excellent/Good/Fair/Poor — one sentence",
+  "condition": "Excellent/Good/Fair/Poor with one sentence",
   "materials": "specific materials",
   "estimatedDimensions": "size estimate"
 }` }
@@ -102,22 +109,30 @@ Return ONLY valid JSON:
 
       let pass1Data;
       try {
-        pass1Data = JSON.parse(pass1.content.map(b => b.text||"").join("").replace(/```json|```/g,"").trim());
+        pass1Data = JSON.parse(pass1.content.map(b => b.text || "").join("").replace(/```json|```/g, "").trim());
       } catch {
-        pass1Data = { pass1Identifications:[{name:label,confidence:"medium",evidence:""}], category:"other", condition:"Unknown", materials:"Unknown", estimatedDimensions:"Unknown", visualInventory:"", brandMarkings:"None visible" };
+        pass1Data = {
+          pass1Identifications: [{ name: label, confidence: "medium", evidence: "" }],
+          category: "other", condition: "Unknown", materials: "Unknown",
+          estimatedDimensions: "Unknown", visualInventory: "", brandMarkings: "None visible"
+        };
       }
 
       const topId = pass1Data.pass1Identifications?.[0]?.name || label;
       const googleResults = await googleSearch(`${topId} resale price used`);
       const googleContext = googleResults.length > 0
-        ? googleResults.map((r,i) => `${i+1}. ${r.title}: ${r.snippet}`).join("\n")
+        ? googleResults.map((r, i) => `${i+1}. ${r.title}: ${r.snippet}`).join("\n")
         : "No results found.";
 
-      const toneGuide = tone === "fast" ? "Write casually and urgently — price it to sell fast, use direct language, short sentences." :
-        tone === "profit" ? "Write professionally and thoroughly — emphasize quality and value to justify a higher price." :
-        "Write clearly and honestly — balanced tone for a fair price.";
+      const toneGuide = tone === "fast"
+        ? "Write casually and urgently — price to sell fast, direct language, short sentences."
+        : tone === "profit"
+        ? "Write professionally and thoroughly — emphasize quality and value to justify higher price."
+        : "Write clearly and honestly — balanced tone for a fair price.";
 
-      const seoGuide = seoOptimize ? "Include relevant search keywords naturally in the title and first paragraph. Think about what buyers search for." : "";
+      const seoGuide = seoOptimize
+        ? "Include relevant search keywords naturally in the title and first paragraph."
+        : "";
 
       const pass2 = await client.messages.create({
         model: "claude-sonnet-4-20250514",
@@ -140,7 +155,7 @@ ${seoGuide}
 
 EXAMPLE OF A GREAT LISTING:
 Title: "West Elm Mid-Century Modern Walnut Nightstand — Excellent Condition"
-Description: "Selling this beautiful West Elm mid-century modern nightstand in walnut finish. Features a single drawer with brass pull hardware and tapered legs. The perfect accent piece for any bedroom. Purchased for $299, asking $120. Dimensions approximately 22W x 16D x 24H inches. Local pickup only, no holds."
+Description: "Selling this beautiful West Elm mid-century modern nightstand in walnut finish. Features a single drawer with brass pull hardware and tapered legs. Purchased for $299, asking $120. Dimensions approximately 22W x 16D x 24H inches. Local pickup only."
 
 Now generate for this specific item. Use Google data to set realistic prices.
 
@@ -170,23 +185,26 @@ Return ONLY valid JSON:
 
       let result;
       try {
-        result = JSON.parse(pass2.content.map(b=>b.text||"").join("").replace(/```json|```/g,"").trim());
+        result = JSON.parse(pass2.content.map(b => b.text || "").join("").replace(/```json|```/g, "").trim());
       } catch {
         result = {
-          identifications:[{name:topId,confidence:"medium",reasoning:""}],
-          confidenceScore:50, condition:pass1Data.condition, materials:pass1Data.materials,
-          estimatedDimensions:pass1Data.estimatedDimensions, brandMarkings:pass1Data.brandMarkings,
-          googleVerified:false, tags:[], title:label, priceMin:10, priceMax:50, priceSuggested:25,
-          listing:"Unable to generate listing. Please edit manually."
+          identifications: [{ name: topId, confidence: "medium", reasoning: "" }],
+          confidenceScore: 50, condition: pass1Data.condition, materials: pass1Data.materials,
+          estimatedDimensions: pass1Data.estimatedDimensions, brandMarkings: pass1Data.brandMarkings,
+          googleVerified: false, tags: [], title: label,
+          priceMin: 10, priceMax: 50, priceSuggested: 25,
+          listing: "Unable to generate listing. Please edit manually."
         };
       }
       return Response.json(result);
     }
 
     if (mode === "rewrite") {
-      const { currentListing, currentTitle, rewriteTone } = await request.json().catch(() => ({}));
-      const toneGuide = rewriteTone === "fast" ? "Casual, urgent, price to sell fast." :
-        rewriteTone === "profit" ? "Professional, detailed, justify higher price." : "Clear, honest, balanced.";
+      const toneGuide = rewriteTone === "fast"
+        ? "Casual, urgent, price to sell fast."
+        : rewriteTone === "profit"
+        ? "Professional, detailed, justify higher price."
+        : "Clear, honest, balanced.";
 
       const response = await client.messages.create({
         model: "claude-sonnet-4-20250514",
@@ -198,15 +216,16 @@ Return ONLY valid JSON:
 Current title: ${currentTitle}
 Current listing: ${currentListing}
 
-Return ONLY valid JSON:
+Return ONLY valid JSON with no markdown:
 { "title": "new title", "listing": "new listing text" }`
         }]
       });
-      const raw = response.content.map(b=>b.text||"").join("").replace(/```json|```/g,"").trim();
+      const raw = response.content.map(b => b.text || "").join("").replace(/```json|```/g, "").trim();
       return Response.json(JSON.parse(raw));
     }
 
     return Response.json({ error: "Invalid mode" }, { status: 400 });
+
   } catch (err) {
     console.error(err);
     return Response.json({ error: err.message }, { status: 500 });
