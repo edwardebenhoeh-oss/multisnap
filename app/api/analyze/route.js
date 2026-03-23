@@ -1,10 +1,24 @@
+export const maxDuration = 60;
+
 import Anthropic from "@anthropic-ai/sdk";
 
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
+const GOOGLE_CSE_ID = process.env.GOOGLE_CSE_ID;
+
+async function googleSearch(query) {
+  try {
+    const url = `https://www.googleapis.com/customsearch/v1?key=${GOOGLE_API_KEY}&cx=${GOOGLE_CSE_ID}&q=${encodeURIComponent(query)}&num=5`;
+    const res = await fetch(url);
+    const data = await res.json();
+    if (!data.items) return [];
+    return data.items.map(item => ({ title: item.title, snippet: item.snippet }));
+  } catch { return []; }
+}
 
 export async function POST(request) {
   try {
-    const { imageBase64, mediaType, mode, label, highResBase64 } = await request.json();
+    const { imageBase64, mediaType, mode, label, highResBase64, tone, seoOptimize } = await request.json();
 
     if (mode === "detect") {
       const response = await client.messages.create({
@@ -14,30 +28,20 @@ export async function POST(request) {
           role: "user",
           content: [
             { type: "image", source: { type: "base64", media_type: mediaType, data: imageBase64 } },
-            { type: "text", text: `You are an expert appraiser and identifier scanning an image for anything worth identifying or listing.
+            { type: "text", text: `You are an expert resale appraiser scanning an image for items to sell.
 
-Identify EVERY distinct subject in the image that could be identified, listed, sold, adopted, or is otherwise interesting. Be thorough and scan the entire image carefully.
+Identify EVERY distinct item that could be individually resold. Scan the entire image carefully.
 
-Include absolutely anything visible such as:
-- Furniture, decor, lamps, rugs, mirrors, artwork, frames
-- Electronics, appliances, gadgets, cables, accessories
-- Clothing, shoes, bags, hats, jewelry, watches
-- Tools, hardware, sporting goods, outdoor equipment
-- Plants (any species, potted or growing), flowers, trees
-- Animals (pets, wildlife, birds, any creature visible)
-- Toys, games, collectibles, books, instruments
-- Food items, kitchenware, cookware
-- Vehicles, bicycles, parts
-- Anything else that has a name and could be identified
+Include: furniture, electronics, clothing, shoes, bags, jewelry, watches, tools, artwork, mirrors, rugs, lamps, decor, plants, collectibles, books, instruments, kitchenware, bicycles, anything sellable.
 
-Only exclude: plain walls, floors, ceilings, windows, doors, sky, and empty space.
+Exclude: plain walls, floors, ceilings, windows, doors, sky, empty space.
 
-For each subject provide a tight bounding box as image fractions (0.0 to 1.0).
+For each item provide a tight bounding box as image fractions (0.0 to 1.0).
 
-Return ONLY a valid JSON array, no markdown, no explanation:
+Return ONLY a valid JSON array, no markdown:
 [
   {
-    "label": "specific descriptive label (e.g. potted fiddle leaf fig, golden retriever, vintage table lamp)",
+    "label": "specific item name",
     "xFrac": 0.1,
     "yFrac": 0.05,
     "wFrac": 0.35,
@@ -46,7 +50,7 @@ Return ONLY a valid JSON array, no markdown, no explanation:
   }
 ]
 
-Be thorough. Return between 1 and 10 subjects. Do not merge multiple distinct subjects into one box.` }
+Return between 1 and 10 items. Do not merge multiple items into one box.` }
           ]
         }]
       });
@@ -65,40 +69,32 @@ Be thorough. Return between 1 and 10 subjects. Do not merge multiple distinct su
           role: "user",
           content: [
             { type: "image", source: { type: "base64", media_type: "image/jpeg", data: imageData } },
-            { type: "text", text: `You are a world-class expert identifier and appraiser. Your goal is to identify this item as specifically and accurately as possible.
+            { type: "text", text: `You are a world-class resale appraiser. Identify this item with maximum precision.
 
-The item label provided is: "${label}" but do NOT rely on this label. Look at the image with fresh eyes.
+Item label hint: "${label}" — but verify visually, do not trust this blindly.
 
-IDENTIFICATION METHODOLOGY:
+Analyze every visual detail:
+- Shape, proportions, colors, materials, finish
+- Brand markings, logos, labels, model numbers, signatures
+- Construction quality, joinery, hardware, stitching
+- Style period, design era, manufacturer indicators
+- Condition: wear, fading, damage, patina
 
-1. VISUAL INVENTORY: List every visual detail you can see including shape, proportions, colors, materials, hardware, markings, logos, labels, signatures, wear patterns, construction method, style indicators.
-
-2. CATEGORY-SPECIFIC ANALYSIS:
-- FURNITURE: leg style, joinery, hardware era, wood species, upholstery, style period, likely manufacturer
-- PLANTS: leaf shape, venation, stem structure, growth habit, pot type, species, variety, estimated age
-- ANIMALS: coat pattern, body structure, facial features, ear shape, tail, species, breed, age estimate
-- ELECTRONICS: form factor, port types, brand markings, design era, model indicators
-- ARTWORK: medium, subject matter, style, any signature or markings, frame type
-- CLOTHING: cut, construction, fabric, era, brand indicators
-- COLLECTIBLES: type, era, makers marks, rarity indicators
-
-3. BRAND/MAKER DETECTION: Look extremely carefully for any text, logos, labels, makers marks, or signatures even partial ones.
-
-4. Give the 3 most specific identifications from most to least likely.
+Give 3 identifications from most to least specific.
 
 Return ONLY valid JSON:
 {
-  "visualInventory": "Detailed inventory of every visual detail observed",
-  "brandMarkings": "Exact description of any text, logos, labels, or marks visible, or None visible",
+  "visualInventory": "detailed visual description",
+  "brandMarkings": "any visible text, logos, labels or None visible",
   "pass1Identifications": [
-    { "name": "Most specific identification", "confidence": "high", "evidence": "specific visual features" },
-    { "name": "Second possibility", "confidence": "medium", "evidence": "supporting features" },
-    { "name": "Third possibility", "confidence": "low", "evidence": "supporting features" }
+    { "name": "most specific ID", "confidence": "high", "evidence": "visual evidence" },
+    { "name": "second option", "confidence": "medium", "evidence": "evidence" },
+    { "name": "third option", "confidence": "low", "evidence": "evidence" }
   ],
-  "category": "furniture|plant|animal|electronics|clothing|art|collectible|other",
-  "condition": "Excellent/Good/Fair/Poor with explanation",
-  "materials": "Specific materials identified",
-  "estimatedDimensions": "Size estimate based on proportions"
+  "category": "furniture|electronics|clothing|art|collectible|plant|animal|other",
+  "condition": "Excellent/Good/Fair/Poor — one sentence",
+  "materials": "specific materials",
+  "estimatedDimensions": "size estimate"
 }` }
           ]
         }]
@@ -106,15 +102,22 @@ Return ONLY valid JSON:
 
       let pass1Data;
       try {
-        const raw1 = pass1.content.map(b => b.text || "").join("").replace(/```json|```/g, "").trim();
-        pass1Data = JSON.parse(raw1);
+        pass1Data = JSON.parse(pass1.content.map(b => b.text||"").join("").replace(/```json|```/g,"").trim());
       } catch {
-        pass1Data = {
-          pass1Identifications: [{ name: label, confidence: "medium", evidence: "Unable to parse" }],
-          category: "other", condition: "Unknown", materials: "Unknown",
-          estimatedDimensions: "Unknown", visualInventory: "", brandMarkings: "None visible"
-        };
+        pass1Data = { pass1Identifications:[{name:label,confidence:"medium",evidence:""}], category:"other", condition:"Unknown", materials:"Unknown", estimatedDimensions:"Unknown", visualInventory:"", brandMarkings:"None visible" };
       }
+
+      const topId = pass1Data.pass1Identifications?.[0]?.name || label;
+      const googleResults = await googleSearch(`${topId} resale price used`);
+      const googleContext = googleResults.length > 0
+        ? googleResults.map((r,i) => `${i+1}. ${r.title}: ${r.snippet}`).join("\n")
+        : "No results found.";
+
+      const toneGuide = tone === "fast" ? "Write casually and urgently — price it to sell fast, use direct language, short sentences." :
+        tone === "profit" ? "Write professionally and thoroughly — emphasize quality and value to justify a higher price." :
+        "Write clearly and honestly — balanced tone for a fair price.";
+
+      const seoGuide = seoOptimize ? "Include relevant search keywords naturally in the title and first paragraph. Think about what buyers search for." : "";
 
       const pass2 = await client.messages.create({
         model: "claude-sonnet-4-20250514",
@@ -123,44 +126,43 @@ Return ONLY valid JSON:
           role: "user",
           content: [
             { type: "image", source: { type: "base64", media_type: "image/jpeg", data: imageData } },
-            { type: "text", text: `You are verifying and finalizing an identification. A first analysis identified this item as: "${pass1Data.pass1Identifications?.[0]?.name || label}"
+            { type: "text", text: `Verify and finalize this identification and generate a complete resale listing.
 
-Visual inventory from first pass: ${pass1Data.visualInventory}
-Brand markings found: ${pass1Data.brandMarkings}
+First pass ID: "${topId}"
+Visual inventory: ${pass1Data.visualInventory}
+Brand markings: ${pass1Data.brandMarkings}
 
-YOUR TASK:
-1. Look at the image again with the first identification in mind
-2. Either CONFIRM it if the evidence strongly supports it or CORRECT it if you see something the first pass missed
-3. Assign a final confidence score 0-100
-4. Generate pricing based on current resale market (Facebook Marketplace, eBay sold listings, OfferUp)
-5. Write a compelling accurate listing
+Google market data:
+${googleContext}
 
-Pricing guidelines by category:
-- Furniture: 20-35% of retail, weighted by brand and condition
-- Plants: nursery retail value based on size and rarity
-- Animals: breed-appropriate adoption or sale value
-- Electronics: 30-50% of retail depending on age and condition
-- Art: base on medium, size, artist recognition
-- Clothing: 10-25% of retail unless designer or vintage
-- Collectibles: research comparable sold listings
+Listing tone: ${toneGuide}
+${seoGuide}
+
+EXAMPLE OF A GREAT LISTING:
+Title: "West Elm Mid-Century Modern Walnut Nightstand — Excellent Condition"
+Description: "Selling this beautiful West Elm mid-century modern nightstand in walnut finish. Features a single drawer with brass pull hardware and tapered legs. The perfect accent piece for any bedroom. Purchased for $299, asking $120. Dimensions approximately 22W x 16D x 24H inches. Local pickup only, no holds."
+
+Now generate for this specific item. Use Google data to set realistic prices.
 
 Return ONLY valid JSON:
 {
   "identifications": [
-    { "name": "Final most specific identification", "confidence": "high", "reasoning": "combined evidence from both passes" },
-    { "name": "Second possibility", "confidence": "medium", "reasoning": "evidence" },
-    { "name": "Third possibility", "confidence": "low", "reasoning": "evidence" }
+    { "name": "final specific ID", "confidence": "high", "reasoning": "evidence" },
+    { "name": "second", "confidence": "medium", "reasoning": "evidence" },
+    { "name": "third", "confidence": "low", "reasoning": "evidence" }
   ],
   "confidenceScore": 85,
   "condition": "${pass1Data.condition}",
   "materials": "${pass1Data.materials}",
   "estimatedDimensions": "${pass1Data.estimatedDimensions}",
   "brandMarkings": "${pass1Data.brandMarkings}",
-  "title": "Accurate compelling listing title under 80 chars",
+  "googleVerified": true,
+  "tags": ["keyword1", "keyword2", "keyword3", "keyword4", "keyword5"],
+  "title": "compelling listing title under 80 chars",
   "priceMin": 25,
   "priceMax": 150,
   "priceSuggested": 75,
-  "listing": "4 paragraph professional listing. Para 1: precise identification and standout features. Para 2: materials, construction, breed or species details, or model specifics. Para 3: honest condition assessment with any flaws noted. Para 4: dimensions estimate and relevant care or logistics info."
+  "listing": "3-4 paragraph professional listing in the requested tone"
 }` }
           ]
         }]
@@ -168,27 +170,43 @@ Return ONLY valid JSON:
 
       let result;
       try {
-        const raw2 = pass2.content.map(b => b.text || "").join("").replace(/```json|```/g, "").trim();
-        result = JSON.parse(raw2);
+        result = JSON.parse(pass2.content.map(b=>b.text||"").join("").replace(/```json|```/g,"").trim());
       } catch {
         result = {
-          identifications: pass1Data.pass1Identifications?.map(i => ({ name: i.name, confidence: i.confidence, reasoning: i.evidence })) || [{ name: label, confidence: "medium", reasoning: "Parse error" }],
-          confidenceScore: 50,
-          condition: pass1Data.condition,
-          materials: pass1Data.materials,
-          estimatedDimensions: pass1Data.estimatedDimensions,
-          brandMarkings: pass1Data.brandMarkings,
-          title: label,
-          priceMin: 10, priceMax: 50, priceSuggested: 25,
-          listing: "Unable to generate listing. Please edit manually."
+          identifications:[{name:topId,confidence:"medium",reasoning:""}],
+          confidenceScore:50, condition:pass1Data.condition, materials:pass1Data.materials,
+          estimatedDimensions:pass1Data.estimatedDimensions, brandMarkings:pass1Data.brandMarkings,
+          googleVerified:false, tags:[], title:label, priceMin:10, priceMax:50, priceSuggested:25,
+          listing:"Unable to generate listing. Please edit manually."
         };
       }
-
       return Response.json(result);
     }
 
-    return Response.json({ error: "Invalid mode" }, { status: 400 });
+    if (mode === "rewrite") {
+      const { currentListing, currentTitle, rewriteTone } = await request.json().catch(() => ({}));
+      const toneGuide = rewriteTone === "fast" ? "Casual, urgent, price to sell fast." :
+        rewriteTone === "profit" ? "Professional, detailed, justify higher price." : "Clear, honest, balanced.";
 
+      const response = await client.messages.create({
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 1000,
+        messages: [{
+          role: "user",
+          content: `Rewrite this resale listing with tone: ${toneGuide}
+
+Current title: ${currentTitle}
+Current listing: ${currentListing}
+
+Return ONLY valid JSON:
+{ "title": "new title", "listing": "new listing text" }`
+        }]
+      });
+      const raw = response.content.map(b=>b.text||"").join("").replace(/```json|```/g,"").trim();
+      return Response.json(JSON.parse(raw));
+    }
+
+    return Response.json({ error: "Invalid mode" }, { status: 400 });
   } catch (err) {
     console.error(err);
     return Response.json({ error: err.message }, { status: 500 });
