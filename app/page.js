@@ -42,6 +42,21 @@ const STYLES = `
   .nav-tab.active { color: var(--accent); background: rgba(124,111,255,0.12); }
   .nav-beta { font-size: 0.58rem; font-weight: 700; color: var(--accent); background: rgba(124,111,255,0.15); border: 1px solid rgba(124,111,255,0.3); padding: 3px 8px; border-radius: 100px; letter-spacing: 0.08em; }
 
+  /* STEP PROGRESS */
+  .step-progress { display: flex; align-items: center; gap: 0; margin-bottom: 24px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px 18px; }
+  .step-item { display: flex; align-items: center; gap: 8px; flex: 1; }
+  .step-circle { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.65rem; font-weight: 800; flex-shrink: 0; transition: all 0.3s; }
+  .step-circle.done { background: var(--success); color: #000; }
+  .step-circle.active { background: var(--accent); color: #fff; box-shadow: 0 0 12px var(--glow); }
+  .step-circle.pending { background: var(--surface3); color: var(--muted); border: 1px solid var(--border2); }
+  .step-label { font-size: 0.68rem; font-weight: 700; transition: color 0.3s; }
+  .step-label.active { color: var(--accent); }
+  .step-label.done { color: var(--success); }
+  .step-label.pending { color: var(--muted); }
+  .step-divider { width: 24px; height: 2px; background: var(--border2); margin: 0 4px; flex-shrink: 0; }
+  .step-divider.done { background: var(--success); }
+
+  /* CAMERA */
   .camera-screen { position: relative; width: 100%; background: #000; overflow: hidden; }
   .camera-video { width: 100%; height: 100%; display: block; object-fit: cover; background: #000; }
   .scan-overlay { position: absolute; inset: 0; pointer-events: none; }
@@ -50,18 +65,17 @@ const STYLES = `
   .scan-corner.tr { top: 16px; right: 16px; border-width: 3px 3px 0 0; border-radius: 0 6px 0 0; }
   .scan-corner.bl { bottom: 80px; left: 16px; border-width: 0 0 3px 3px; border-radius: 0 0 0 6px; }
   .scan-corner.br { bottom: 80px; right: 16px; border-width: 0 3px 3px 0; border-radius: 0 0 6px 0; }
-  .scan-line { position: absolute; left: 16px; right: 16px; height: 2px; background: linear-gradient(90deg, transparent, var(--accent), transparent); animation: scanLine 2s ease-in-out infinite; top: 16px; }
+  .scan-line { position: absolute; left: 16px; right: 16px; height: 2px; background: linear-gradient(90deg, transparent, var(--accent), transparent); animation: scanLine 2s ease-in-out infinite; }
   @keyframes scanLine { 0%{top:16px;opacity:1} 90%{opacity:1} 100%{top:calc(100% - 80px);opacity:0} }
-  .scan-status { position: absolute; top: 16px; left: 50%; transform: translateX(-50%); background: rgba(8,8,15,0.85); backdrop-filter: blur(8px); border: 1px solid var(--border2); border-radius: 100px; padding: 6px 16px; font-size: 0.7rem; font-weight: 700; color: var(--text2); white-space: nowrap; pointer-events: none; }
-  .scan-status.active { color: var(--accent); border-color: rgba(124,111,255,0.4); }
+  .scan-status { position: absolute; top: 16px; left: 50%; transform: translateX(-50%); background: rgba(8,8,15,0.85); backdrop-filter: blur(8px); border: 1px solid var(--border2); border-radius: 100px; padding: 6px 16px; font-size: 0.7rem; font-weight: 700; color: var(--accent); white-space: nowrap; pointer-events: none; border-color: rgba(124,111,255,0.4); }
   .camera-controls { position: absolute; bottom: 0; left: 0; right: 0; padding: 12px 20px 28px; background: linear-gradient(transparent, rgba(8,8,15,0.95)); display: flex; align-items: center; justify-content: space-between; gap: 12px; }
   .cam-btn { background: rgba(255,255,255,0.1); backdrop-filter: blur(8px); color: var(--text); border: 1px solid rgba(255,255,255,0.15); font-family: 'Inter', sans-serif; font-size: 0.72rem; font-weight: 600; padding: 10px 16px; border-radius: 100px; cursor: pointer; touch-action: manipulation; transition: all 0.2s; white-space: nowrap; }
   .cam-btn:hover { background: rgba(255,255,255,0.18); }
   .scan-now-btn { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff; font-family: 'Inter', sans-serif; font-size: 0.9rem; font-weight: 800; padding: 14px 32px; border-radius: 100px; border: none; cursor: pointer; touch-action: manipulation; transition: all 0.2s; letter-spacing: -0.02em; box-shadow: 0 4px 24px var(--glow); flex: 1; max-width: 200px; }
   .scan-now-btn:hover { transform: scale(1.04); }
   .scan-now-btn:active { transform: scale(0.97); }
-  .scan-now-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
+  /* FRAME + BBOXES */
   .frame-container { position: relative; width: 100%; background: #000; overflow: hidden; }
   .captured-frame { width: 100%; display: block; }
   .bbox { position: absolute; border: 2px solid; border-radius: 8px; cursor: pointer; animation: bboxPop 0.35s cubic-bezier(0.34,1.56,0.64,1) forwards; opacity: 0; }
@@ -71,6 +85,7 @@ const STYLES = `
   .bbox-num { position: absolute; top: -10px; right: -10px; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.6rem; font-weight: 800; color: #fff; }
   .bbox.sel-box { box-shadow: 0 0 0 2px #fff inset; }
 
+  /* HERO */
   .hero { text-align: center; padding: 64px 24px 48px; position: relative; overflow: hidden; }
   .hero::before { content:''; position:absolute; top:-100px; left:50%; transform:translateX(-50%); width:500px; height:500px; background:radial-gradient(ellipse,rgba(124,111,255,0.1) 0%,transparent 70%); pointer-events:none; }
   .hero-pill { display:inline-flex; align-items:center; gap:8px; background:var(--surface2); border:1px solid var(--border2); border-radius:100px; padding:6px 16px; font-size:0.7rem; font-weight:600; color:var(--text2); margin-bottom:28px; }
@@ -80,6 +95,7 @@ const STYLES = `
   .hero-h1 .grad { background:linear-gradient(135deg,var(--accent) 0%,var(--accent2) 50%,var(--accent3) 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
   .hero-sub { font-size:0.95rem; color:var(--text2); line-height:1.7; max-width:440px; margin:0 auto 32px; }
 
+  /* UPLOAD ZONE */
   .scan-wrap { max-width: 640px; margin: 0 auto; padding: 0 20px 60px; }
   .scan-zone { border: 2px dashed var(--border2); border-radius: var(--radius); background: var(--surface); padding: 52px 28px; text-align: center; transition: all 0.3s; position: relative; overflow: hidden; }
   .scan-zone::after { content:''; position:absolute; inset:0; background:radial-gradient(ellipse at 50% 120%,rgba(124,111,255,0.07) 0%,transparent 60%); pointer-events:none; }
@@ -95,13 +111,17 @@ const STYLES = `
   .btn-outline:hover { border-color:var(--accent); color:var(--accent); }
   .scan-hint { font-size:0.68rem; color:var(--muted); margin-top:16px; }
 
+  /* BOTTOM SHEET */
   .sheet-backdrop { position:fixed; inset:0; background:rgba(0,0,0,0.75); z-index:300; backdrop-filter:blur(6px); animation:fadeIn 0.2s ease; }
   @keyframes fadeIn{from{opacity:0}to{opacity:1}}
-  .bottom-sheet { position:fixed; bottom:0; left:0; right:0; background:var(--surface); border-top:1px solid var(--border2); border-radius:24px 24px 0 0; z-index:301; max-height:78vh; overflow-y:auto; animation:slideUp 0.32s cubic-bezier(0.34,1.56,0.64,1); }
+  .bottom-sheet { position:fixed; bottom:0; left:0; right:0; background:var(--surface); border-top:1px solid var(--border2); border-radius:24px 24px 0 0; z-index:301; max-height:82vh; overflow-y:auto; animation:slideUp 0.32s cubic-bezier(0.34,1.56,0.64,1); }
   @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
-  .sheet-handle { width:40px; height:4px; background:var(--border2); border-radius:2px; margin:14px auto 18px; }
-  .sheet-title { font-size:1.05rem; font-weight:800; padding:0 20px 14px; letter-spacing:-0.02em; }
-  .sheet-items { padding:0 16px 16px; display:flex; flex-direction:column; gap:9px; }
+  .sheet-handle { width:40px; height:4px; background:var(--border2); border-radius:2px; margin:14px auto 0; }
+  .sheet-header { padding: 16px 20px 0; }
+  .sheet-step { font-size:0.6rem; color:var(--accent); font-weight:700; letter-spacing:0.12em; text-transform:uppercase; margin-bottom:6px; }
+  .sheet-title { font-size:1.1rem; font-weight:900; letter-spacing:-0.02em; margin-bottom:6px; }
+  .sheet-desc { font-size:0.72rem; color:var(--text2); line-height:1.5; padding-bottom:16px; border-bottom:1px solid var(--border); }
+  .sheet-items { padding:14px 16px; display:flex; flex-direction:column; gap:9px; }
   .sheet-item { display:flex; align-items:center; gap:13px; padding:11px 13px; background:var(--surface2); border:1px solid var(--border); border-radius:var(--radius-sm); cursor:pointer; transition:all 0.2s; }
   .sheet-item:hover,.sheet-item.sel { border-color:var(--accent); background:rgba(124,111,255,0.07); }
   .sheet-thumb { width:52px; height:52px; border-radius:9px; object-fit:cover; background:var(--surface3); flex-shrink:0; }
@@ -110,8 +130,9 @@ const STYLES = `
   .sheet-sub { font-size:0.65rem; color:var(--text2); }
   .sheet-check { width:22px; height:22px; border-radius:50%; border:2px solid var(--border2); display:flex; align-items:center; justify-content:center; font-size:0.65rem; flex-shrink:0; transition:all 0.2s; }
   .sheet-item.sel .sheet-check { background:var(--accent); border-color:var(--accent); color:#fff; }
-  .sheet-foot { padding:14px 18px 32px; border-top:1px solid var(--border); display:flex; gap:10px; }
+  .sheet-foot { padding:14px 18px 36px; border-top:1px solid var(--border); display:flex; gap:10px; }
 
+  /* LOADING */
   .loading-full { display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:55vh; padding:40px 24px; text-align:center; }
   .loader-ring { position:relative; width:60px; height:60px; margin:0 auto 24px; }
   .loader-outer { width:60px; height:60px; border:3px solid var(--border2); border-top-color:var(--accent); border-radius:50%; animation:spin 0.9s linear infinite; }
@@ -124,7 +145,7 @@ const STYLES = `
   .step-pill.active { border-color:var(--accent); color:var(--accent); background:rgba(124,111,255,0.1); }
   .step-pill.done { color:var(--success); }
 
-  .crop-wrap { max-width: 960px; margin: 0 auto; padding: 24px 18px; }
+  /* CROP */
   .crop-grid { display:grid; grid-template-columns:1fr; gap:14px; }
   @media(min-width:600px){.crop-grid{grid-template-columns:repeat(2,1fr)}}
   @media(min-width:880px){.crop-grid{grid-template-columns:repeat(3,1fr)}}
@@ -149,6 +170,13 @@ const STYLES = `
   .skip-btn:hover { border-color:var(--danger); color:var(--danger); }
   .skip-btn.skipped { border-color:rgba(248,113,113,0.4); color:var(--danger); background:rgba(248,113,113,0.06); }
 
+  /* GENERATE CTA BOX */
+  .generate-cta { background: linear-gradient(135deg, rgba(124,111,255,0.12), rgba(176,106,255,0.08)); border: 1px solid rgba(124,111,255,0.3); border-radius: var(--radius-sm); padding: 20px; margin-top: 24px; text-align: center; }
+  .generate-cta-title { font-size: 1rem; font-weight: 800; margin-bottom: 6px; letter-spacing: -0.02em; }
+  .generate-cta-sub { font-size: 0.72rem; color: var(--text2); margin-bottom: 16px; line-height: 1.5; }
+  .generate-cta-btns { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+
+  /* RESULTS */
   .results-wrap { max-width:1200px; margin:0 auto; padding:28px 18px 80px; }
   .results-hdr { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:28px; gap:14px; flex-wrap:wrap; }
   .results-h { font-size:1.5rem; font-weight:900; letter-spacing:-0.04em; }
@@ -184,6 +212,7 @@ const STYLES = `
   .btn-card.danger { color:rgba(248,113,113,0.7); border-color:rgba(248,113,113,0.2); }
   .btn-card.danger:hover { color:var(--danger); border-color:var(--danger); }
 
+  /* EXPANDED CARD */
   .exp-inner { display:grid; grid-template-columns:1fr; gap:24px; padding:20px; }
   @media(min-width:680px){.exp-inner{grid-template-columns:290px 1fr;padding:28px;gap:36px}}
   .exp-img { width:100%; border-radius:var(--radius-sm); border:1px solid var(--border); object-fit:contain; background:#05050f; max-height:240px; cursor:pointer; }
@@ -244,6 +273,7 @@ const STYLES = `
   .btn-del:hover { color:var(--danger); border-color:var(--danger); }
   .pkg-note { font-size:0.6rem; color:var(--muted); margin-top:9px; line-height:1.6; }
 
+  /* POST */
   .post-wrap { max-width:640px; margin:0 auto; padding:36px 18px 80px; }
   .post-hdr { text-align:center; margin-bottom:36px; }
   .post-h { font-size:1.7rem; font-weight:900; letter-spacing:-0.04em; margin-bottom:9px; }
@@ -266,6 +296,7 @@ const STYLES = `
   .post-all-btn:hover { transform:translateY(-2px); }
   .post-all-btn:disabled { opacity:0.5; cursor:not-allowed; transform:none; }
 
+  /* DASHBOARD */
   .dash-wrap { max-width:1080px; margin:0 auto; padding:28px 18px 80px; }
   .dash-stats { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-bottom:24px; }
   @media(min-width:680px){.dash-stats{grid-template-columns:repeat(4,1fr)}}
@@ -292,18 +323,20 @@ const STYLES = `
   .dash-price { font-size:1.05rem; font-weight:900; letter-spacing:-0.03em; }
   .dash-empty { text-align:center; padding:40px 20px; color:var(--muted); font-size:0.8rem; }
 
+  /* MISC */
   .lightbox { position:fixed; inset:0; background:rgba(5,5,10,0.97); z-index:500; display:flex; align-items:center; justify-content:center; padding:20px; animation:fadeIn 0.2s ease; }
   .lb-img { max-width:100%; max-height:90vh; border-radius:var(--radius-sm); object-fit:contain; }
   .lb-video { max-width:100%; max-height:90vh; border-radius:var(--radius-sm); }
   .lb-close { position:absolute; top:18px; right:18px; background:rgba(255,255,255,0.08); color:#fff; border:1px solid rgba(255,255,255,0.15); font-size:1rem; width:42px; height:42px; border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:background 0.2s; }
   .lb-close:hover { background:rgba(255,255,255,0.15); }
   .err-box { background:rgba(248,113,113,0.08); border:1px solid rgba(248,113,113,0.25); color:var(--danger); padding:13px 16px; border-radius:var(--radius-sm); font-size:0.76rem; margin-top:14px; line-height:1.5; max-width:640px; margin-left:auto; margin-right:auto; }
+  .cam-error { background:rgba(248,113,113,0.08); border:1px solid rgba(248,113,113,0.25); color:var(--danger); padding:16px 20px; border-radius:var(--radius-sm); font-size:0.78rem; line-height:1.6; text-align:center; max-width:500px; margin:20px auto 0; }
   .sec-hdr { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:20px; gap:12px; flex-wrap:wrap; }
   .sec-h { font-size:1.4rem; font-weight:900; letter-spacing:-0.04em; }
   .sec-sub { font-size:0.7rem; color:var(--text2); margin-top:4px; }
   .btn-ghost-sm { background:transparent; color:var(--text2); border:1px solid var(--border); font-family:'Inter',sans-serif; font-size:0.73rem; font-weight:600; padding:8px 16px; border-radius:var(--radius-xs); cursor:pointer; touch-action:manipulation; transition:all 0.2s; }
   .btn-ghost-sm:hover { color:var(--text); border-color:var(--border2); }
-  .cam-error { background:rgba(248,113,113,0.08); border:1px solid rgba(248,113,113,0.25); color:var(--danger); padding:16px 20px; border-radius:var(--radius-sm); font-size:0.78rem; line-height:1.6; text-align:center; max-width:500px; margin:20px auto 0; }
+  .page-pad { max-width: 960px; margin: 0 auto; padding: 20px 18px; }
 `;
 
 const BBOX_COLORS = [
@@ -323,6 +356,26 @@ const PLATFORMS = [
   { id:"offerup", name:"OfferUp", icon:"🟠", desc:"Best for quick local sales, all categories", color:"#ff5a35" },
 ];
 
+// ── STEP PROGRESS BAR ────────────────────────────────────
+function StepProgress({ current }) {
+  const steps = ["Scan", "Review", "Crop", "Generate"];
+  return (
+    <div className="step-progress">
+      {steps.map((s, i) => {
+        const state = i < current ? "done" : i === current ? "active" : "pending";
+        return (
+          <div key={s} className="step-item">
+            <div className={`step-circle ${state}`}>{state === "done" ? "✓" : i + 1}</div>
+            <div className={`step-label ${state}`}>{s}</div>
+            {i < steps.length - 1 && <div className={`step-divider${state === "done" ? " done" : ""}`} />}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+// ── HELPERS ───────────────────────────────────────────────
 function compressImage(file) {
   return new Promise((resolve) => {
     const reader = new FileReader();
@@ -392,6 +445,21 @@ function getEventPos(e) {
   return { clientX:e.clientX, clientY:e.clientY };
 }
 
+function dataUrlToBlob(dataUrl) {
+  const [h,d]=dataUrl.split(",");
+  const mime=h.match(/:(.*?);/)[1];
+  const bin=atob(d),arr=new Uint8Array(bin.length);
+  for(let i=0;i<bin.length;i++)arr[i]=bin.charCodeAt(i);
+  return new Blob([arr],{type:mime});
+}
+
+function confColor(score) {
+  if(score>=80)return{bg:"rgba(74,222,128,0.15)",color:"#4ade80"};
+  if(score>=60)return{bg:"rgba(251,191,36,0.15)",color:"#fbbf24"};
+  return{bg:"rgba(248,113,113,0.15)",color:"#f87171"};
+}
+
+// ── CROP EDITOR ───────────────────────────────────────────
 function CropEditor({ imgSrc, cropBox, onChange }) {
   const containerRef = useRef();
   const dragRef = useRef(null);
@@ -452,31 +520,19 @@ function CropEditor({ imgSrc, cropBox, onChange }) {
   );
 }
 
-function dataUrlToBlob(dataUrl) {
-  const [h,d]=dataUrl.split(",");
-  const mime=h.match(/:(.*?);/)[1];
-  const bin=atob(d),arr=new Uint8Array(bin.length);
-  for(let i=0;i<bin.length;i++)arr[i]=bin.charCodeAt(i);
-  return new Blob([arr],{type:mime});
-}
-
-function confColor(score) {
-  if(score>=80)return{bg:"rgba(74,222,128,0.15)",color:"#4ade80"};
-  if(score>=60)return{bg:"rgba(251,191,36,0.15)",color:"#fbbf24"};
-  return{bg:"rgba(248,113,113,0.15)",color:"#f87171"};
-}
-
+// ── MAIN APP ──────────────────────────────────────────────
 export default function App() {
+  // The flow: upload → review → crop → results
+  // "phase" drives which screen shows
   const [tab, setTab] = useState("scan");
+  const [phase, setPhase] = useState("upload"); // upload | loading | review | crop | results
   const [cameraActive, setCameraActive] = useState(false);
   const [capturedImage, setCapturedImage] = useState(null);
-  const [phase, setPhase] = useState("upload");
   const [loadStep, setLoadStep] = useState(0);
   const [detectedObjects, setDetectedObjects] = useState([]);
   const [cropBoxes, setCropBoxes] = useState([]);
   const [skipped, setSkipped] = useState([]);
   const [cropPreviews, setCropPreviews] = useState([]);
-  const [showSheet, setShowSheet] = useState(false);
   const [selectedItems, setSelectedItems] = useState([]);
   const [items, setItems] = useState([]);
   const [expandedId, setExpandedId] = useState(null);
@@ -504,87 +560,56 @@ export default function App() {
   const startCamera = useCallback(async () => {
     setCameraError(null);
     setCameraActive(true);
-
-    // Small delay to let React render the video element first
     await new Promise(r => setTimeout(r, 200));
-
     const video = videoRef.current;
     if (!video) {
       setCameraError("Could not initialize camera. Please use Upload Photo instead.");
       setCameraActive(false);
       return;
     }
-
     let stream;
     try {
-      // Try rear camera first (mobile), fall back to any camera
       try {
-        stream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: { ideal: "environment" } }
-        });
+        stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: "environment" } } });
       } catch {
         stream = await navigator.mediaDevices.getUserMedia({ video: true });
       }
     } catch (err) {
       let msg = "Camera error. Please use Upload Photo instead.";
-      if (err.name === "NotAllowedError" || err.name === "PermissionDeniedError") {
-        msg = "Camera permission denied. Please allow camera access in your browser settings, then try again.";
-      } else if (err.name === "NotFoundError" || err.name === "DevicesNotFoundError") {
-        msg = "No camera found on this device. Please use Upload Photo instead.";
-      } else if (err.name === "NotReadableError") {
-        msg = "Camera is in use by another app. Please close other apps and try again.";
-      }
-      setCameraError(msg);
-      setCameraActive(false);
-      return;
+      if (err.name === "NotAllowedError" || err.name === "PermissionDeniedError") msg = "Camera permission denied. Please allow camera access in your browser settings.";
+      else if (err.name === "NotFoundError") msg = "No camera found on this device. Please use Upload Photo instead.";
+      else if (err.name === "NotReadableError") msg = "Camera is in use by another app. Please close other apps and try again.";
+      setCameraError(msg); setCameraActive(false); return;
     }
-
     streamRef.current = stream;
-
-    // Attach stream to video element
     video.srcObject = stream;
     video.muted = true;
     video.setAttribute("muted", "");
     video.setAttribute("playsinline", "");
     video.setAttribute("webkit-playsinline", "");
-
-    try {
-      await video.play();
-    } catch {
-      // Some browsers need user interaction — still show the video
-    }
+    try { await video.play(); } catch { /* some browsers need interaction */ }
   }, []);
 
   const stopCamera = useCallback(() => {
-    if (streamRef.current) {
-      streamRef.current.getTracks().forEach(t => t.stop());
-      streamRef.current = null;
-    }
-    if (videoRef.current) {
-      videoRef.current.srcObject = null;
-    }
+    if (streamRef.current) { streamRef.current.getTracks().forEach(t => t.stop()); streamRef.current = null; }
+    if (videoRef.current) videoRef.current.srcObject = null;
     setCameraActive(false);
   }, []);
 
   const captureFrame = useCallback(() => {
     const video = videoRef.current;
     if (!video || !streamRef.current) return;
-
     const canvas = document.createElement("canvas");
-    canvas.width = video.videoWidth || 1280;
-    canvas.height = video.videoHeight || 720;
+    canvas.width = video.videoWidth || 1280; canvas.height = video.videoHeight || 720;
     canvas.getContext("2d").drawImage(video, 0, 0, canvas.width, canvas.height);
     const dataUrl = canvas.toDataURL("image/jpeg", 0.92);
-
     stopCamera();
     const imgObj = { dataUrl, name: "camera-capture.jpg", size: (dataUrl.length/1024).toFixed(1)+" KB" };
     setCapturedImage(imgObj);
     runDetection(dataUrl);
   }, [stopCamera]);
 
-  useEffect(() => {
-    return () => stopCamera();
-  }, [stopCamera]);
+  useEffect(() => { return () => stopCamera(); }, [stopCamera]);
 
   // ── FILE UPLOAD ──────────────────────────────────────────
   const handleFile = useCallback(async (file) => {
@@ -593,7 +618,7 @@ export default function App() {
     const compressed = await compressImage(file);
     setCapturedImage(compressed);
     setDetectedObjects([]); setCropBoxes([]); setSkipped([]);
-    setShowSheet(false); setError(null);
+    setError(null);
     runDetection(compressed.dataUrl);
   }, [stopCamera]);
 
@@ -607,26 +632,21 @@ export default function App() {
     try {
       const base64 = dataUrl.split(",")[1];
       const mediaType = dataUrl.split(";")[0].split(":")[1];
-      const res = await fetch("/api/analyze", {
-        method:"POST", headers:{"Content-Type":"application/json"},
-        body: JSON.stringify({ imageBase64: base64, mediaType, mode: "detect" })
-      });
+      const res = await fetch("/api/analyze", { method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({ imageBase64: base64, mediaType, mode: "detect" }) });
       const data = await res.json();
       if (data.error) throw new Error(data.error);
       setDetectedObjects(data.objects);
       setCropBoxes(data.objects.map(o => ({ x:o.xFrac, y:o.yFrac, w:o.wFrac, h:o.hFrac })));
       setSkipped([]);
       setSelectedItems(data.objects.map((_,i) => i));
-      setLoadStep(2); setPhase("detect");
-      setTimeout(() => setShowSheet(true), 500);
-    } catch(err) {
-      setError(err.message); setPhase("upload");
-    }
+      setLoadStep(2);
+      setPhase("review"); // go to review first — user taps "Crop Images" to proceed
+    } catch(err) { setError(err.message); setPhase("upload"); }
   };
 
-  // Update crop previews
+  // ── CROP PREVIEWS ─────────────────────────────────────────
   useEffect(() => {
-    if (phase !== "detect" || !capturedImage) return;
+    if ((phase !== "review" && phase !== "crop") || !capturedImage) return;
     const img = new Image();
     img.onload = () => {
       const nw = img.naturalWidth, nh = img.naturalHeight;
@@ -640,7 +660,6 @@ export default function App() {
 
   // ── GENERATE LISTINGS ─────────────────────────────────────
   const generateListings = async () => {
-    setShowSheet(false);
     setPhase("loading"); setLoadStep(3);
     if (!capturedImage) return;
     const tempImg = new Image();
@@ -653,17 +672,14 @@ export default function App() {
         const obj = detectedObjects[i], box = cropBoxes[i];
         const px = { x:box.x*nw, y:box.y*nh, w:box.w*nw, h:box.h*nh };
         const cropDataUrl = cropImageToCanvas(tempImg, px);
-        const res = await fetch("/api/analyze", {
-          method:"POST", headers:{"Content-Type":"application/json"},
-          body: JSON.stringify({ imageBase64:cropDataUrl.split(",")[1], mediaType:"image/jpeg", mode:"list", label:obj.label, highResBase64:getHighResCrop(tempImg,px) })
-        });
+        const res = await fetch("/api/analyze", { method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({ imageBase64:cropDataUrl.split(",")[1], mediaType:"image/jpeg", mode:"list", label:obj.label, highResBase64:getHighResCrop(tempImg,px) }) });
         const data = await res.json();
         return { id:i, label:obj.label, cropDataUrl, extraPhotos:[], video:null,
           ...(data.error ? { title:obj.label, priceSuggested:20, priceMin:10, priceMax:40, listing:"Unable to generate listing.", identifications:[{name:obj.label,confidence:"medium"}], confidenceScore:0, tags:[] } : data) };
       }));
       setLoadStep(4); await new Promise(r=>setTimeout(r,300));
       setItems(results); setPhase("results");
-    } catch(err) { setError(err.message); setPhase("detect"); }
+    } catch(err) { setError(err.message); setPhase("crop"); }
   };
 
   // ── REWRITE ───────────────────────────────────────────────
@@ -673,8 +689,7 @@ export default function App() {
     try {
       const toneVal = toneValues[itemId]!==undefined ? toneValues[itemId] : 50;
       const tone = toneVal<33?"fast":toneVal>66?"profit":"balanced";
-      const res = await fetch("/api/analyze", { method:"POST", headers:{"Content-Type":"application/json"},
-        body: JSON.stringify({ mode:"rewrite", currentTitle:item.title, currentListing:item.listing, rewriteTone:tone }) });
+      const res = await fetch("/api/analyze", { method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({ mode:"rewrite", currentTitle:item.title, currentListing:item.listing, rewriteTone:tone }) });
       const data = await res.json();
       if(data.title) updateItem(itemId,"title",data.title);
       if(data.listing) updateItem(itemId,"listing",data.listing);
@@ -697,7 +712,7 @@ export default function App() {
     setIsPosting(false);
   };
 
-  // ── HELPERS ───────────────────────────────────────────────
+  // ── ITEM HELPERS ──────────────────────────────────────────
   const addPhotos=(itemId,files)=>{Array.from(files).filter(f=>f.type.startsWith("image/")).forEach(file=>{const reader=new FileReader();reader.onload=e=>setItems(prev=>prev.map(it=>it.id===itemId?{...it,extraPhotos:[...(it.extraPhotos||[]),{dataUrl:e.target.result,name:file.name}]}:it));reader.readAsDataURL(file);});};
   const addVideo=(itemId,file)=>{if(!file||!file.type.startsWith("video/"))return;setItems(prev=>prev.map(it=>it.id===itemId?{...it,video:{url:URL.createObjectURL(file),name:file.name}}:it));};
   const removePhoto=(itemId,pi)=>setItems(prev=>prev.map(it=>it.id===itemId?{...it,extraPhotos:it.extraPhotos.filter((_,i)=>i!==pi)}:it));
@@ -708,17 +723,18 @@ export default function App() {
   const updateCropBox=(i,box)=>setCropBoxes(prev=>prev.map((b,idx)=>idx===i?box:b));
   const toggleSkip=i=>setSkipped(prev=>prev.includes(i)?prev.filter(x=>x!==i):[...prev,i]);
   const toggleSelected=i=>setSelectedItems(prev=>prev.includes(i)?prev.filter(x=>x!==i):[...prev,i]);
-  const reset=()=>{stopCamera();setCapturedImage(null);setItems([]);setPhase("upload");setError(null);setExpandedId(null);setDetectedObjects([]);setCropBoxes([]);setSkipped([]);setShowSheet(false);setSelectedItems([]);setCameraError(null);};
+  const reset=()=>{stopCamera();setCapturedImage(null);setItems([]);setPhase("upload");setError(null);setExpandedId(null);setDetectedObjects([]);setCropBoxes([]);setSkipped([]);setSelectedItems([]);setCameraError(null);};
   const getToneLabel=val=>val<33?"⚡ Sell Fast":val>66?"💰 Max Profit":"⚖️ Balanced";
   const totalEarnings=items.reduce((sum,it)=>sum+(parseFloat(it.priceSuggested)||0),0);
   const steps=["Uploading","Detecting Objects","Ready","Generating Listings","Done!"];
+  const activeCount = selectedItems.filter(i=>!skipped.includes(i)).length;
 
   const downloadPackage=async(item)=>{
     setDownloading(item.id);
     try{
       const zip=new JSZip();
       const folder=zip.folder(item.title.replace(/[^a-z0-9]/gi,"_").slice(0,40));
-      const txt=[`TITLE: ${item.title}`,`PRICE: $${item.priceSuggested} ($${item.priceMin}-$${item.priceMax})`,item.confidenceScore?`CONFIDENCE: ${item.confidenceScore}%`:"",item.condition?`CONDITION: ${item.condition}`:"",item.materials?`MATERIALS: ${item.materials}`:"",item.estimatedDimensions?`DIMENSIONS: ${item.estimatedDimensions}`:"",`\nTAGS: ${(item.tags||[]).join(", ")}`,`\nDESCRIPTION:\n${item.listing}`].filter(Boolean).join("\n");
+      const txt=[`TITLE: ${item.title}`,`PRICE: $${item.priceSuggested} ($${item.priceMin}-$${item.priceMax})`,item.confidenceScore?`CONFIDENCE: ${item.confidenceScore}%`:"",item.condition?`CONDITION: ${item.condition}`:"",item.materials?`MATERIALS: ${item.materials}`:"",`\nTAGS: ${(item.tags||[]).join(", ")}`,`\nDESCRIPTION:\n${item.listing}`].filter(Boolean).join("\n");
       folder.file("listing.txt",txt);
       folder.file("photo_main.jpg",dataUrlToBlob(item.cropDataUrl));
       (item.extraPhotos||[]).forEach((p,i)=>folder.file(`photo_${i+2}.${p.name.split(".").pop()||"jpg"}`,dataUrlToBlob(p.dataUrl)));
@@ -729,7 +745,7 @@ export default function App() {
     setDownloading(null);
   };
 
-  // ── ITEM CARD RENDERER ────────────────────────────────────
+  // ── ITEM CARD ─────────────────────────────────────────────
   const renderCard = (item) => {
     const isExp = expandedId===item.id;
     const totalMedia = 1+(item.extraPhotos?.length||0)+(item.video?1:0);
@@ -808,7 +824,7 @@ export default function App() {
               <input className="f-input f-price" value={item.priceSuggested} onChange={e=>updateItem(item.id,"priceSuggested",e.target.value)} />
               <div className="price-meta">Range: ${item.priceMin} – ${item.priceMax}</div>
               <div className="tone-wrap">
-                <div className="f-lbl" style={{marginTop:14}}>Strategy</div>
+                <div className="f-lbl" style={{marginTop:14}}>Pricing Strategy</div>
                 <div className="tone-lbl-row"><span>⚡ Sell Fast</span><span>💰 Max Profit</span></div>
                 <input type="range" className="tone-slider" min="0" max="100" value={toneVal} onChange={e=>setToneValues(prev=>({...prev,[item.id]:parseInt(e.target.value)}))} />
                 <div className="tone-current">{getToneLabel(toneVal)}</div>
@@ -841,11 +857,9 @@ export default function App() {
     <>
       <style>{STYLES}</style>
 
-      {/* Hidden file inputs */}
       <input ref={cameraRef} type="file" accept="image/*" capture="environment" style={{position:"absolute",left:"-9999px"}} onChange={e=>handleFile(e.target.files[0])} />
       <input ref={galleryRef} type="file" accept="image/*" style={{position:"absolute",left:"-9999px"}} onChange={e=>handleFile(e.target.files[0])} />
 
-      {/* Lightbox */}
       {lightbox&&(
         <div className="lightbox" onClick={()=>setLightbox(null)}>
           <button className="lb-close">✕</button>
@@ -853,31 +867,7 @@ export default function App() {
         </div>
       )}
 
-      {/* Bottom Sheet */}
-      {showSheet&&(
-        <>
-          <div className="sheet-backdrop" onClick={()=>setShowSheet(false)} />
-          <div className="bottom-sheet">
-            <div className="sheet-handle" />
-            <div className="sheet-title">{detectedObjects.length} Items Found</div>
-            <div className="sheet-items">
-              {detectedObjects.map((obj,i)=>(
-                <div key={i} className={`sheet-item${selectedItems.includes(i)?" sel":""}`} onClick={()=>toggleSelected(i)}>
-                  {cropPreviews[i]?<img className="sheet-thumb" src={cropPreviews[i]} alt="" />:<div className="sheet-thumb" style={{background:"var(--surface3)"}} />}
-                  <div className="sheet-info"><div className="sheet-label">{obj.label}</div><div className="sheet-sub">#{i+1} · {obj.confidence} confidence</div></div>
-                  <div className="sheet-check">{selectedItems.includes(i)?"✓":""}</div>
-                </div>
-              ))}
-            </div>
-            <div className="sheet-foot">
-              <button className="btn-ghost-sm" onClick={()=>setShowSheet(false)} style={{flex:1}}>Back</button>
-              <button className="btn-grad" onClick={generateListings} style={{flex:2}} disabled={selectedItems.length===0}>Generate {selectedItems.length} Listing{selectedItems.length!==1?"s":""} →</button>
-            </div>
-          </div>
-        </>
-      )}
-
-      {/* Nav */}
+      {/* NAV */}
       <nav className="nav">
         <div className="nav-logo">Multi<span className="g">Snap</span></div>
         <div className="nav-right">
@@ -893,25 +883,19 @@ export default function App() {
       {/* ── SCAN TAB ── */}
       {tab==="scan"&&(
         <>
-          {/* LIVE CAMERA — always rendered when active so videoRef stays mounted */}
-          <div style={{display: cameraActive ? "block" : "none"}}>
+          {/* CAMERA — always in DOM when active */}
+          <div style={{display:cameraActive?"block":"none"}}>
             <div className="camera-screen" style={{height:"65vh"}}>
-              <video
-                ref={videoRef}
-                className="camera-video"
-                autoPlay
-                playsInline
-                muted
-                style={{width:"100%",height:"100%",objectFit:"cover",background:"#000",display:"block"}}
-              />
+              <video ref={videoRef} className="camera-video" autoPlay playsInline muted
+                style={{width:"100%",height:"100%",objectFit:"cover",background:"#000",display:"block"}} />
               <div className="scan-overlay">
                 <div className="scan-corner tl"/><div className="scan-corner tr"/>
                 <div className="scan-corner bl"/><div className="scan-corner br"/>
                 <div className="scan-line"/>
-                <div className="scan-status active">Point at items · Tap Scan Now</div>
+                <div className="scan-status">Point at items · Tap Scan Now</div>
               </div>
               <div className="camera-controls">
-                <button className="cam-btn" onClick={()=>{stopCamera();}}>✕ Cancel</button>
+                <button className="cam-btn" onClick={()=>stopCamera()}>✕ Cancel</button>
                 <button className="scan-now-btn" onClick={captureFrame}>📷 Scan Now</button>
                 <button className="cam-btn" onClick={()=>{stopCamera();galleryRef.current.value="";galleryRef.current.click();}}>🖼 Gallery</button>
               </div>
@@ -928,16 +912,20 @@ export default function App() {
             </div>
           )}
 
-          {/* DETECT — show captured image + bboxes */}
-          {phase==="detect"&&capturedImage&&!cameraActive&&(
-            <div style={{maxWidth:"860px",margin:"0 auto",padding:"16px 18px"}}>
+          {/* ── STEP 2: REVIEW ── */}
+          {phase==="review"&&capturedImage&&(
+            <div className="page-pad">
+              <StepProgress current={1} />
+
               <div className="sec-hdr">
-                <div><div className="sec-h">{detectedObjects.length} Items Found</div><div className="sec-sub">Tap boxes to select · Adjust crops below</div></div>
-                <div style={{display:"flex",gap:"8px"}}>
-                  <button className="btn-ghost-sm" onClick={reset}>Re-Scan</button>
-                  <button className="btn-grad" onClick={()=>setShowSheet(true)} disabled={detectedObjects.length===0}>Select Items →</button>
+                <div>
+                  <div className="sec-h">{detectedObjects.length} Item{detectedObjects.length!==1?"s":""} Detected</div>
+                  <div className="sec-sub">Select which items to list, then tap Crop Images to continue</div>
                 </div>
+                <button className="btn-ghost-sm" onClick={reset}>Re-Scan</button>
               </div>
+
+              {/* Captured image with bboxes */}
               <div className="frame-container" style={{borderRadius:"var(--radius)",border:"1px solid var(--border)",marginBottom:"20px"}}>
                 <img src={capturedImage.dataUrl} className="captured-frame" alt="captured" />
                 {detectedObjects.map((obj,i)=>{
@@ -953,41 +941,99 @@ export default function App() {
                   );
                 })}
               </div>
-              {detectedObjects.length>0&&(
-                <>
-                  <div style={{fontSize:"0.88rem",fontWeight:800,letterSpacing:"-0.02em",marginBottom:"12px"}}>Adjust Crops</div>
-                  <div className="crop-grid">
-                    {detectedObjects.map((obj,i)=>(
-                      <div key={i} className="crop-card" style={{opacity:skipped.includes(i)?0.4:1}}>
-                        <div className="crop-card-top">
-                          <div className="crop-card-name" style={{color:BBOX_COLORS[i%BBOX_COLORS.length].border}}>{obj.label}</div>
-                          <div className="crop-card-num">#{i+1}</div>
-                        </div>
-                        <CropEditor imgSrc={capturedImage.dataUrl} cropBox={cropBoxes[i]||{x:obj.xFrac,y:obj.yFrac,w:obj.wFrac,h:obj.hFrac}} onChange={box=>updateCropBox(i,box)} />
-                        {cropPreviews[i]&&<><div className="crop-prev-bar">Preview</div><img className="crop-prev-img" src={cropPreviews[i]} alt="" /></>}
-                        <div className="crop-card-foot">
-                          <button className={`skip-btn${skipped.includes(i)?" skipped":""}`} onClick={()=>toggleSkip(i)}>{skipped.includes(i)?"✕ Skipped":"Skip"}</button>
-                        </div>
-                      </div>
-                    ))}
+
+              {/* Item list */}
+              <div style={{display:"flex",flexDirection:"column",gap:"9px",marginBottom:"24px"}}>
+                {detectedObjects.map((obj,i)=>(
+                  <div key={i} className={`sheet-item${selectedItems.includes(i)?" sel":""}`}
+                    style={{margin:0}} onClick={()=>toggleSelected(i)}>
+                    {cropPreviews[i]?<img className="sheet-thumb" src={cropPreviews[i]} alt="" />:<div className="sheet-thumb" style={{background:"var(--surface3)"}} />}
+                    <div className="sheet-info">
+                      <div className="sheet-label">{obj.label}</div>
+                      <div className="sheet-sub">#{i+1} · {obj.confidence} confidence</div>
+                    </div>
+                    <div className="sheet-check">{selectedItems.includes(i)?"✓":""}</div>
                   </div>
-                  <div style={{marginTop:"16px",display:"flex",gap:"10px",flexWrap:"wrap"}}>
-                    <button className="btn-ghost-sm" onClick={reset}>Re-Scan</button>
-                    <button className="btn-grad" style={{flex:1}} onClick={generateListings} disabled={selectedItems.filter(i=>!skipped.includes(i)).length===0}>
-                      Generate {selectedItems.filter(i=>!skipped.includes(i)).length} Listings →
-                    </button>
-                  </div>
-                </>
-              )}
+                ))}
+              </div>
+
+              {/* PRIMARY CTA — Crop Images */}
+              <div style={{background:"var(--surface)",border:"1px solid var(--border2)",borderRadius:"var(--radius-sm)",padding:"20px"}}>
+                <div style={{fontSize:"0.72rem",color:"var(--text2)",marginBottom:"14px",lineHeight:1.6}}>
+                  <strong style={{color:"var(--text)"}}>Next:</strong> Review and adjust the crop for each item before generating listings.
+                </div>
+                <div style={{display:"flex",gap:"10px",flexWrap:"wrap"}}>
+                  <button className="btn-ghost-sm" onClick={reset}>Re-Scan</button>
+                  <button className="btn-grad" style={{flex:1,minWidth:"160px"}}
+                    onClick={()=>setPhase("crop")}
+                    disabled={selectedItems.length===0}>
+                    ✂️ Crop Images ({selectedItems.length}) →
+                  </button>
+                </div>
+              </div>
+
               {error&&<div className="err-box">⚠ {error}</div>}
             </div>
           )}
 
-          {/* RESULTS */}
-          {phase==="results"&&items.length>0&&!cameraActive&&(
+          {/* ── STEP 3: CROP ── */}
+          {phase==="crop"&&capturedImage&&(
+            <div className="page-pad">
+              <StepProgress current={2} />
+
+              <div className="sec-hdr">
+                <div>
+                  <div className="sec-h">Adjust Your Crops</div>
+                  <div className="sec-sub">Drag the colored handles to tighten each crop. Skip items you don't want listed.</div>
+                </div>
+                <button className="btn-ghost-sm" onClick={()=>setPhase("review")}>← Back</button>
+              </div>
+
+              <div className="crop-grid">
+                {detectedObjects.filter((_,i)=>selectedItems.includes(i)).map((obj,_,arr)=>{
+                  const i = detectedObjects.indexOf(obj);
+                  return(
+                    <div key={i} className="crop-card" style={{opacity:skipped.includes(i)?0.4:1}}>
+                      <div className="crop-card-top">
+                        <div className="crop-card-name" style={{color:BBOX_COLORS[i%BBOX_COLORS.length].border}}>{obj.label}</div>
+                        <div className="crop-card-num">#{i+1}</div>
+                      </div>
+                      <CropEditor imgSrc={capturedImage.dataUrl} cropBox={cropBoxes[i]||{x:obj.xFrac,y:obj.yFrac,w:obj.wFrac,h:obj.hFrac}} onChange={box=>updateCropBox(i,box)} />
+                      {cropPreviews[i]&&<><div className="crop-prev-bar">Preview</div><img className="crop-prev-img" src={cropPreviews[i]} alt="" /></>}
+                      <div className="crop-card-foot">
+                        <button className={`skip-btn${skipped.includes(i)?" skipped":""}`} onClick={()=>toggleSkip(i)}>{skipped.includes(i)?"✕ Skipped":"Skip Item"}</button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* PRIMARY CTA — Generate Listings */}
+              <div className="generate-cta">
+                <div className="generate-cta-title">Crops look good?</div>
+                <div className="generate-cta-sub">
+                  AI will identify each item, suggest a price, and write a full listing ready to post.
+                </div>
+                <div className="generate-cta-btns">
+                  <button className="btn-ghost-sm" onClick={()=>setPhase("review")}>← Back to Review</button>
+                  <button className="btn-grad" style={{minWidth:"180px"}}
+                    onClick={generateListings}
+                    disabled={activeCount===0}>
+                    ✨ Generate {activeCount} Listing{activeCount!==1?"s":""}
+                  </button>
+                </div>
+              </div>
+
+              {error&&<div className="err-box">⚠ {error}</div>}
+            </div>
+          )}
+
+          {/* ── STEP 4: RESULTS ── */}
+          {phase==="results"&&items.length>0&&(
             <div className="results-wrap">
+              <StepProgress current={3} />
               <div className="results-hdr">
-                <div><div className="results-h">{items.length} Listing{items.length!==1?"s":""} Ready</div><div className="results-sub">Tap any card to expand and edit</div></div>
+                <div><div className="results-h">{items.length} Listing{items.length!==1?"s":""} Ready</div><div className="results-sub">Tap any card to expand, edit and download</div></div>
                 <div style={{display:"flex",gap:"8px",flexWrap:"wrap"}}>
                   <button className="btn-ghost-sm" onClick={reset}>New Scan</button>
                   <button className="btn-grad" onClick={()=>setTab("post")}>Post All →</button>
@@ -997,7 +1043,7 @@ export default function App() {
             </div>
           )}
 
-          {/* UPLOAD — initial state */}
+          {/* ── UPLOAD (home screen) ── */}
           {phase==="upload"&&!cameraActive&&(
             <>
               <div className="hero">
