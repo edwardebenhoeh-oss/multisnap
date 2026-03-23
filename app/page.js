@@ -33,7 +33,6 @@ const STYLES = `
   ::-webkit-scrollbar-track { background: var(--bg); }
   ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 4px; }
 
-  /* NAV */
   .nav { display: flex; align-items: center; justify-content: space-between; padding: 14px 24px; border-bottom: 1px solid var(--border); background: rgba(8,8,15,0.9); backdrop-filter: blur(20px); position: sticky; top: 0; z-index: 200; }
   .nav-logo { font-size: 1.2rem; font-weight: 900; letter-spacing: -0.04em; }
   .nav-logo .g { background: linear-gradient(135deg, var(--accent), var(--accent2), var(--accent3)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
@@ -43,12 +42,8 @@ const STYLES = `
   .nav-tab.active { color: var(--accent); background: rgba(124,111,255,0.12); }
   .nav-beta { font-size: 0.58rem; font-weight: 700; color: var(--accent); background: rgba(124,111,255,0.15); border: 1px solid rgba(124,111,255,0.3); padding: 3px 8px; border-radius: 100px; letter-spacing: 0.08em; }
 
-  /* CAMERA SCREEN */
   .camera-screen { position: relative; width: 100%; background: #000; overflow: hidden; }
-  .camera-video { width: 100%; display: block; object-fit: cover; }
-  .camera-canvas { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
-
-  /* SCAN OVERLAY UI */
+  .camera-video { width: 100%; height: 100%; display: block; object-fit: cover; background: #000; }
   .scan-overlay { position: absolute; inset: 0; pointer-events: none; }
   .scan-corner { position: absolute; width: 28px; height: 28px; border-color: rgba(124,111,255,0.9); border-style: solid; }
   .scan-corner.tl { top: 16px; left: 16px; border-width: 3px 0 0 3px; border-radius: 6px 0 0 0; }
@@ -58,27 +53,15 @@ const STYLES = `
   .scan-line { position: absolute; left: 16px; right: 16px; height: 2px; background: linear-gradient(90deg, transparent, var(--accent), transparent); animation: scanLine 2s ease-in-out infinite; top: 16px; }
   @keyframes scanLine { 0%{top:16px;opacity:1} 90%{opacity:1} 100%{top:calc(100% - 80px);opacity:0} }
   .scan-status { position: absolute; top: 16px; left: 50%; transform: translateX(-50%); background: rgba(8,8,15,0.85); backdrop-filter: blur(8px); border: 1px solid var(--border2); border-radius: 100px; padding: 6px 16px; font-size: 0.7rem; font-weight: 700; color: var(--text2); white-space: nowrap; pointer-events: none; }
-  .scan-status.scanning { color: var(--accent); border-color: rgba(124,111,255,0.4); }
-  .scan-status.detecting { color: var(--warning); border-color: rgba(251,191,36,0.4); }
-  .scan-status.done { color: var(--success); border-color: rgba(74,222,128,0.4); }
-
-  /* AUTO CAPTURE RING */
-  .capture-ring-wrap { position: absolute; bottom: 90px; left: 50%; transform: translateX(-50%); pointer-events: none; }
-  .capture-ring { width: 64px; height: 64px; border-radius: 50%; border: 3px solid rgba(124,111,255,0.3); position: relative; }
-  .capture-ring-fill { position: absolute; inset: 0; border-radius: 50%; border: 3px solid var(--accent); clip-path: inset(0 0 0 0); animation: none; }
-  .capture-ring-fill.counting { animation: ringFill 2s linear forwards; }
-  @keyframes ringFill { from{stroke-dashoffset:100} to{stroke-dashoffset:0} }
-
-  /* CAMERA CONTROLS */
-  .camera-controls { position: absolute; bottom: 0; left: 0; right: 0; padding: 12px 20px 24px; background: linear-gradient(transparent, rgba(8,8,15,0.95)); display: flex; align-items: center; justify-content: space-between; gap: 12px; pointer-events: all; }
-  .cam-btn-secondary { background: rgba(255,255,255,0.1); backdrop-filter: blur(8px); color: var(--text); border: 1px solid rgba(255,255,255,0.15); font-family: 'Inter', sans-serif; font-size: 0.72rem; font-weight: 600; padding: 10px 16px; border-radius: 100px; cursor: pointer; touch-action: manipulation; transition: all 0.2s; white-space: nowrap; }
-  .cam-btn-secondary:hover { background: rgba(255,255,255,0.15); }
+  .scan-status.active { color: var(--accent); border-color: rgba(124,111,255,0.4); }
+  .camera-controls { position: absolute; bottom: 0; left: 0; right: 0; padding: 12px 20px 28px; background: linear-gradient(transparent, rgba(8,8,15,0.95)); display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .cam-btn { background: rgba(255,255,255,0.1); backdrop-filter: blur(8px); color: var(--text); border: 1px solid rgba(255,255,255,0.15); font-family: 'Inter', sans-serif; font-size: 0.72rem; font-weight: 600; padding: 10px 16px; border-radius: 100px; cursor: pointer; touch-action: manipulation; transition: all 0.2s; white-space: nowrap; }
+  .cam-btn:hover { background: rgba(255,255,255,0.18); }
   .scan-now-btn { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff; font-family: 'Inter', sans-serif; font-size: 0.9rem; font-weight: 800; padding: 14px 32px; border-radius: 100px; border: none; cursor: pointer; touch-action: manipulation; transition: all 0.2s; letter-spacing: -0.02em; box-shadow: 0 4px 24px var(--glow); flex: 1; max-width: 200px; }
-  .scan-now-btn:hover { transform: scale(1.03); box-shadow: 0 8px 32px var(--glow); }
+  .scan-now-btn:hover { transform: scale(1.04); }
+  .scan-now-btn:active { transform: scale(0.97); }
   .scan-now-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-  .cam-btn-gallery { background: rgba(255,255,255,0.1); backdrop-filter: blur(8px); color: var(--text); border: 1px solid rgba(255,255,255,0.15); font-family: 'Inter', sans-serif; font-size: 0.72rem; font-weight: 600; padding: 10px 14px; border-radius: 100px; cursor: pointer; touch-action: manipulation; transition: all 0.2s; }
 
-  /* CAPTURED FRAME + BBOXES */
   .frame-container { position: relative; width: 100%; background: #000; overflow: hidden; }
   .captured-frame { width: 100%; display: block; }
   .bbox { position: absolute; border: 2px solid; border-radius: 8px; cursor: pointer; animation: bboxPop 0.35s cubic-bezier(0.34,1.56,0.64,1) forwards; opacity: 0; }
@@ -86,19 +69,17 @@ const STYLES = `
   .bbox:hover { filter: brightness(1.15); }
   .bbox-label { position: absolute; top: -26px; left: 0; font-size: 0.58rem; font-weight: 800; padding: 3px 10px; border-radius: 100px; white-space: nowrap; letter-spacing: 0.06em; text-transform: uppercase; color: #fff; }
   .bbox-num { position: absolute; top: -10px; right: -10px; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.6rem; font-weight: 800; color: #fff; }
-  .bbox.selected-box { box-shadow: 0 0 0 2px #fff inset; }
+  .bbox.sel-box { box-shadow: 0 0 0 2px #fff inset; }
 
-  /* HERO (no camera) */
   .hero { text-align: center; padding: 64px 24px 48px; position: relative; overflow: hidden; }
   .hero::before { content:''; position:absolute; top:-100px; left:50%; transform:translateX(-50%); width:500px; height:500px; background:radial-gradient(ellipse,rgba(124,111,255,0.1) 0%,transparent 70%); pointer-events:none; }
   .hero-pill { display:inline-flex; align-items:center; gap:8px; background:var(--surface2); border:1px solid var(--border2); border-radius:100px; padding:6px 16px; font-size:0.7rem; font-weight:600; color:var(--text2); margin-bottom:28px; }
   .hero-dot { width:7px; height:7px; background:var(--success); border-radius:50%; animation:blink 2s ease infinite; }
-  @keyframes blink{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.4;transform:scale(0.7)}}
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
   .hero-h1 { font-size:clamp(2rem,7vw,4rem); font-weight:900; line-height:1.05; letter-spacing:-0.05em; margin-bottom:16px; }
   .hero-h1 .grad { background:linear-gradient(135deg,var(--accent) 0%,var(--accent2) 50%,var(--accent3) 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
   .hero-sub { font-size:0.95rem; color:var(--text2); line-height:1.7; max-width:440px; margin:0 auto 32px; }
 
-  /* UPLOAD ZONE */
   .scan-wrap { max-width: 640px; margin: 0 auto; padding: 0 20px 60px; }
   .scan-zone { border: 2px dashed var(--border2); border-radius: var(--radius); background: var(--surface); padding: 52px 28px; text-align: center; transition: all 0.3s; position: relative; overflow: hidden; }
   .scan-zone::after { content:''; position:absolute; inset:0; background:radial-gradient(ellipse at 50% 120%,rgba(124,111,255,0.07) 0%,transparent 60%); pointer-events:none; }
@@ -109,11 +90,11 @@ const STYLES = `
   .scan-btns { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
   .btn-grad { background:linear-gradient(135deg,var(--accent),var(--accent2)); color:#fff; font-family:'Inter',sans-serif; font-size:0.88rem; font-weight:700; padding:13px 28px; border-radius:var(--radius-sm); border:none; cursor:pointer; touch-action:manipulation; transition:all 0.2s; letter-spacing:-0.01em; box-shadow:0 4px 18px var(--glow); }
   .btn-grad:hover { transform:translateY(-2px); box-shadow:0 8px 28px var(--glow); }
+  .btn-grad:active { transform:scale(0.97); }
   .btn-outline { background:transparent; color:var(--text); font-family:'Inter',sans-serif; font-size:0.88rem; font-weight:600; padding:13px 24px; border-radius:var(--radius-sm); border:1.5px solid var(--border2); cursor:pointer; touch-action:manipulation; transition:all 0.2s; }
   .btn-outline:hover { border-color:var(--accent); color:var(--accent); }
   .scan-hint { font-size:0.68rem; color:var(--muted); margin-top:16px; }
 
-  /* BOTTOM SHEET */
   .sheet-backdrop { position:fixed; inset:0; background:rgba(0,0,0,0.75); z-index:300; backdrop-filter:blur(6px); animation:fadeIn 0.2s ease; }
   @keyframes fadeIn{from{opacity:0}to{opacity:1}}
   .bottom-sheet { position:fixed; bottom:0; left:0; right:0; background:var(--surface); border-top:1px solid var(--border2); border-radius:24px 24px 0 0; z-index:301; max-height:78vh; overflow-y:auto; animation:slideUp 0.32s cubic-bezier(0.34,1.56,0.64,1); }
@@ -131,7 +112,6 @@ const STYLES = `
   .sheet-item.sel .sheet-check { background:var(--accent); border-color:var(--accent); color:#fff; }
   .sheet-foot { padding:14px 18px 32px; border-top:1px solid var(--border); display:flex; gap:10px; }
 
-  /* LOADING */
   .loading-full { display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:55vh; padding:40px 24px; text-align:center; }
   .loader-ring { position:relative; width:60px; height:60px; margin:0 auto 24px; }
   .loader-outer { width:60px; height:60px; border:3px solid var(--border2); border-top-color:var(--accent); border-radius:50%; animation:spin 0.9s linear infinite; }
@@ -144,7 +124,6 @@ const STYLES = `
   .step-pill.active { border-color:var(--accent); color:var(--accent); background:rgba(124,111,255,0.1); }
   .step-pill.done { color:var(--success); }
 
-  /* CROP EDITOR */
   .crop-wrap { max-width: 960px; margin: 0 auto; padding: 24px 18px; }
   .crop-grid { display:grid; grid-template-columns:1fr; gap:14px; }
   @media(min-width:600px){.crop-grid{grid-template-columns:repeat(2,1fr)}}
@@ -170,7 +149,6 @@ const STYLES = `
   .skip-btn:hover { border-color:var(--danger); color:var(--danger); }
   .skip-btn.skipped { border-color:rgba(248,113,113,0.4); color:var(--danger); background:rgba(248,113,113,0.06); }
 
-  /* RESULTS */
   .results-wrap { max-width:1200px; margin:0 auto; padding:28px 18px 80px; }
   .results-hdr { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:28px; gap:14px; flex-wrap:wrap; }
   .results-h { font-size:1.5rem; font-weight:900; letter-spacing:-0.04em; }
@@ -206,7 +184,6 @@ const STYLES = `
   .btn-card.danger { color:rgba(248,113,113,0.7); border-color:rgba(248,113,113,0.2); }
   .btn-card.danger:hover { color:var(--danger); border-color:var(--danger); }
 
-  /* EXPANDED */
   .exp-inner { display:grid; grid-template-columns:1fr; gap:24px; padding:20px; }
   @media(min-width:680px){.exp-inner{grid-template-columns:290px 1fr;padding:28px;gap:36px}}
   .exp-img { width:100%; border-radius:var(--radius-sm); border:1px solid var(--border); object-fit:contain; background:#05050f; max-height:240px; cursor:pointer; }
@@ -257,7 +234,7 @@ const STYLES = `
   .tog-sw.on::after { transform:translateX(15px); }
   .act-row { display:flex; gap:7px; margin-top:18px; flex-wrap:wrap; }
   .btn-list-now { background:linear-gradient(135deg,var(--accent),var(--accent2)); color:#fff; font-family:'Inter',sans-serif; font-size:0.8rem; font-weight:700; padding:12px 20px; border-radius:var(--radius-sm); border:none; cursor:pointer; touch-action:manipulation; flex:1; text-align:center; min-width:100px; transition:all 0.2s; box-shadow:0 4px 14px var(--glow); }
-  .btn-list-now:hover { transform:translateY(-1px); box-shadow:0 8px 22px var(--glow); }
+  .btn-list-now:hover { transform:translateY(-1px); }
   .btn-dl { background:var(--surface2); color:var(--text); font-family:'Inter',sans-serif; font-size:0.8rem; font-weight:600; padding:12px 18px; border-radius:var(--radius-sm); border:1px solid var(--border2); cursor:pointer; touch-action:manipulation; flex:1; text-align:center; min-width:100px; transition:border-color 0.2s; }
   .btn-dl:hover { border-color:var(--accent); }
   .btn-dl:disabled { opacity:0.5; cursor:not-allowed; }
@@ -267,7 +244,6 @@ const STYLES = `
   .btn-del:hover { color:var(--danger); border-color:var(--danger); }
   .pkg-note { font-size:0.6rem; color:var(--muted); margin-top:9px; line-height:1.6; }
 
-  /* POST */
   .post-wrap { max-width:640px; margin:0 auto; padding:36px 18px 80px; }
   .post-hdr { text-align:center; margin-bottom:36px; }
   .post-h { font-size:1.7rem; font-weight:900; letter-spacing:-0.04em; margin-bottom:9px; }
@@ -287,10 +263,9 @@ const STYLES = `
   .progress-bar-wrap { width:72px; height:3px; background:var(--border); border-radius:2px; overflow:hidden; }
   .progress-fill { height:100%; background:linear-gradient(90deg,var(--accent),var(--accent2)); border-radius:2px; transition:width 0.5s ease; }
   .post-all-btn { width:100%; background:linear-gradient(135deg,var(--accent),var(--accent2)); color:#fff; font-family:'Inter',sans-serif; font-size:1rem; font-weight:800; padding:17px; border-radius:var(--radius-sm); border:none; cursor:pointer; touch-action:manipulation; letter-spacing:-0.02em; box-shadow:0 8px 28px var(--glow); transition:all 0.2s; }
-  .post-all-btn:hover { transform:translateY(-2px); box-shadow:0 14px 36px var(--glow); }
+  .post-all-btn:hover { transform:translateY(-2px); }
   .post-all-btn:disabled { opacity:0.5; cursor:not-allowed; transform:none; }
 
-  /* DASHBOARD */
   .dash-wrap { max-width:1080px; margin:0 auto; padding:28px 18px 80px; }
   .dash-stats { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-bottom:24px; }
   @media(min-width:680px){.dash-stats{grid-template-columns:repeat(4,1fr)}}
@@ -307,7 +282,7 @@ const STYLES = `
   .insight-text { flex:1; }
   .insight-title { font-size:0.8rem; font-weight:700; margin-bottom:2px; }
   .insight-sub { font-size:0.65rem; color:var(--text2); }
-  .insight-action { font-size:0.68rem; font-weight:700; color:var(--accent); background:rgba(124,111,255,0.1); border:1px solid rgba(124,111,255,0.2); padding:5px 12px; border-radius:var(--radius-xs); cursor:pointer; white-space:nowrap; }
+  .insight-action { font-size:0.68rem; font-weight:700; color:var(--accent); background:rgba(124,111,255,0.1); border:1px solid rgba(124,111,255,0.2); padding:5px 12px; border-radius:var(--radius-xs); cursor:pointer; white-space:nowrap; touch-action:manipulation; }
   .dash-listings { display:flex; flex-direction:column; gap:9px; }
   .dash-row { background:var(--card); border:1px solid var(--border); border-radius:var(--radius-sm); padding:12px 16px; display:flex; align-items:center; gap:12px; }
   .dash-thumb { width:48px; height:48px; border-radius:9px; object-fit:cover; background:var(--surface2); flex-shrink:0; }
@@ -317,7 +292,6 @@ const STYLES = `
   .dash-price { font-size:1.05rem; font-weight:900; letter-spacing:-0.03em; }
   .dash-empty { text-align:center; padding:40px 20px; color:var(--muted); font-size:0.8rem; }
 
-  /* LIGHTBOX */
   .lightbox { position:fixed; inset:0; background:rgba(5,5,10,0.97); z-index:500; display:flex; align-items:center; justify-content:center; padding:20px; animation:fadeIn 0.2s ease; }
   .lb-img { max-width:100%; max-height:90vh; border-radius:var(--radius-sm); object-fit:contain; }
   .lb-video { max-width:100%; max-height:90vh; border-radius:var(--radius-sm); }
@@ -329,17 +303,18 @@ const STYLES = `
   .sec-sub { font-size:0.7rem; color:var(--text2); margin-top:4px; }
   .btn-ghost-sm { background:transparent; color:var(--text2); border:1px solid var(--border); font-family:'Inter',sans-serif; font-size:0.73rem; font-weight:600; padding:8px 16px; border-radius:var(--radius-xs); cursor:pointer; touch-action:manipulation; transition:all 0.2s; }
   .btn-ghost-sm:hover { color:var(--text); border-color:var(--border2); }
+  .cam-error { background:rgba(248,113,113,0.08); border:1px solid rgba(248,113,113,0.25); color:var(--danger); padding:16px 20px; border-radius:var(--radius-sm); font-size:0.78rem; line-height:1.6; text-align:center; max-width:500px; margin:20px auto 0; }
 `;
 
 const BBOX_COLORS = [
-  { border:"#7c6fff", bg:"rgba(124,111,255,0.18)", label:"#7c6fff" },
-  { border:"#ff6ab0", bg:"rgba(255,106,176,0.18)", label:"#ff6ab0" },
-  { border:"#4ade80", bg:"rgba(74,222,128,0.18)", label:"#4ade80" },
-  { border:"#fbbf24", bg:"rgba(251,191,36,0.18)", label:"#fbbf24" },
-  { border:"#60a5fa", bg:"rgba(96,165,250,0.18)", label:"#60a5fa" },
-  { border:"#f87171", bg:"rgba(248,113,113,0.18)", label:"#f87171" },
-  { border:"#a78bfa", bg:"rgba(167,139,250,0.18)", label:"#a78bfa" },
-  { border:"#34d399", bg:"rgba(52,211,153,0.18)", label:"#34d399" },
+  { border:"#7c6fff", bg:"rgba(124,111,255,0.2)" },
+  { border:"#ff6ab0", bg:"rgba(255,106,176,0.2)" },
+  { border:"#4ade80", bg:"rgba(74,222,128,0.2)" },
+  { border:"#fbbf24", bg:"rgba(251,191,36,0.2)" },
+  { border:"#60a5fa", bg:"rgba(96,165,250,0.2)" },
+  { border:"#f87171", bg:"rgba(248,113,113,0.2)" },
+  { border:"#a78bfa", bg:"rgba(167,139,250,0.2)" },
+  { border:"#34d399", bg:"rgba(52,211,153,0.2)" },
 ];
 
 const PLATFORMS = [
@@ -493,11 +468,9 @@ function confColor(score) {
 
 export default function App() {
   const [tab, setTab] = useState("scan");
-  const [cameraMode, setCameraMode] = useState("idle"); // idle | live | captured | detecting
-  const [scanStatus, setScanStatus] = useState("point"); // point | scanning | detecting | done
+  const [cameraActive, setCameraActive] = useState(false);
   const [capturedImage, setCapturedImage] = useState(null);
-  const [image, setImage] = useState(null);
-  const [phase, setPhase] = useState("upload"); // upload | loading | detect | crop | results
+  const [phase, setPhase] = useState("upload");
   const [loadStep, setLoadStep] = useState(0);
   const [detectedObjects, setDetectedObjects] = useState([]);
   const [cropBoxes, setCropBoxes] = useState([]);
@@ -518,184 +491,213 @@ export default function App() {
   const [postingStatus, setPostingStatus] = useState({});
   const [postProgress, setPostProgress] = useState({});
   const [isPosting, setIsPosting] = useState(false);
-  const [autoCountdown, setAutoCountdown] = useState(false);
   const [cameraError, setCameraError] = useState(null);
 
-  const videoRef = useRef();
+  const videoRef = useRef(null);
   const streamRef = useRef(null);
-  const autoTimerRef = useRef(null);
-  const capturedImgRef = useRef();
-  const imgRef = useRef();
   const cameraRef = useRef();
   const galleryRef = useRef();
   const photoRefs = useRef({});
   const videoRefs = useRef({});
 
-  // Start camera
-  const startCamera = async () => {
+  // ── CAMERA ──────────────────────────────────────────────
+  const startCamera = useCallback(async () => {
     setCameraError(null);
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: "environment", width: { ideal: 1280 }, height: { ideal: 720 } }
-      });
-      streamRef.current = stream;
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream;
-        videoRef.current.play();
-      }
-      setCameraMode("live");
-      setScanStatus("point");
-    } catch (err) {
-      setCameraError("Camera access denied. Please allow camera access or upload an image instead.");
-      setCameraMode("idle");
-    }
-  };
+    setCameraActive(true);
 
-  const stopCamera = () => {
+    // Small delay to let React render the video element first
+    await new Promise(r => setTimeout(r, 200));
+
+    const video = videoRef.current;
+    if (!video) {
+      setCameraError("Could not initialize camera. Please use Upload Photo instead.");
+      setCameraActive(false);
+      return;
+    }
+
+    let stream;
+    try {
+      // Try rear camera first (mobile), fall back to any camera
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: { ideal: "environment" } }
+        });
+      } catch {
+        stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      }
+    } catch (err) {
+      let msg = "Camera error. Please use Upload Photo instead.";
+      if (err.name === "NotAllowedError" || err.name === "PermissionDeniedError") {
+        msg = "Camera permission denied. Please allow camera access in your browser settings, then try again.";
+      } else if (err.name === "NotFoundError" || err.name === "DevicesNotFoundError") {
+        msg = "No camera found on this device. Please use Upload Photo instead.";
+      } else if (err.name === "NotReadableError") {
+        msg = "Camera is in use by another app. Please close other apps and try again.";
+      }
+      setCameraError(msg);
+      setCameraActive(false);
+      return;
+    }
+
+    streamRef.current = stream;
+
+    // Attach stream to video element
+    video.srcObject = stream;
+    video.muted = true;
+    video.setAttribute("muted", "");
+    video.setAttribute("playsinline", "");
+    video.setAttribute("webkit-playsinline", "");
+
+    try {
+      await video.play();
+    } catch {
+      // Some browsers need user interaction — still show the video
+    }
+  }, []);
+
+  const stopCamera = useCallback(() => {
     if (streamRef.current) {
       streamRef.current.getTracks().forEach(t => t.stop());
       streamRef.current = null;
     }
-    setCameraMode("idle");
-    clearTimeout(autoTimerRef.current);
-    setAutoCountdown(false);
-  };
+    if (videoRef.current) {
+      videoRef.current.srcObject = null;
+    }
+    setCameraActive(false);
+  }, []);
 
   const captureFrame = useCallback(() => {
-    if (!videoRef.current || cameraMode !== "live") return;
-    clearTimeout(autoTimerRef.current);
-    setAutoCountdown(false);
-    setScanStatus("detecting");
-    setCameraMode("captured");
     const video = videoRef.current;
+    if (!video || !streamRef.current) return;
+
     const canvas = document.createElement("canvas");
     canvas.width = video.videoWidth || 1280;
     canvas.height = video.videoHeight || 720;
     canvas.getContext("2d").drawImage(video, 0, 0, canvas.width, canvas.height);
-    const dataUrl = canvas.toDataURL("image/jpeg", 0.9);
+    const dataUrl = canvas.toDataURL("image/jpeg", 0.92);
+
     stopCamera();
     const imgObj = { dataUrl, name: "camera-capture.jpg", size: (dataUrl.length/1024).toFixed(1)+" KB" };
     setCapturedImage(imgObj);
-    setImage(imgObj);
     runDetection(dataUrl);
-  }, [cameraMode]);
-
-  const startAutoCountdown = useCallback(() => {
-    if (autoCountdown || cameraMode !== "live") return;
-    setAutoCountdown(true);
-    autoTimerRef.current = setTimeout(() => {
-      setAutoCountdown(false);
-      captureFrame();
-    }, 2000);
-  }, [autoCountdown, cameraMode, captureFrame]);
-
-  const cancelAutoCountdown = useCallback(() => {
-    clearTimeout(autoTimerRef.current);
-    setAutoCountdown(false);
-  }, []);
+  }, [stopCamera]);
 
   useEffect(() => {
-    return () => { stopCamera(); clearTimeout(autoTimerRef.current); };
-  }, []);
+    return () => stopCamera();
+  }, [stopCamera]);
 
-  const runDetection = async (dataUrl) => {
-    setPhase("loading"); setLoadStep(1); setError(null);
-    try {
-      const base64 = dataUrl.split(",")[1];
-      const mediaType = dataUrl.split(";")[0].split(":")[1];
-      const res = await fetch("/api/analyze", { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({imageBase64:base64, mediaType, mode:"detect"}) });
-      const data = await res.json();
-      if (data.error) throw new Error(data.error);
-      setDetectedObjects(data.objects);
-      setCropBoxes(data.objects.map(o => ({x:o.xFrac,y:o.yFrac,w:o.wFrac,h:o.hFrac})));
-      setSkipped([]);
-      setSelectedItems(data.objects.map((_,i)=>i));
-      setLoadStep(2); setPhase("detect");
-      setScanStatus("done");
-      setTimeout(() => setShowSheet(true), 500);
-    } catch(err) { setError(err.message); setPhase("upload"); setScanStatus("point"); }
-  };
-
+  // ── FILE UPLOAD ──────────────────────────────────────────
   const handleFile = useCallback(async (file) => {
     if (!file || !file.type.startsWith("image/")) return;
     stopCamera();
     const compressed = await compressImage(file);
-    setImage(compressed);
     setCapturedImage(compressed);
-    setDetectedObjects([]); setCropBoxes([]); setSkipped([]); setShowSheet(false);
+    setDetectedObjects([]); setCropBoxes([]); setSkipped([]);
+    setShowSheet(false); setError(null);
     runDetection(compressed.dataUrl);
-  }, []);
+  }, [stopCamera]);
 
   const handleDrop = useCallback((e) => {
     e.preventDefault(); setDragOver(false); handleFile(e.dataTransfer.files[0]);
   }, [handleFile]);
 
-  useEffect(() => {
-    if (phase !== "crop" || !imgRef.current) return;
-    const img = imgRef.current;
-    const nw = img.naturalWidth, nh = img.naturalHeight;
-    setCropPreviews(cropBoxes.map(box => {
-      const px={x:box.x*nw,y:box.y*nh,w:box.w*nw,h:box.h*nh};
-      return cropImageToCanvas(img, px);
-    }));
-  }, [cropBoxes, phase]);
+  // ── DETECTION ────────────────────────────────────────────
+  const runDetection = async (dataUrl) => {
+    setPhase("loading"); setLoadStep(1); setError(null);
+    try {
+      const base64 = dataUrl.split(",")[1];
+      const mediaType = dataUrl.split(";")[0].split(":")[1];
+      const res = await fetch("/api/analyze", {
+        method:"POST", headers:{"Content-Type":"application/json"},
+        body: JSON.stringify({ imageBase64: base64, mediaType, mode: "detect" })
+      });
+      const data = await res.json();
+      if (data.error) throw new Error(data.error);
+      setDetectedObjects(data.objects);
+      setCropBoxes(data.objects.map(o => ({ x:o.xFrac, y:o.yFrac, w:o.wFrac, h:o.hFrac })));
+      setSkipped([]);
+      setSelectedItems(data.objects.map((_,i) => i));
+      setLoadStep(2); setPhase("detect");
+      setTimeout(() => setShowSheet(true), 500);
+    } catch(err) {
+      setError(err.message); setPhase("upload");
+    }
+  };
 
+  // Update crop previews
+  useEffect(() => {
+    if (phase !== "detect" || !capturedImage) return;
+    const img = new Image();
+    img.onload = () => {
+      const nw = img.naturalWidth, nh = img.naturalHeight;
+      setCropPreviews(cropBoxes.map(box => {
+        const px = { x:box.x*nw, y:box.y*nh, w:box.w*nw, h:box.h*nh };
+        return cropImageToCanvas(img, px);
+      }));
+    };
+    img.src = capturedImage.dataUrl;
+  }, [cropBoxes, phase, capturedImage]);
+
+  // ── GENERATE LISTINGS ─────────────────────────────────────
   const generateListings = async () => {
     setShowSheet(false);
     setPhase("loading"); setLoadStep(3);
-    const imgSrc = capturedImage?.dataUrl || image?.dataUrl;
-    if (!imgSrc) return;
+    if (!capturedImage) return;
     const tempImg = new Image();
-    tempImg.src = imgSrc;
-    await new Promise(r => { tempImg.onload = r; });
+    tempImg.src = capturedImage.dataUrl;
+    await new Promise(r => { tempImg.onload = r; if(tempImg.complete) r(); });
     const nw = tempImg.naturalWidth, nh = tempImg.naturalHeight;
     try {
       const activeIndexes = detectedObjects.map((_,i)=>i).filter(i => !skipped.includes(i) && selectedItems.includes(i));
       const results = await Promise.all(activeIndexes.map(async (i) => {
         const obj = detectedObjects[i], box = cropBoxes[i];
-        const px={x:box.x*nw,y:box.y*nh,w:box.w*nw,h:box.h*nh};
+        const px = { x:box.x*nw, y:box.y*nh, w:box.w*nw, h:box.h*nh };
         const cropDataUrl = cropImageToCanvas(tempImg, px);
-        const res = await fetch("/api/analyze", { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({imageBase64:cropDataUrl.split(",")[1], mediaType:"image/jpeg", mode:"list", label:obj.label, highResBase64:getHighResCrop(tempImg,px)}) });
+        const res = await fetch("/api/analyze", {
+          method:"POST", headers:{"Content-Type":"application/json"},
+          body: JSON.stringify({ imageBase64:cropDataUrl.split(",")[1], mediaType:"image/jpeg", mode:"list", label:obj.label, highResBase64:getHighResCrop(tempImg,px) })
+        });
         const data = await res.json();
-        return {id:i, label:obj.label, cropDataUrl, extraPhotos:[], video:null, ...(data.error?{title:obj.label,priceSuggested:20,priceMin:10,priceMax:40,listing:"Unable to generate listing.",identifications:[{name:obj.label,confidence:"medium"}],confidenceScore:0,tags:[]}:data)};
+        return { id:i, label:obj.label, cropDataUrl, extraPhotos:[], video:null,
+          ...(data.error ? { title:obj.label, priceSuggested:20, priceMin:10, priceMax:40, listing:"Unable to generate listing.", identifications:[{name:obj.label,confidence:"medium"}], confidenceScore:0, tags:[] } : data) };
       }));
       setLoadStep(4); await new Promise(r=>setTimeout(r,300));
       setItems(results); setPhase("results");
     } catch(err) { setError(err.message); setPhase("detect"); }
   };
 
+  // ── REWRITE ───────────────────────────────────────────────
   const rewriteListing = async (itemId) => {
-    const item = items.find(it=>it.id===itemId);
-    if (!item) return;
+    const item = items.find(it=>it.id===itemId); if (!item) return;
     setRewriting(itemId);
     try {
-      const toneVal = toneValues[itemId]!==undefined?toneValues[itemId]:50;
+      const toneVal = toneValues[itemId]!==undefined ? toneValues[itemId] : 50;
       const tone = toneVal<33?"fast":toneVal>66?"profit":"balanced";
-      const res = await fetch("/api/analyze", {method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({mode:"rewrite",currentTitle:item.title,currentListing:item.listing,rewriteTone:tone})});
+      const res = await fetch("/api/analyze", { method:"POST", headers:{"Content-Type":"application/json"},
+        body: JSON.stringify({ mode:"rewrite", currentTitle:item.title, currentListing:item.listing, rewriteTone:tone }) });
       const data = await res.json();
       if(data.title) updateItem(itemId,"title",data.title);
       if(data.listing) updateItem(itemId,"listing",data.listing);
-    } catch(err){console.error(err);}
+    } catch(err) { console.error(err); }
     setRewriting(null);
   };
 
+  // ── POSTING ───────────────────────────────────────────────
   const simulatePosting = async () => {
-    if(items.length===0)return;
+    if(items.length===0) return;
     setIsPosting(true);
-    const ns={},np={};
+    const ns={}, np={};
     PLATFORMS.forEach(p=>{ns[p.id]="posting";np[p.id]=0;});
     setPostingStatus(ns); setPostProgress(np);
     for(const platform of PLATFORMS){
-      for(let i=0;i<=100;i+=10){
-        await new Promise(r=>setTimeout(r,120));
-        setPostProgress(prev=>({...prev,[platform.id]:i}));
-      }
+      for(let i=0;i<=100;i+=10){ await new Promise(r=>setTimeout(r,120)); setPostProgress(prev=>({...prev,[platform.id]:i})); }
       await new Promise(r=>setTimeout(r,200));
       setPostingStatus(prev=>({...prev,[platform.id]:"done"}));
     }
     setIsPosting(false);
   };
 
+  // ── HELPERS ───────────────────────────────────────────────
   const addPhotos=(itemId,files)=>{Array.from(files).filter(f=>f.type.startsWith("image/")).forEach(file=>{const reader=new FileReader();reader.onload=e=>setItems(prev=>prev.map(it=>it.id===itemId?{...it,extraPhotos:[...(it.extraPhotos||[]),{dataUrl:e.target.result,name:file.name}]}:it));reader.readAsDataURL(file);});};
   const addVideo=(itemId,file)=>{if(!file||!file.type.startsWith("video/"))return;setItems(prev=>prev.map(it=>it.id===itemId?{...it,video:{url:URL.createObjectURL(file),name:file.name}}:it));};
   const removePhoto=(itemId,pi)=>setItems(prev=>prev.map(it=>it.id===itemId?{...it,extraPhotos:it.extraPhotos.filter((_,i)=>i!==pi)}:it));
@@ -706,13 +708,10 @@ export default function App() {
   const updateCropBox=(i,box)=>setCropBoxes(prev=>prev.map((b,idx)=>idx===i?box:b));
   const toggleSkip=i=>setSkipped(prev=>prev.includes(i)?prev.filter(x=>x!==i):[...prev,i]);
   const toggleSelected=i=>setSelectedItems(prev=>prev.includes(i)?prev.filter(x=>x!==i):[...prev,i]);
-
-  const reset=()=>{
-    stopCamera();
-    setImage(null);setCapturedImage(null);setItems([]);setPhase("upload");setError(null);
-    setExpandedId(null);setDetectedObjects([]);setCropBoxes([]);setSkipped([]);
-    setShowSheet(false);setSelectedItems([]);setScanStatus("point");setCameraMode("idle");setCameraError(null);
-  };
+  const reset=()=>{stopCamera();setCapturedImage(null);setItems([]);setPhase("upload");setError(null);setExpandedId(null);setDetectedObjects([]);setCropBoxes([]);setSkipped([]);setShowSheet(false);setSelectedItems([]);setCameraError(null);};
+  const getToneLabel=val=>val<33?"⚡ Sell Fast":val>66?"💰 Max Profit":"⚖️ Balanced";
+  const totalEarnings=items.reduce((sum,it)=>sum+(parseFloat(it.priceSuggested)||0),0);
+  const steps=["Uploading","Detecting Objects","Ready","Generating Listings","Done!"];
 
   const downloadPackage=async(item)=>{
     setDownloading(item.id);
@@ -730,23 +729,20 @@ export default function App() {
     setDownloading(null);
   };
 
-  const getToneLabel=val=>val<33?"⚡ Sell Fast":val>66?"💰 Max Profit":"⚖️ Balanced";
-  const steps=["Uploading","Detecting Objects","Ready","Generating Listings","Done!"];
-  const totalEarnings=items.reduce((sum,it)=>sum+(parseFloat(it.priceSuggested)||0),0);
-
-  const renderItemCard = (item, inGrid=true) => {
+  // ── ITEM CARD RENDERER ────────────────────────────────────
+  const renderCard = (item) => {
     const isExp = expandedId===item.id;
-    const totalMedia=1+(item.extraPhotos?.length||0)+(item.video?1:0);
-    const cc=item.confidenceScore?confColor(item.confidenceScore):null;
-    const toneVal=toneValues[item.id]!==undefined?toneValues[item.id]:50;
+    const totalMedia = 1+(item.extraPhotos?.length||0)+(item.video?1:0);
+    const cc = item.confidenceScore ? confColor(item.confidenceScore) : null;
+    const toneVal = toneValues[item.id]!==undefined ? toneValues[item.id] : 50;
     return (
       <div key={item.id} className={`item-card${isExp?" expanded":""}`} onClick={()=>!isExp&&setExpandedId(item.id)}>
-        {!isExp?(
+        {!isExp ? (
           <>
             <div className="card-img-wrap">
               <img className="card-img" src={item.cropDataUrl} alt={item.label} />
               <div className="card-badge">{item.label}</div>
-              {cc&&<div className="conf-pill" style={{background:cc.bg,color:cc.color}}>{item.confidenceScore}%</div>}
+              {cc && <div className="conf-pill" style={{background:cc.bg,color:cc.color}}>{item.confidenceScore}%</div>}
               <div className="card-count">#{item.id+1} · {totalMedia} photo{totalMedia!==1?"s":""}</div>
             </div>
             <div className="card-body">
@@ -770,7 +766,7 @@ export default function App() {
               </div>
             </div>
           </>
-        ):(
+        ) : (
           <div className="exp-inner">
             <div>
               <img className="exp-img" src={item.cropDataUrl} alt={item.label} onClick={()=>setLightbox({type:"image",src:item.cropDataUrl})} />
@@ -795,8 +791,10 @@ export default function App() {
               <div className="id-sec">
                 <div className="id-lbl">AI ID {cc&&<span style={{color:cc.color}}>{item.confidenceScore}% conf</span>}{item.googleVerified&&<span className="g-verify">✓ Google</span>}</div>
                 {item.identifications?.map((id,i)=>(
-                  <div key={i}><div className="id-row"><span className="id-n">{i+1}</span><span className="id-name">{id.name}</span><span className="id-conf">{id.confidence}</span></div>
-                  {id.reasoning&&<div className="reason-box">{id.reasoning}</div>}</div>
+                  <div key={i}>
+                    <div className="id-row"><span className="id-n">{i+1}</span><span className="id-name">{id.name}</span><span className="id-conf">{id.confidence}</span></div>
+                    {id.reasoning&&<div className="reason-box">{id.reasoning}</div>}
+                  </div>
                 ))}
               </div>
               {item.condition&&<div className="meta-it">{item.condition}</div>}
@@ -838,13 +836,16 @@ export default function App() {
     );
   };
 
+  // ── RENDER ────────────────────────────────────────────────
   return (
     <>
       <style>{STYLES}</style>
-      {image && <img ref={imgRef} src={image.dataUrl} alt="" style={{display:"none"}} />}
+
+      {/* Hidden file inputs */}
       <input ref={cameraRef} type="file" accept="image/*" capture="environment" style={{position:"absolute",left:"-9999px"}} onChange={e=>handleFile(e.target.files[0])} />
       <input ref={galleryRef} type="file" accept="image/*" style={{position:"absolute",left:"-9999px"}} onChange={e=>handleFile(e.target.files[0])} />
 
+      {/* Lightbox */}
       {lightbox&&(
         <div className="lightbox" onClick={()=>setLightbox(null)}>
           <button className="lb-close">✕</button>
@@ -852,12 +853,13 @@ export default function App() {
         </div>
       )}
 
+      {/* Bottom Sheet */}
       {showSheet&&(
         <>
           <div className="sheet-backdrop" onClick={()=>setShowSheet(false)} />
           <div className="bottom-sheet">
             <div className="sheet-handle" />
-            <div className="sheet-title">{detectedObjects.length} Items Found — Choose to List</div>
+            <div className="sheet-title">{detectedObjects.length} Items Found</div>
             <div className="sheet-items">
               {detectedObjects.map((obj,i)=>(
                 <div key={i} className={`sheet-item${selectedItems.includes(i)?" sel":""}`} onClick={()=>toggleSelected(i)}>
@@ -875,6 +877,7 @@ export default function App() {
         </>
       )}
 
+      {/* Nav */}
       <nav className="nav">
         <div className="nav-logo">Multi<span className="g">Snap</span></div>
         <div className="nav-right">
@@ -890,47 +893,59 @@ export default function App() {
       {/* ── SCAN TAB ── */}
       {tab==="scan"&&(
         <>
-          {/* LIVE CAMERA */}
-          {cameraMode==="live"&&(
-            <div className="camera-screen" style={{maxHeight:"70vh"}}>
-              <video ref={videoRef} className="camera-video" autoPlay playsInline muted style={{maxHeight:"70vh",objectFit:"cover"}} />
+          {/* LIVE CAMERA — always rendered when active so videoRef stays mounted */}
+          <div style={{display: cameraActive ? "block" : "none"}}>
+            <div className="camera-screen" style={{height:"65vh"}}>
+              <video
+                ref={videoRef}
+                className="camera-video"
+                autoPlay
+                playsInline
+                muted
+                style={{width:"100%",height:"100%",objectFit:"cover",background:"#000",display:"block"}}
+              />
               <div className="scan-overlay">
                 <div className="scan-corner tl"/><div className="scan-corner tr"/>
                 <div className="scan-corner bl"/><div className="scan-corner br"/>
                 <div className="scan-line"/>
-                <div className={`scan-status${autoCountdown?" scanning":""}`}>
-                  {autoCountdown?"Hold still — capturing in 2s...":"Point at items to scan"}
-                </div>
+                <div className="scan-status active">Point at items · Tap Scan Now</div>
               </div>
               <div className="camera-controls">
-                <button className="cam-btn-secondary" onClick={stopCamera}>Cancel</button>
+                <button className="cam-btn" onClick={()=>{stopCamera();}}>✕ Cancel</button>
                 <button className="scan-now-btn" onClick={captureFrame}>📷 Scan Now</button>
-                <button className="cam-btn-gallery" onClick={()=>{galleryRef.current.value="";galleryRef.current.click();}}>🖼</button>
+                <button className="cam-btn" onClick={()=>{stopCamera();galleryRef.current.value="";galleryRef.current.click();}}>🖼 Gallery</button>
               </div>
+            </div>
+          </div>
+
+          {/* LOADING */}
+          {phase==="loading"&&(
+            <div className="loading-full">
+              <div className="loader-ring"><div className="loader-outer"/><div className="loader-inner"/></div>
+              <div className="loading-h">{loadStep===3?"Generating listings...":"Detecting objects..."}</div>
+              <div className="loading-sub">{loadStep===3?"Running two-pass AI identification with Google verification":"AI scanning every sellable item in your image"}</div>
+              <div className="steps-row">{steps.map((s,i)=><span key={s} className={`step-pill${i<loadStep?" done":i===loadStep?" active":""}`}>{i<loadStep?"✓ ":""}{s}</span>)}</div>
             </div>
           )}
 
-          {/* CAPTURED + BBOXES */}
-          {(cameraMode==="captured"||phase==="detect")&&capturedImage&&(
+          {/* DETECT — show captured image + bboxes */}
+          {phase==="detect"&&capturedImage&&!cameraActive&&(
             <div style={{maxWidth:"860px",margin:"0 auto",padding:"16px 18px"}}>
               <div className="sec-hdr">
-                <div>
-                  <div className="sec-h">{detectedObjects.length} Items Found</div>
-                  <div className="sec-sub">Tap a box to select · Adjust crops below</div>
-                </div>
+                <div><div className="sec-h">{detectedObjects.length} Items Found</div><div className="sec-sub">Tap boxes to select · Adjust crops below</div></div>
                 <div style={{display:"flex",gap:"8px"}}>
                   <button className="btn-ghost-sm" onClick={reset}>Re-Scan</button>
                   <button className="btn-grad" onClick={()=>setShowSheet(true)} disabled={detectedObjects.length===0}>Select Items →</button>
                 </div>
               </div>
               <div className="frame-container" style={{borderRadius:"var(--radius)",border:"1px solid var(--border)",marginBottom:"20px"}}>
-                <img src={capturedImage.dataUrl} className="captured-frame" alt="captured" ref={capturedImgRef} />
+                <img src={capturedImage.dataUrl} className="captured-frame" alt="captured" />
                 {detectedObjects.map((obj,i)=>{
                   const col=BBOX_COLORS[i%BBOX_COLORS.length];
                   const isSel=selectedItems.includes(i);
                   return(
-                    <div key={i} className={`bbox${isSel?" selected-box":""}`}
-                      style={{left:`${obj.xFrac*100}%`,top:`${obj.yFrac*100}%`,width:`${obj.wFrac*100}%`,height:`${obj.hFrac*100}%`,borderColor:col.border,background:isSel?col.bg:"rgba(0,0,0,0.05)",animationDelay:`${i*0.12}s`}}
+                    <div key={i} className={`bbox${isSel?" sel-box":""}`}
+                      style={{left:`${obj.xFrac*100}%`,top:`${obj.yFrac*100}%`,width:`${obj.wFrac*100}%`,height:`${obj.hFrac*100}%`,borderColor:col.border,background:isSel?col.bg:"rgba(0,0,0,0.04)",animationDelay:`${i*0.12}s`}}
                       onClick={()=>toggleSelected(i)}>
                       <div className="bbox-label" style={{background:col.border}}>{obj.label}</div>
                       <div className="bbox-num" style={{background:col.border}}>{i+1}</div>
@@ -940,7 +955,7 @@ export default function App() {
               </div>
               {detectedObjects.length>0&&(
                 <>
-                  <div style={{fontSize:"0.85rem",fontWeight:800,letterSpacing:"-0.02em",marginBottom:"12px"}}>Adjust Crops</div>
+                  <div style={{fontSize:"0.88rem",fontWeight:800,letterSpacing:"-0.02em",marginBottom:"12px"}}>Adjust Crops</div>
                   <div className="crop-grid">
                     {detectedObjects.map((obj,i)=>(
                       <div key={i} className="crop-card" style={{opacity:skipped.includes(i)?0.4:1}}>
@@ -968,18 +983,8 @@ export default function App() {
             </div>
           )}
 
-          {/* LOADING */}
-          {phase==="loading"&&(
-            <div className="loading-full">
-              <div className="loader-ring"><div className="loader-outer"/><div className="loader-inner"/></div>
-              <div className="loading-h">{loadStep===3?"Generating listings...":"Detecting objects..."}</div>
-              <div className="loading-sub">{loadStep===3?"Running two-pass AI identification with Google verification":"AI scanning every sellable item in your image"}</div>
-              <div className="steps-row">{steps.map((s,i)=><span key={s} className={`step-pill${i<loadStep?" done":i===loadStep?" active":""}`}>{i<loadStep?"✓ ":""}{s}</span>)}</div>
-            </div>
-          )}
-
           {/* RESULTS */}
-          {phase==="results"&&items.length>0&&(
+          {phase==="results"&&items.length>0&&!cameraActive&&(
             <div className="results-wrap">
               <div className="results-hdr">
                 <div><div className="results-h">{items.length} Listing{items.length!==1?"s":""} Ready</div><div className="results-sub">Tap any card to expand and edit</div></div>
@@ -988,17 +993,17 @@ export default function App() {
                   <button className="btn-grad" onClick={()=>setTab("post")}>Post All →</button>
                 </div>
               </div>
-              <div className="items-grid">{items.map(item=>renderItemCard(item))}</div>
+              <div className="items-grid">{items.map(item=>renderCard(item))}</div>
             </div>
           )}
 
-          {/* UPLOAD (initial state) */}
-          {phase==="upload"&&cameraMode==="idle"&&(
+          {/* UPLOAD — initial state */}
+          {phase==="upload"&&!cameraActive&&(
             <>
               <div className="hero">
                 <div className="hero-pill"><div className="hero-dot"/>AI-Powered Multi-Object Detection</div>
                 <h1 className="hero-h1">One Photo.<br /><span className="grad">Infinite Listings.</span></h1>
-                <p className="hero-sub">Point your camera or upload any photo — AI detects, crops, prices and describes every item automatically.</p>
+                <p className="hero-sub">Point your camera or upload any photo. AI detects, crops, prices and describes every item automatically.</p>
               </div>
               <div className="scan-wrap">
                 <div className={`scan-zone${dragOver?" drag":""}`} onDragOver={e=>{e.preventDefault();setDragOver(true);}} onDragLeave={()=>setDragOver(false)} onDrop={handleDrop}>
@@ -1011,7 +1016,7 @@ export default function App() {
                   </div>
                   <div className="scan-hint">Drag and drop also works on desktop</div>
                 </div>
-                {cameraError&&<div className="err-box">⚠ {cameraError}</div>}
+                {cameraError&&<div className="cam-error">⚠ {cameraError}</div>}
                 {error&&<div className="err-box">⚠ {error}</div>}
               </div>
             </>
@@ -1032,10 +1037,10 @@ export default function App() {
           ):(
             <>
               <div className="results-hdr">
-                <div><div className="results-h">{items.length} Active Listing{items.length!==1?"s":""}</div><div className="results-sub">Est. total value: ${totalEarnings.toFixed(0)}</div></div>
+                <div><div className="results-h">{items.length} Active Listing{items.length!==1?"s":""}</div><div className="results-sub">Est. total: ${totalEarnings.toFixed(0)}</div></div>
                 <button className="btn-grad" onClick={()=>{setTab("scan");reset();}}>+ New Scan</button>
               </div>
-              <div className="items-grid">{items.map(item=>renderItemCard(item))}</div>
+              <div className="items-grid">{items.map(item=>renderCard(item))}</div>
             </>
           )}
         </div>
@@ -1044,10 +1049,7 @@ export default function App() {
       {/* ── POST TAB ── */}
       {tab==="post"&&(
         <div className="post-wrap">
-          <div className="post-hdr">
-            <div className="post-h">Post Your Listings</div>
-            <div className="post-sub">{items.length} listing{items.length!==1?"s":""} ready · Select platforms below</div>
-          </div>
+          <div className="post-hdr"><div className="post-h">Post Listings</div><div className="post-sub">{items.length} listing{items.length!==1?"s":""} ready to post</div></div>
           {items.length===0?(
             <div style={{textAlign:"center",padding:"32px 20px"}}>
               <div style={{fontSize:"0.85rem",color:"var(--text2)",marginBottom:"20px"}}>No listings yet. Scan some items first.</div>
@@ -1086,11 +1088,9 @@ export default function App() {
       {/* ── DASHBOARD TAB ── */}
       {tab==="dashboard"&&(
         <div className="dash-wrap">
-          <div className="sec-hdr">
-            <div><div className="sec-h">Dashboard</div><div className="sec-sub">Your reselling activity</div></div>
-          </div>
+          <div className="sec-hdr"><div><div className="sec-h">Dashboard</div><div className="sec-sub">Your reselling activity</div></div></div>
           <div className="dash-stats">
-            <div className="stat-card"><div className="stat-lbl">Est. Value</div><div className="stat-val green">${totalEarnings.toFixed(0)}</div><div className="stat-sub">active listings</div></div>
+            <div className="stat-card"><div className="stat-lbl">Est. Value</div><div className="stat-val green">${totalEarnings.toFixed(0)}</div><div className="stat-sub">from active listings</div></div>
             <div className="stat-card"><div className="stat-lbl">Active</div><div className="stat-val purple">{items.length}</div><div className="stat-sub">listings ready</div></div>
             <div className="stat-card"><div className="stat-lbl">Avg Price</div><div className="stat-val purple">${items.length?(totalEarnings/items.length).toFixed(0):0}</div><div className="stat-sub">per listing</div></div>
             <div className="stat-card"><div className="stat-lbl">Platforms</div><div className="stat-val">{PLATFORMS.length}</div><div className="stat-sub">marketplaces</div></div>
@@ -1103,7 +1103,7 @@ export default function App() {
               <>
                 <div className="insight-card"><div className="insight-icon" style={{background:"rgba(251,191,36,0.1)"}}>⚡</div><div className="insight-text"><div className="insight-title">Price 10-20% below market to sell 3x faster</div><div className="insight-sub">Items at competitive prices get significantly more inquiries</div></div><button className="insight-action" onClick={()=>setTab("listings")}>Review</button></div>
                 <div className="insight-card"><div className="insight-icon" style={{background:"rgba(74,222,128,0.1)"}}>📸</div><div className="insight-text"><div className="insight-title">Add 3+ photos per listing to boost views</div><div className="insight-sub">Listings with multiple photos get 40% more engagement</div></div><button className="insight-action" onClick={()=>setTab("listings")}>Add Photos</button></div>
-                <div className="insight-card"><div className="insight-icon" style={{background:"rgba(124,111,255,0.1)"}}>🚀</div><div className="insight-text"><div className="insight-title">Post to all 3 platforms for maximum reach</div><div className="insight-sub">Multi-platform reach means more buyers, faster sales</div></div><button className="insight-action" onClick={()=>setTab("post")}>Post Now</button></div>
+                <div className="insight-card"><div className="insight-icon" style={{background:"rgba(124,111,255,0.1)"}}>🚀</div><div className="insight-text"><div className="insight-title">Post to all 3 platforms for maximum reach</div><div className="insight-sub">Multi-platform listings reach more buyers faster</div></div><button className="insight-action" onClick={()=>setTab("post")}>Post Now</button></div>
               </>
             )}
           </div>
@@ -1112,7 +1112,7 @@ export default function App() {
             {items.length===0?<div className="dash-empty">No listings yet</div>:items.map(item=>(
               <div key={item.id} className="dash-row">
                 <img className="dash-thumb" src={item.cropDataUrl} alt={item.label} />
-                <div className="dash-info"><div className="dash-title">{item.title}</div><div className="dash-meta">{item.label} · {item.condition||"Condition not assessed"}</div></div>
+                <div className="dash-info"><div className="dash-title">{item.title}</div><div className="dash-meta">{item.label}</div></div>
                 <div className="dash-price">${item.priceSuggested}</div>
               </div>
             ))}
