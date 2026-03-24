@@ -1,6 +1,7 @@
 "use client";
 import { useState, useRef, useCallback, useEffect } from "react";
 import JSZip from "jszip";
+import { supabase } from "./lib/supabase";
 
 const STYLES = `
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=DM+Mono:wght@400;500&display=swap');
@@ -548,6 +549,12 @@ export default function App() {
   const [postProgress, setPostProgress] = useState({});
   const [isPosting, setIsPosting] = useState(false);
   const [cameraError, setCameraError] = useState(null);
+  // ── AUTH STATE ──────────────────────────────────────────
+  const [authUser, setAuthUser] = useState(null);
+  const [authLoading, setAuthLoading] = useState(true);
+  const [publishedListings, setPublishedListings] = useState([]);
+  const [publishing, setPublishing] = useState(false);
+  const [publishResult, setPublishResult] = useState(null);
 
   const videoRef = useRef(null);
   const streamRef = useRef(null);
@@ -555,6 +562,89 @@ export default function App() {
   const galleryRef = useRef();
   const photoRefs = useRef({});
   const videoRefs = useRef({});
+
+  // ── AUTH INIT ────────────────────────────────────────────
+  useEffect(() => {
+    // Get current session on mount
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setAuthUser(session?.user ?? null);
+      setAuthLoading(false);
+    });
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setAuthUser(session?.user ?? null);
+    });
+    return () => subscription.unsubscribe();
+  }, []);
+
+  // ── PUBLISH TO SUPABASE ──────────────────────────────────
+  async function publishToSupabase() {
+    if (!authUser) {
+      window.location.href = "/auth";
+      return;
+    }
+    if (!items.length) return;
+
+    setPublishing(true);
+    setPublishResult(null);
+
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) throw new Error("Not authenticated");
+
+      // Build the payload
+      const scanBase64 = capturedImage?.dataUrl?.split(",")?.[1] || null;
+      const scanMime = capturedImage?.dataUrl?.match(/data:([^;]+);base64/)?.[1] || "image/jpeg";
+
+      const itemsPayload = items.map((item) => ({
+        // AI originals
+        aiTitle: item.title,
+        aiDescription: item.listing,
+        aiPrice: item.priceSuggested,
+        aiCategory: item.category || null,
+        aiCondition: item.condition || null,
+        // Current values (may be edited)
+        title: item.title,
+        description: item.listing,
+        price: item.priceSuggested,
+        category: item.category || null,
+        condition: item.condition || null,
+        tags: item.tags || [],
+        priceMin: item.priceMin || null,
+        priceMax: item.priceMax || null,
+        priceSuggested: item.priceSuggested || null,
+        confidenceScore: item.confidenceScore || null,
+        label: item.label,
+        // Crop image (base64 only, no data: prefix)
+        cropBase64: item.cropDataUrl?.split(",")?.[1] || null,
+      }));
+
+      const res = await fetch("/api/publish", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          scanImageBase64: scanBase64,
+          scanImageMime: scanMime,
+          detectedObjects: detectedObjects,
+          items: itemsPayload,
+          userToken: session.access_token,
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Publish failed");
+
+      setPublishedListings(data.listings || []);
+      setPublishResult({ success: true, count: data.publishedCount });
+      // Switch to the published tab
+      setTab("listings");
+    } catch (err) {
+      console.error("[Publish]", err);
+      setPublishResult({ success: false, error: err.message });
+    } finally {
+      setPublishing(false);
+    }
+  }
 
   // ── CAMERA ──────────────────────────────────────────────
   const startCamera = useCallback(async () => {
@@ -699,6 +789,9 @@ export default function App() {
 
   // ── POSTING ───────────────────────────────────────────────
   const simulatePosting = async () => {
+    // Redirect to real publish if user is logged in
+    if (authUser) { await publishToSupabase(); return; }
+    // Fallback simulate for non-authenticated users
     if(items.length===0) return;
     setIsPosting(true);
     const ns={}, np={};
@@ -869,13 +962,25 @@ export default function App() {
 
       {/* NAV */}
       <nav className="nav">
-        <div className="nav-logo">Multi<span className="g">Snap</span></div>
+        <div className="nav-logo">FLIP<span className="g">R</span></div>
         <div className="nav-right">
           {["scan","listings","post","dashboard"].map(t=>(
             <button key={t} className={`nav-tab${tab===t?" active":""}`} onClick={()=>setTab(t)}>
               {t==="scan"?"Scan":t==="listings"?`Listings${items.length?` (${items.length})`:""}`:`${t.charAt(0).toUpperCase()+t.slice(1)}`}
             </button>
           ))}
+          <button className="nav-tab" onClick={()=>window.location.href="/feed"}>Feed</button>
+          {authUser ? (
+            <button className="nav-tab" onClick={()=>supabase.auth.signOut().then(()=>window.location.reload())}
+              title={authUser.email} style={{maxWidth:"80px",overflow:"hidden",textOverflow:"ellipsis"}}>
+              {authUser.email?.split("@")[0]}
+            </button>
+          ) : (
+            <button className="nav-tab" onClick={()=>window.location.href="/auth"}
+              style={{color:"var(--accent)",border:"1px solid rgba(124,111,255,0.3)",borderRadius:"100px"}}>
+              Sign In
+            </button>
+          )}
           <div className="nav-beta">BETA</div>
         </div>
       </nav>
@@ -1047,9 +1152,9 @@ export default function App() {
           {phase==="upload"&&!cameraActive&&(
             <>
               <div className="hero">
-                <div className="hero-pill"><div className="hero-dot"/>AI-Powered Multi-Object Detection</div>
-                <h1 className="hero-h1">One Photo.<br /><span className="grad">Infinite Listings.</span></h1>
-                <p className="hero-sub">Point your camera or upload any photo. AI detects, crops, prices and describes every item automatically.</p>
+                <div className="hero-pill"><div className="hero-dot"/>AI-Powered · Instant Listings</div>
+                <h1 className="hero-h1">Scan. List.<br /><span className="grad">Flip.</span></h1>
+                <p className="hero-sub">Point your camera at anything. AI detects every item, writes the listing, and gets you flipping in seconds.</p>
               </div>
               <div className="scan-wrap">
                 <div className={`scan-zone${dragOver?" drag":""}`} onDragOver={e=>{e.preventDefault();setDragOver(true);}} onDragLeave={()=>setDragOver(false)} onDrop={handleDrop}>
@@ -1095,37 +1200,93 @@ export default function App() {
       {/* ── POST TAB ── */}
       {tab==="post"&&(
         <div className="post-wrap">
-          <div className="post-hdr"><div className="post-h">Post Listings</div><div className="post-sub">{items.length} listing{items.length!==1?"s":""} ready to post</div></div>
+          <div className="post-hdr"><div className="post-h">Publish Listings</div><div className="post-sub">{items.length} listing{items.length!==1?"s":""} ready</div></div>
           {items.length===0?(
             <div style={{textAlign:"center",padding:"32px 20px"}}>
               <div style={{fontSize:"0.85rem",color:"var(--text2)",marginBottom:"20px"}}>No listings yet. Scan some items first.</div>
               <button className="btn-grad" onClick={()=>setTab("scan")}>Go to Scanner →</button>
             </div>
-          ):(
-            <>
-              <div className="platform-cards">
-                {PLATFORMS.map(p=>{
-                  const status=postingStatus[p.id]||"ready";
-                  const progress=postProgress[p.id]||0;
-                  return(
-                    <div key={p.id} className={`platform-card${status==="posting"?" active":""}`}>
-                      <div className="platform-icon" style={{background:`${p.color}22`}}>{p.icon}</div>
-                      <div className="platform-info">
-                        <div className="platform-name">{p.name}</div>
-                        <div className="platform-desc">{p.desc}</div>
-                        {status==="posting"&&<div className="progress-bar-wrap" style={{marginTop:"8px",width:"100%"}}><div className="progress-fill" style={{width:`${progress}%`}} /></div>}
-                      </div>
-                      <div className="platform-status">
-                        <div className={`status-badge ${status}`}>{status==="ready"?"Ready":status==="posting"?"Posting...":"✓ Done"}</div>
-                        {status==="ready"&&<div style={{fontSize:"0.62rem",color:"var(--muted)"}}>{items.length} items</div>}
+          ):!authUser?(
+            /* AUTH PROMPT */
+            <div style={{textAlign:"center",padding:"32px 20px"}}>
+              <div style={{fontSize:"2rem",marginBottom:"14px"}}>🔒</div>
+              <div style={{fontSize:"1rem",fontWeight:800,marginBottom:"8px",letterSpacing:"-0.02em"}}>Sign in to publish</div>
+              <div style={{fontSize:"0.78rem",color:"var(--text2)",marginBottom:"24px",lineHeight:1.6}}>
+                Create a free account to publish your listings to the FLIPR marketplace and reach real buyers.
+              </div>
+              <button className="btn-grad" onClick={()=>window.location.href="/auth"}>
+                Sign In / Create Account →
+              </button>
+            </div>
+          ):publishResult?.success?(
+            /* PUBLISH SUCCESS */
+            <div style={{textAlign:"center",padding:"32px 20px"}}>
+              <div style={{fontSize:"2.5rem",marginBottom:"14px"}}>🎉</div>
+              <div style={{fontSize:"1.1rem",fontWeight:800,marginBottom:"8px",letterSpacing:"-0.03em"}}>
+                {publishResult.count} listing{publishResult.count!==1?"s":""} published!
+              </div>
+              <div style={{fontSize:"0.78rem",color:"var(--text2)",marginBottom:"24px",lineHeight:1.6}}>
+                Your items are now live on the FLIPR marketplace.
+              </div>
+              <div style={{display:"flex",gap:"10px",justifyContent:"center",flexWrap:"wrap"}}>
+                <button className="btn-grad" onClick={()=>window.location.href="/feed"}>View in Feed →</button>
+                <button className="btn-outline" style={{padding:"13px 20px",fontSize:"0.85rem"}} onClick={()=>{setPublishResult(null);setTab("scan");reset();}}>Scan More Items</button>
+              </div>
+              {publishedListings.length>0&&(
+                <div style={{marginTop:"24px",display:"flex",flexDirection:"column",gap:"10px"}}>
+                  {publishedListings.map(l=>(
+                    <div key={l.id} style={{display:"flex",alignItems:"center",gap:"12px",background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:"12px",padding:"12px 14px",cursor:"pointer"}}
+                      onClick={()=>window.location.href=l.url}>
+                      {l.imageUrl&&<img src={l.imageUrl} alt={l.title} style={{width:48,height:48,borderRadius:8,objectFit:"cover"}}/>}
+                      <div style={{flex:1,textAlign:"left"}}>
+                        <div style={{fontSize:"0.82rem",fontWeight:700,marginBottom:2}}>{l.title}</div>
+                        <div style={{fontSize:"0.72rem",color:"var(--text2)"}}>${l.price} · View listing →</div>
                       </div>
                     </div>
-                  );
-                })}
+                  ))}
+                </div>
+              )}
+            </div>
+          ):(
+            <>
+              {publishResult?.error&&(
+                <div style={{margin:"0 0 16px",padding:"12px 16px",background:"rgba(248,113,113,0.1)",border:"1px solid rgba(248,113,113,0.25)",borderRadius:"12px",fontSize:"0.78rem",color:"var(--danger)"}}>
+                  ⚠ {publishResult.error}
+                </div>
+              )}
+              {/* FLIPR PLATFORM CARD */}
+              <div className="platform-cards">
+                <div className={`platform-card${publishing?" active":""}`} style={{borderColor:publishing?"var(--accent)":""}}>
+                  <div className="platform-icon" style={{background:"rgba(124,111,255,0.15)"}}>⚡</div>
+                  <div className="platform-info">
+                    <div className="platform-name">FLIPR Marketplace</div>
+                    <div className="platform-desc">Publish to our marketplace feed · Live immediately</div>
+                    {publishing&&<div className="progress-bar-wrap" style={{marginTop:"8px",width:"100%"}}><div className="progress-fill" style={{width:"100%",animation:"progressPulse 1.5s ease infinite"}} /></div>}
+                  </div>
+                  <div className="platform-status">
+                    <div className={`status-badge${publishing?" posting":" ready"}`}>{publishing?"Publishing...":"Ready"}</div>
+                    {!publishing&&<div style={{fontSize:"0.62rem",color:"var(--muted)"}}>{items.length} items</div>}
+                  </div>
+                </div>
+                {PLATFORMS.filter(p=>p.id!=="flipr").map(p=>(
+                  <div key={p.id} className="platform-card" style={{opacity:0.45}}>
+                    <div className="platform-icon" style={{background:`${p.color}22`}}>{p.icon}</div>
+                    <div className="platform-info">
+                      <div className="platform-name">{p.name}</div>
+                      <div className="platform-desc">Coming soon</div>
+                    </div>
+                    <div className="platform-status">
+                      <div className="status-badge" style={{background:"var(--surface3)",color:"var(--muted)"}}>Soon</div>
+                    </div>
+                  </div>
+                ))}
               </div>
-              <button className="post-all-btn" onClick={simulatePosting} disabled={isPosting||Object.values(postingStatus).every(s=>s==="done")}>
-                {isPosting?"Posting...":Object.values(postingStatus).every(s=>s==="done")?"✓ All Posted!":"🚀 Post All "+items.length+" Listings"}
+              <button className="post-all-btn" onClick={publishToSupabase} disabled={publishing}>
+                {publishing?"Publishing...":"⚡ Flip "+items.length+" Item"+(items.length!==1?"s":"")+" on FLIPR"}
               </button>
+              <div style={{textAlign:"center",fontSize:"0.66rem",color:"var(--muted)",marginTop:"12px"}}>
+                Signed in as {authUser.email}
+              </div>
             </>
           )}
         </div>
