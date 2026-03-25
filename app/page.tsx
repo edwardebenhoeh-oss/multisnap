@@ -29,9 +29,9 @@ const DETECT_STEPS = ['Uploading', 'Detecting items', 'Preparing crops'];
 // ─── Landing-page content (shown only in upload phase) ───────────────────────
 const USE_CASES = [
   { icon: '📦', title: 'Moving & Downsizing',  desc: 'Turn a full household into cash listings before the movers arrive.' },
-  { icon: '🏚️', title: 'Garage Cleanouts',     desc: 'Transform a day's cleanout into dozens of ready-to-post items.' },
+  { icon: '🏚️', title: 'Garage Cleanouts',     desc: "Transform a day's cleanout into dozens of ready-to-post items." },
   { icon: '🏛️', title: 'Estate Sales',          desc: 'Professionally list inherited items fast, with accurate market pricing.' },
-  { icon: '🗄️', title: 'Storage Units',         desc: 'Photograph each shelf and get every item listed while you're still there.' },
+  { icon: '🗄️', title: 'Storage Units',         desc: "Photograph each shelf and get every item listed while you're still there." },
   { icon: '♻️', title: 'Resellers & Flippers',  desc: 'Scale your operation — scan, list, and move inventory 10× faster.' },
 ];
 
