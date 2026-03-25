@@ -12,7 +12,7 @@ const STYLES = `
     --border: rgba(255,255,255,0.08);
     --border2: rgba(255,255,255,0.12);
     --accent: #7c5cff;
-    --accent-hover: #6b4eee;
+    --accent-h: #6b4eee;
     --success: #22c55e;
     --warning: #f59e0b;
     --danger: #ef4444;
@@ -31,134 +31,120 @@ const STYLES = `
   ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
 
-  /* NAV */
   .nav { display: flex; align-items: center; justify-content: space-between; padding: 14px 20px; border-bottom: 1px solid var(--border); background: rgba(11,11,15,0.95); backdrop-filter: blur(16px); position: sticky; top: 0; z-index: 200; }
-  .nav-logo { font-size: 1.15rem; font-weight: 800; letter-spacing: -0.03em; color: var(--text); }
-  .nav-logo .accent { color: var(--accent); }
+  .nav-logo { font-size: 1.2rem; font-weight: 900; letter-spacing: -0.04em; color: var(--text); }
+  .nav-logo .acc { color: var(--accent); }
   .nav-right { display: flex; align-items: center; gap: 6px; }
   .nav-tab { background: transparent; border: none; color: var(--text2); font-family: 'Inter', sans-serif; font-size: 0.73rem; font-weight: 600; padding: 6px 12px; border-radius: 8px; cursor: pointer; transition: all 0.15s; white-space: nowrap; }
   .nav-tab:hover { color: var(--text); background: var(--surface2); }
   .nav-tab.active { color: var(--text); background: var(--surface2); }
   .nav-badge { font-size: 0.55rem; font-weight: 700; color: var(--accent); background: rgba(124,92,255,0.12); border: 1px solid rgba(124,92,255,0.2); padding: 2px 7px; border-radius: 100px; letter-spacing: 0.06em; }
 
-  /* STEP INDICATOR */
-  .step-bar { display: flex; align-items: center; padding: 14px 20px; background: var(--surface); border-bottom: 1px solid var(--border); overflow-x: auto; gap: 0; }
+  .step-bar { display: flex; align-items: center; padding: 12px 20px; background: var(--surface); border-bottom: 1px solid var(--border); overflow-x: auto; gap: 0; }
   .step-bar::-webkit-scrollbar { display: none; }
-  .step-item { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
-  .step-dot { width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.62rem; font-weight: 800; flex-shrink: 0; transition: all 0.2s; }
+  .step-item { display: flex; align-items: center; gap: 7px; flex-shrink: 0; }
+  .step-dot { width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.6rem; font-weight: 800; flex-shrink: 0; transition: all 0.2s; }
   .step-dot.done { background: var(--success); color: #fff; }
   .step-dot.active { background: var(--accent); color: #fff; }
   .step-dot.pending { background: var(--surface3); color: var(--muted); border: 1px solid var(--border2); }
-  .step-text { font-size: 0.68rem; font-weight: 600; white-space: nowrap; }
+  .step-text { font-size: 0.67rem; font-weight: 600; white-space: nowrap; }
   .step-text.done { color: var(--success); }
   .step-text.active { color: var(--text); }
   .step-text.pending { color: var(--muted); }
-  .step-arrow { color: var(--muted); font-size: 0.7rem; margin: 0 10px; flex-shrink: 0; }
+  .step-arrow { color: var(--muted); font-size: 0.68rem; margin: 0 8px; flex-shrink: 0; }
 
-  /* BUTTONS */
   .btn-primary { background: var(--accent); color: #fff; font-family: 'Inter', sans-serif; font-size: 0.88rem; font-weight: 700; padding: 13px 24px; border-radius: var(--radius-sm); border: none; cursor: pointer; touch-action: manipulation; transition: background 0.15s; letter-spacing: -0.01em; }
-  .btn-primary:hover { background: var(--accent-hover); }
+  .btn-primary:hover { background: var(--accent-h); }
   .btn-primary:active { transform: scale(0.98); }
   .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
   .btn-secondary { background: var(--surface2); color: var(--text2); font-family: 'Inter', sans-serif; font-size: 0.85rem; font-weight: 600; padding: 12px 20px; border-radius: var(--radius-sm); border: 1px solid var(--border2); cursor: pointer; touch-action: manipulation; transition: all 0.15s; }
-  .btn-secondary:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
+  .btn-secondary:hover { color: var(--text); }
   .btn-ghost { background: transparent; color: var(--text2); font-family: 'Inter', sans-serif; font-size: 0.8rem; font-weight: 600; padding: 10px 16px; border-radius: var(--radius-xs); border: 1px solid var(--border); cursor: pointer; touch-action: manipulation; transition: all 0.15s; }
   .btn-ghost:hover { color: var(--text); border-color: var(--border2); }
-  .btn-danger-ghost { background: transparent; color: rgba(239,68,68,0.7); font-family: 'Inter', sans-serif; font-size: 0.8rem; font-weight: 600; padding: 10px 16px; border-radius: var(--radius-xs); border: 1px solid rgba(239,68,68,0.2); cursor: pointer; touch-action: manipulation; transition: all 0.15s; }
-  .btn-danger-ghost:hover { color: var(--danger); border-color: rgba(239,68,68,0.4); }
 
-  /* PAGE WRAPPER */
   .page { max-width: 860px; margin: 0 auto; padding: 24px 18px 80px; }
 
-  /* CAMERA */
   .camera-screen { position: relative; width: 100%; background: #000; overflow: hidden; }
-  .camera-video { width: 100%; height: 100%; display: block; object-fit: cover; background: #000; }
-  .cam-corners { position: absolute; inset: 0; pointer-events: none; }
-  .cam-corner { position: absolute; width: 24px; height: 24px; border-color: rgba(255,255,255,0.6); border-style: solid; }
-  .cam-corner.tl { top: 16px; left: 16px; border-width: 2px 0 0 2px; border-radius: 4px 0 0 0; }
-  .cam-corner.tr { top: 16px; right: 16px; border-width: 2px 2px 0 0; border-radius: 0 4px 0 0; }
-  .cam-corner.bl { bottom: 72px; left: 16px; border-width: 0 0 2px 2px; border-radius: 0 0 0 4px; }
-  .cam-corner.br { bottom: 72px; right: 16px; border-width: 0 2px 2px 0; border-radius: 0 0 4px 0; }
-  .cam-scan-line { position: absolute; left: 16px; right: 16px; height: 1px; background: rgba(124,92,255,0.7); animation: camScan 2.5s ease-in-out infinite; }
-  @keyframes camScan { 0%{top:16px;opacity:1} 90%{opacity:0.8} 100%{top:calc(100% - 72px);opacity:0} }
-  .cam-controls { position: absolute; bottom: 0; left: 0; right: 0; padding: 10px 20px 24px; background: linear-gradient(transparent, rgba(0,0,0,0.85)); display: flex; align-items: center; justify-content: space-between; gap: 10px; }
-  .cam-cancel { background: rgba(255,255,255,0.12); color: #fff; font-family: 'Inter', sans-serif; font-size: 0.75rem; font-weight: 600; padding: 9px 16px; border-radius: 100px; border: 1px solid rgba(255,255,255,0.15); cursor: pointer; touch-action: manipulation; }
-  .cam-scan-btn { background: var(--accent); color: #fff; font-family: 'Inter', sans-serif; font-size: 0.9rem; font-weight: 700; padding: 13px 28px; border-radius: 100px; border: none; cursor: pointer; touch-action: manipulation; transition: background 0.15s; flex: 1; max-width: 180px; }
-  .cam-scan-btn:hover { background: var(--accent-hover); }
-  .cam-gallery { background: rgba(255,255,255,0.12); color: #fff; font-family: 'Inter', sans-serif; font-size: 0.75rem; font-weight: 600; padding: 9px 14px; border-radius: 100px; border: 1px solid rgba(255,255,255,0.15); cursor: pointer; touch-action: manipulation; }
+  .cam-video { width: 100%; height: 100%; display: block; object-fit: cover; background: #000; }
+  .cam-overlay { position: absolute; inset: 0; pointer-events: none; }
+  .cam-corner { position: absolute; width: 22px; height: 22px; border-color: rgba(255,255,255,0.55); border-style: solid; }
+  .cam-corner.tl { top: 14px; left: 14px; border-width: 2px 0 0 2px; border-radius: 4px 0 0 0; }
+  .cam-corner.tr { top: 14px; right: 14px; border-width: 2px 2px 0 0; border-radius: 0 4px 0 0; }
+  .cam-corner.bl { bottom: 70px; left: 14px; border-width: 0 0 2px 2px; border-radius: 0 0 0 4px; }
+  .cam-corner.br { bottom: 70px; right: 14px; border-width: 0 2px 2px 0; border-radius: 0 0 4px 0; }
+  .cam-line { position: absolute; left: 14px; right: 14px; height: 1px; background: rgba(124,92,255,0.65); animation: camLine 2.5s ease-in-out infinite; }
+  @keyframes camLine { 0%{top:14px;opacity:1} 90%{opacity:0.7} 100%{top:calc(100% - 70px);opacity:0} }
+  .cam-controls { position: absolute; bottom: 0; left: 0; right: 0; padding: 10px 18px 22px; background: linear-gradient(transparent, rgba(0,0,0,0.88)); display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .cam-cancel { background: rgba(255,255,255,0.1); color: #fff; font-family: 'Inter', sans-serif; font-size: 0.73rem; font-weight: 600; padding: 9px 15px; border-radius: 100px; border: 1px solid rgba(255,255,255,0.15); cursor: pointer; touch-action: manipulation; }
+  .cam-scan { background: var(--accent); color: #fff; font-family: 'Inter', sans-serif; font-size: 0.88rem; font-weight: 700; padding: 13px 28px; border-radius: 100px; border: none; cursor: pointer; touch-action: manipulation; transition: background 0.15s; flex: 1; max-width: 175px; }
+  .cam-scan:hover { background: var(--accent-h); }
+  .cam-gallery { background: rgba(255,255,255,0.1); color: #fff; font-family: 'Inter', sans-serif; font-size: 0.73rem; font-weight: 600; padding: 9px 13px; border-radius: 100px; border: 1px solid rgba(255,255,255,0.15); cursor: pointer; touch-action: manipulation; }
 
-  /* HOME SCREEN */
-  .home-hero { text-align: center; padding: 56px 24px 40px; }
-  .home-badge { display: inline-flex; align-items: center; gap: 7px; background: var(--surface2); border: 1px solid var(--border2); border-radius: 100px; padding: 5px 14px; font-size: 0.68rem; font-weight: 600; color: var(--text2); margin-bottom: 24px; }
+  .home-hero { text-align: center; padding: 52px 24px 36px; }
+  .home-badge { display: inline-flex; align-items: center; gap: 7px; background: var(--surface2); border: 1px solid var(--border2); border-radius: 100px; padding: 5px 14px; font-size: 0.67rem; font-weight: 600; color: var(--text2); margin-bottom: 22px; }
   .home-badge-dot { width: 6px; height: 6px; background: var(--success); border-radius: 50%; }
-  .home-h1 { font-size: clamp(1.8rem, 6vw, 3.2rem); font-weight: 900; line-height: 1.1; letter-spacing: -0.04em; margin-bottom: 14px; }
+  .home-h1 { font-size: clamp(1.8rem, 6vw, 3.2rem); font-weight: 900; line-height: 1.1; letter-spacing: -0.04em; margin-bottom: 13px; }
   .home-h1 .hl { color: var(--accent); }
-  .home-sub { font-size: 0.9rem; color: var(--text2); line-height: 1.7; max-width: 400px; margin: 0 auto 32px; }
-  .upload-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 40px 28px; text-align: center; max-width: 560px; margin: 0 auto; }
+  .home-sub { font-size: 0.88rem; color: var(--text2); line-height: 1.7; max-width: 400px; margin: 0 auto 30px; }
+  .upload-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 38px 26px; text-align: center; max-width: 540px; margin: 0 auto; transition: border-color 0.2s; }
   .upload-card.drag { border-color: var(--accent); background: rgba(124,92,255,0.04); }
-  .upload-icon { width: 60px; height: 60px; background: var(--surface2); border-radius: 14px; display: flex; align-items: center; justify-content: center; margin: 0 auto 18px; font-size: 1.6rem; border: 1px solid var(--border2); }
-  .upload-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 7px; letter-spacing: -0.02em; }
-  .upload-sub { font-size: 0.78rem; color: var(--text2); margin-bottom: 22px; line-height: 1.6; }
+  .upload-icon { width: 56px; height: 56px; background: var(--surface2); border-radius: 14px; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; font-size: 1.5rem; border: 1px solid var(--border2); }
+  .upload-title { font-size: 1.05rem; font-weight: 700; margin-bottom: 7px; letter-spacing: -0.02em; }
+  .upload-sub { font-size: 0.76rem; color: var(--text2); margin-bottom: 20px; line-height: 1.6; }
   .upload-btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
-  .upload-hint { font-size: 0.65rem; color: var(--muted); margin-top: 14px; }
-  .cam-error { background: rgba(239,68,68,0.07); border: 1px solid rgba(239,68,68,0.2); color: var(--danger); padding: 12px 16px; border-radius: var(--radius-sm); font-size: 0.75rem; margin-top: 14px; line-height: 1.5; max-width: 560px; margin-left: auto; margin-right: auto; }
+  .upload-hint { font-size: 0.63rem; color: var(--muted); margin-top: 13px; }
+  .cam-err { background: rgba(239,68,68,0.07); border: 1px solid rgba(239,68,68,0.2); color: var(--danger); padding: 11px 14px; border-radius: var(--radius-sm); font-size: 0.74rem; margin-top: 12px; line-height: 1.5; max-width: 540px; margin-left: auto; margin-right: auto; }
 
-  /* LOADING */
   .loading-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 52vh; padding: 40px 24px; text-align: center; }
-  .loader { position: relative; width: 52px; height: 52px; margin: 0 auto 22px; }
-  .loader-ring1 { width: 52px; height: 52px; border: 2.5px solid var(--border2); border-top-color: var(--accent); border-radius: 50%; animation: spin 1s linear infinite; }
-  .loader-ring2 { position: absolute; inset: 8px; border: 2px solid transparent; border-top-color: rgba(124,92,255,0.4); border-radius: 50%; animation: spin 0.7s linear infinite reverse; }
+  .loader { position: relative; width: 50px; height: 50px; margin: 0 auto 20px; }
+  .loader-r1 { width: 50px; height: 50px; border: 2.5px solid var(--border2); border-top-color: var(--accent); border-radius: 50%; animation: spin 1s linear infinite; }
+  .loader-r2 { position: absolute; inset: 8px; border: 2px solid transparent; border-top-color: rgba(124,92,255,0.35); border-radius: 50%; animation: spin 0.7s linear infinite reverse; }
   @keyframes spin { to { transform: rotate(360deg); } }
-  .loading-title { font-size: 1.15rem; font-weight: 800; margin-bottom: 7px; letter-spacing: -0.02em; }
-  .loading-sub { font-size: 0.77rem; color: var(--text2); margin-bottom: 22px; line-height: 1.6; }
+  .loading-title { font-size: 1.1rem; font-weight: 800; margin-bottom: 7px; letter-spacing: -0.02em; }
+  .loading-sub { font-size: 0.76rem; color: var(--text2); margin-bottom: 20px; line-height: 1.6; }
   .loading-pills { display: flex; flex-wrap: wrap; justify-content: center; gap: 5px; }
-  .loading-pill { padding: 3px 11px; border-radius: 100px; background: var(--surface2); border: 1px solid var(--border); font-size: 0.64rem; font-weight: 600; color: var(--muted); transition: all 0.25s; }
+  .loading-pill { padding: 3px 11px; border-radius: 100px; background: var(--surface2); border: 1px solid var(--border); font-size: 0.63rem; font-weight: 600; color: var(--muted); transition: all 0.25s; }
   .loading-pill.active { border-color: var(--accent); color: var(--accent); background: rgba(124,92,255,0.08); }
   .loading-pill.done { color: var(--success); border-color: rgba(34,197,94,0.3); }
 
-  /* REVIEW SCREEN */
-  .screen-header { margin-bottom: 20px; }
-  .screen-label { font-size: 0.62rem; font-weight: 700; color: var(--accent); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 5px; }
-  .screen-title { font-size: 1.5rem; font-weight: 900; letter-spacing: -0.04em; margin-bottom: 6px; }
-  .screen-sub { font-size: 0.78rem; color: var(--text2); line-height: 1.6; }
+  .screen-label { font-size: 0.6rem; font-weight: 700; color: var(--accent); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 5px; }
+  .screen-title { font-size: 1.45rem; font-weight: 900; letter-spacing: -0.04em; margin-bottom: 6px; }
+  .screen-sub { font-size: 0.76rem; color: var(--text2); line-height: 1.6; margin-bottom: 20px; }
 
-  /* FRAME + BBOXES */
-  .frame-wrap { position: relative; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); margin-bottom: 20px; background: #000; }
+  .frame-wrap { position: relative; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); margin-bottom: 18px; background: #000; }
   .frame-img { width: 100%; display: block; }
   .bbox { position: absolute; border: 2px solid; border-radius: 6px; cursor: pointer; animation: bboxIn 0.3s cubic-bezier(0.34,1.56,0.64,1) forwards; opacity: 0; }
   @keyframes bboxIn { 0%{opacity:0;transform:scale(0.88)} 100%{opacity:1;transform:scale(1)} }
   .bbox:hover { filter: brightness(1.1); }
-  .bbox-label { position: absolute; top: -24px; left: 0; font-size: 0.55rem; font-weight: 700; padding: 2px 8px; border-radius: 100px; white-space: nowrap; letter-spacing: 0.05em; text-transform: uppercase; color: #fff; }
-  .bbox-num { position: absolute; top: -9px; right: -9px; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.55rem; font-weight: 800; color: #fff; }
-  .bbox.selected { box-shadow: 0 0 0 2px #fff inset; }
+  .bbox-lbl { position: absolute; top: -23px; left: 0; font-size: 0.54rem; font-weight: 700; padding: 2px 8px; border-radius: 100px; white-space: nowrap; letter-spacing: 0.05em; text-transform: uppercase; color: #fff; }
+  .bbox-num { position: absolute; top: -9px; right: -9px; width: 19px; height: 19px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.53rem; font-weight: 800; color: #fff; }
+  .bbox.sel { box-shadow: 0 0 0 2px #fff inset; }
 
-  /* ITEM LIST */
-  .item-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
-  .item-row { display: flex; align-items: center; gap: 12px; padding: 12px 14px; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-sm); cursor: pointer; transition: all 0.15s; }
-  .item-row:hover, .item-row.sel { border-color: rgba(124,92,255,0.35); background: rgba(124,92,255,0.05); }
-  .item-row-thumb { width: 48px; height: 48px; border-radius: 8px; object-fit: cover; background: var(--surface3); flex-shrink: 0; }
-  .item-row-thumb-ph { width: 48px; height: 48px; border-radius: 8px; background: var(--surface3); flex-shrink: 0; }
-  .item-row-info { flex: 1; }
-  .item-row-name { font-size: 0.82rem; font-weight: 700; margin-bottom: 2px; }
-  .item-row-sub { font-size: 0.65rem; color: var(--text2); }
-  .item-row-check { width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--border2); display: flex; align-items: center; justify-content: center; font-size: 0.62rem; flex-shrink: 0; transition: all 0.15s; }
-  .item-row.sel .item-row-check { background: var(--success); border-color: var(--success); color: #fff; }
+  .item-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 18px; }
+  .item-row { display: flex; align-items: center; gap: 11px; padding: 11px 13px; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-sm); cursor: pointer; transition: all 0.15s; }
+  .item-row:hover, .item-row.sel { border-color: rgba(124,92,255,0.3); background: rgba(124,92,255,0.04); }
+  .item-thumb { width: 46px; height: 46px; border-radius: 8px; object-fit: cover; background: var(--surface3); flex-shrink: 0; }
+  .item-thumb-ph { width: 46px; height: 46px; border-radius: 8px; background: var(--surface3); flex-shrink: 0; }
+  .item-info { flex: 1; }
+  .item-name { font-size: 0.8rem; font-weight: 700; margin-bottom: 2px; }
+  .item-sub { font-size: 0.63rem; color: var(--text2); }
+  .item-check { width: 21px; height: 21px; border-radius: 50%; border: 2px solid var(--border2); display: flex; align-items: center; justify-content: center; font-size: 0.6rem; flex-shrink: 0; transition: all 0.15s; }
+  .item-row.sel .item-check { background: var(--success); border-color: var(--success); color: #fff; }
 
-  /* ACTION BAR */
-  .action-bar { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 16px; display: flex; gap: 10px; align-items: center; }
-  .action-bar-info { flex: 1; font-size: 0.72rem; color: var(--text2); line-height: 1.5; }
+  .action-bar { background: var(--surface); border: 1px solid var(--border2); border-radius: var(--radius-sm); padding: 15px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .action-bar-info { flex: 1; font-size: 0.7rem; color: var(--text2); line-height: 1.5; min-width: 160px; }
   .action-bar-info strong { color: var(--text); }
+  .action-bar-btns { display: flex; gap: 8px; flex-shrink: 0; flex-wrap: wrap; }
 
-  /* CROP SCREEN */
-  .crop-grid { display: grid; grid-template-columns: 1fr; gap: 14px; margin-bottom: 24px; }
-  @media(min-width:560px){.crop-grid{grid-template-columns:repeat(2,1fr)}}
-  @media(min-width:820px){.crop-grid{grid-template-columns:repeat(3,1fr)}}
+  .crop-grid { display: grid; grid-template-columns: 1fr; gap: 13px; margin-bottom: 22px; }
+  @media(min-width:540px){.crop-grid{grid-template-columns:repeat(2,1fr)}}
+  @media(min-width:800px){.crop-grid{grid-template-columns:repeat(3,1fr)}}
   .crop-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
-  .crop-card-head { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; border-bottom: 1px solid var(--border); }
-  .crop-card-name { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; }
-  .crop-card-num { font-size: 0.6rem; color: var(--muted); font-family: 'DM Mono', monospace; }
+  .crop-card-head { display: flex; align-items: center; justify-content: space-between; padding: 10px 13px; border-bottom: 1px solid var(--border); }
+  .crop-card-name { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; }
+  .crop-card-num { font-size: 0.58rem; color: var(--muted); font-family: 'DM Mono', monospace; }
   .crop-editor { position: relative; background: #07070d; touch-action: none; user-select: none; overflow: hidden; }
-  .crop-bg { width: 100%; display: block; opacity: 0.25; pointer-events: none; }
+  .crop-bg { width: 100%; display: block; opacity: 0.24; pointer-events: none; }
   .crop-sel { position: absolute; border: 2px solid var(--accent); background: rgba(124,92,255,0.08); touch-action: none; }
   .crop-handle { position: absolute; width: 24px; height: 24px; background: var(--accent); border-radius: 5px; touch-action: none; z-index: 10; }
   @media(min-width:600px){.crop-handle{width:13px;height:13px;border-radius:3px}}
@@ -167,210 +153,200 @@ const STYLES = `
   .crop-handle.bl{bottom:-12px;left:-12px;cursor:sw-resize}
   .crop-handle.br{bottom:-12px;right:-12px;cursor:se-resize}
   @media(min-width:600px){.crop-handle.tl{top:-6px;left:-6px}.crop-handle.tr{top:-6px;right:-6px}.crop-handle.bl{bottom:-6px;left:-6px}.crop-handle.br{bottom:-6px;right:-6px}}
-  .crop-prev-label { font-size: 0.55rem; color: var(--muted); padding: 6px 12px 2px; text-transform: uppercase; letter-spacing: 0.07em; font-weight: 600; }
-  .crop-prev-img { width: 100%; max-height: 95px; object-fit: contain; background: #040408; display: block; }
-  .crop-card-foot { padding: 8px 12px; display: flex; gap: 7px; }
-  .skip-btn { background: transparent; color: var(--muted); border: 1px solid var(--border); font-family: 'Inter', sans-serif; font-size: 0.64rem; font-weight: 600; padding: 6px 12px; border-radius: var(--radius-xs); cursor: pointer; touch-action: manipulation; transition: all 0.15s; }
+  .crop-prev-lbl { font-size: 0.54rem; color: var(--muted); padding: 5px 11px 2px; text-transform: uppercase; letter-spacing: 0.07em; font-weight: 600; }
+  .crop-prev-img { width: 100%; max-height: 92px; object-fit: contain; background: #040408; display: block; }
+  .crop-card-foot { padding: 8px 11px; display: flex; gap: 6px; }
+  .skip-btn { background: transparent; color: var(--muted); border: 1px solid var(--border); font-family: 'Inter', sans-serif; font-size: 0.63rem; font-weight: 600; padding: 6px 11px; border-radius: var(--radius-xs); cursor: pointer; touch-action: manipulation; transition: all 0.15s; }
   .skip-btn:hover { border-color: rgba(239,68,68,0.4); color: var(--danger); }
   .skip-btn.skipped { border-color: rgba(239,68,68,0.3); color: var(--danger); background: rgba(239,68,68,0.05); }
 
-  /* GENERATE CTA */
   .gen-cta { background: var(--surface2); border: 1px solid var(--border2); border-radius: var(--radius-sm); padding: 20px; text-align: center; }
-  .gen-cta-title { font-size: 1rem; font-weight: 800; margin-bottom: 5px; letter-spacing: -0.02em; }
-  .gen-cta-sub { font-size: 0.73rem; color: var(--text2); margin-bottom: 16px; line-height: 1.5; }
+  .gen-cta-title { font-size: 0.98rem; font-weight: 800; margin-bottom: 5px; letter-spacing: -0.02em; }
+  .gen-cta-sub { font-size: 0.72rem; color: var(--text2); margin-bottom: 15px; line-height: 1.5; }
   .gen-cta-btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
 
-  /* RESULTS */
-  .results-wrap { max-width: 1100px; margin: 0 auto; padding: 24px 18px 80px; }
-  .results-hdr { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 24px; gap: 14px; flex-wrap: wrap; }
+  .results-wrap { max-width: 1100px; margin: 0 auto; padding: 22px 18px 80px; }
+  .results-hdr { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 22px; gap: 13px; flex-wrap: wrap; }
   .results-h { font-size: 1.4rem; font-weight: 900; letter-spacing: -0.03em; }
-  .results-sub { font-size: 0.7rem; color: var(--text2); margin-top: 4px; }
-  .listings-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
-  @media(min-width:560px){.listings-grid{grid-template-columns:repeat(2,1fr)}}
-  @media(min-width:840px){.listings-grid{grid-template-columns:repeat(3,1fr)}}
+  .results-sub { font-size: 0.68rem; color: var(--text2); margin-top: 4px; }
+  .listings-grid { display: grid; grid-template-columns: 1fr; gap: 14px; }
+  @media(min-width:540px){.listings-grid{grid-template-columns:repeat(2,1fr)}}
+  @media(min-width:820px){.listings-grid{grid-template-columns:repeat(3,1fr)}}
 
-  /* LISTING CARD */
   .listing-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; cursor: pointer; transition: border-color 0.15s, transform 0.15s; }
-  .listing-card:hover { border-color: rgba(124,92,255,0.3); transform: translateY(-2px); }
-  .listing-card.exp { grid-column: 1/-1; cursor: default; border-color: rgba(124,92,255,0.4); transform: none; }
+  .listing-card:hover { border-color: rgba(124,92,255,0.28); transform: translateY(-2px); }
+  .listing-card.exp { grid-column: 1/-1; cursor: default; border-color: rgba(124,92,255,0.35); transform: none; }
   .lc-img-wrap { position: relative; aspect-ratio: 4/3; background: #0a0a10; overflow: hidden; }
   .lc-img { width: 100%; height: 100%; object-fit: contain; display: block; transition: transform 0.25s; }
   .listing-card:hover .lc-img { transform: scale(1.03); }
-  .lc-badge { position: absolute; top: 9px; left: 9px; font-size: 0.54rem; font-weight: 700; padding: 2px 8px; border-radius: 100px; background: rgba(11,11,15,0.85); color: rgba(255,255,255,0.7); border: 1px solid var(--border2); backdrop-filter: blur(4px); letter-spacing: 0.06em; text-transform: uppercase; }
-  .lc-conf { position: absolute; top: 9px; right: 9px; font-size: 0.58rem; font-weight: 700; padding: 2px 8px; border-radius: 100px; }
-  .lc-count { position: absolute; bottom: 9px; right: 9px; background: rgba(11,11,15,0.85); color: var(--text2); font-size: 0.56rem; padding: 2px 7px; border-radius: 5px; font-family: 'DM Mono', monospace; backdrop-filter: blur(4px); }
-  .lc-body { padding: 14px; }
-  .lc-title { font-size: 0.88rem; font-weight: 700; margin-bottom: 8px; line-height: 1.3; letter-spacing: -0.01em; }
+  .lc-badge { position: absolute; top: 9px; left: 9px; font-size: 0.53rem; font-weight: 700; padding: 2px 8px; border-radius: 100px; background: rgba(11,11,15,0.85); color: rgba(255,255,255,0.65); border: 1px solid var(--border2); backdrop-filter: blur(4px); letter-spacing: 0.06em; text-transform: uppercase; }
+  .lc-conf { position: absolute; top: 9px; right: 9px; font-size: 0.57rem; font-weight: 700; padding: 2px 8px; border-radius: 100px; }
+  .lc-count { position: absolute; bottom: 9px; right: 9px; background: rgba(11,11,15,0.85); color: var(--text2); font-size: 0.55rem; padding: 2px 7px; border-radius: 5px; font-family: 'DM Mono', monospace; backdrop-filter: blur(4px); }
+  .lc-body { padding: 13px; }
+  .lc-title { font-size: 0.86rem; font-weight: 700; margin-bottom: 8px; line-height: 1.3; letter-spacing: -0.01em; }
   .lc-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 10px; }
-  .lc-tag { font-size: 0.56rem; color: var(--text2); border: 1px solid var(--border); padding: 2px 7px; border-radius: 5px; font-weight: 500; }
-  .lc-tag.p { border-color: rgba(124,92,255,0.3); color: rgba(164,148,255,0.9); background: rgba(124,92,255,0.06); }
-  .lc-price-row { display: flex; align-items: baseline; gap: 7px; margin-bottom: 8px; }
-  .lc-price { font-size: 1.5rem; font-weight: 900; letter-spacing: -0.04em; }
-  .lc-price-range { font-size: 0.67rem; color: var(--muted); }
-  .lc-preview { font-size: 0.67rem; color: var(--text2); line-height: 1.6; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .lc-tag { font-size: 0.55rem; color: var(--text2); border: 1px solid var(--border); padding: 2px 7px; border-radius: 5px; font-weight: 500; }
+  .lc-tag.p { border-color: rgba(124,92,255,0.28); color: rgba(164,148,255,0.85); background: rgba(124,92,255,0.06); }
+  .lc-price-row { display: flex; align-items: baseline; gap: 7px; margin-bottom: 7px; }
+  .lc-price { font-size: 1.45rem; font-weight: 900; letter-spacing: -0.04em; }
+  .lc-range { font-size: 0.65rem; color: var(--muted); }
+  .lc-preview { font-size: 0.66rem; color: var(--text2); line-height: 1.6; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
   .platform-row { display: flex; gap: 5px; margin-top: 9px; flex-wrap: wrap; }
-  .platform-chip { display: flex; align-items: center; gap: 4px; background: var(--surface3); border: 1px solid var(--border); padding: 3px 8px; border-radius: 5px; font-size: 0.58rem; font-weight: 600; color: var(--text2); }
-  .lc-foot { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; border-top: 1px solid var(--border); gap: 7px; flex-wrap: wrap; }
-  .lc-foot-hint { font-size: 0.58rem; color: var(--muted); }
+  .platform-chip { display: flex; align-items: center; gap: 4px; background: var(--surface3); border: 1px solid var(--border); padding: 2px 8px; border-radius: 5px; font-size: 0.57rem; font-weight: 600; color: var(--text2); }
+  .lc-foot { display: flex; align-items: center; justify-content: space-between; padding: 10px 13px; border-top: 1px solid var(--border); gap: 6px; flex-wrap: wrap; }
+  .lc-foot-hint { font-size: 0.57rem; color: var(--muted); }
   .lc-foot-btns { display: flex; gap: 5px; }
-  .btn-sm { background: transparent; font-family: 'Inter', sans-serif; font-size: 0.62rem; font-weight: 700; padding: 5px 11px; border-radius: var(--radius-xs); cursor: pointer; touch-action: manipulation; transition: all 0.15s; border: 1px solid var(--border); color: var(--text2); }
+  .btn-sm { background: transparent; font-family: 'Inter', sans-serif; font-size: 0.61rem; font-weight: 700; padding: 5px 10px; border-radius: var(--radius-xs); cursor: pointer; touch-action: manipulation; transition: all 0.15s; border: 1px solid var(--border); color: var(--text2); }
   .btn-sm:hover { color: var(--text); border-color: var(--border2); }
   .btn-sm.del { color: rgba(239,68,68,0.6); border-color: rgba(239,68,68,0.15); }
   .btn-sm.del:hover { color: var(--danger); border-color: rgba(239,68,68,0.35); }
 
-  /* EXPANDED CARD */
-  .exp-inner { display: grid; grid-template-columns: 1fr; gap: 22px; padding: 18px; }
-  @media(min-width:660px){.exp-inner{grid-template-columns:280px 1fr;padding:24px;gap:32px}}
-  .exp-img { width: 100%; border-radius: var(--radius-sm); border: 1px solid var(--border); object-fit: contain; background: #0a0a10; max-height: 220px; cursor: pointer; }
-  .media-sec { margin-top: 14px; }
-  .media-lbl { font-size: 0.56rem; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 8px; font-weight: 700; }
+  .exp-inner { display: grid; grid-template-columns: 1fr; gap: 20px; padding: 17px; }
+  @media(min-width:640px){.exp-inner{grid-template-columns:275px 1fr;padding:22px;gap:30px}}
+  .exp-img { width: 100%; border-radius: var(--radius-sm); border: 1px solid var(--border); object-fit: contain; background: #0a0a10; max-height: 215px; cursor: pointer; }
+  .media-sec { margin-top: 13px; }
+  .media-lbl { font-size: 0.55rem; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 8px; font-weight: 700; }
   .media-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px; }
-  .media-th-w { position: relative; width: 56px; height: 56px; border-radius: 8px; overflow: hidden; border: 1px solid var(--border); flex-shrink: 0; background: #0a0a10; }
+  .media-tw { position: relative; width: 54px; height: 54px; border-radius: 8px; overflow: hidden; border: 1px solid var(--border); flex-shrink: 0; background: #0a0a10; }
   .media-th { width: 100%; height: 100%; object-fit: cover; cursor: pointer; display: block; }
   .media-vid { width: 100%; height: 100%; object-fit: cover; cursor: pointer; display: block; }
   .media-rm { position: absolute; top: 2px; right: 2px; width: 16px; height: 16px; background: rgba(11,11,15,0.9); color: #fff; border: none; border-radius: 50%; font-size: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
   .vid-badge { position: absolute; bottom: 2px; left: 2px; background: rgba(11,11,15,0.85); color: var(--accent); font-size: 0.42rem; padding: 1px 4px; border-radius: 3px; font-weight: 700; }
   .add-row { display: flex; gap: 6px; flex-wrap: wrap; }
-  .add-btn { display: flex; align-items: center; gap: 4px; background: var(--surface2); border: 1px dashed var(--border2); color: var(--muted); font-family: 'Inter', sans-serif; font-size: 0.64rem; font-weight: 600; padding: 6px 12px; border-radius: var(--radius-xs); cursor: pointer; touch-action: manipulation; transition: all 0.15s; white-space: nowrap; }
+  .add-btn { display: flex; align-items: center; gap: 4px; background: var(--surface2); border: 1px dashed var(--border2); color: var(--muted); font-family: 'Inter', sans-serif; font-size: 0.63rem; font-weight: 600; padding: 6px 11px; border-radius: var(--radius-xs); cursor: pointer; touch-action: manipulation; transition: all 0.15s; white-space: nowrap; }
   .add-btn:hover { border-color: var(--accent); color: var(--accent); }
-  .id-sec { margin-top: 14px; }
-  .id-lbl { font-size: 0.56rem; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 6px; font-weight: 700; display: flex; align-items: center; gap: 6px; }
+  .id-sec { margin-top: 13px; }
+  .id-lbl { font-size: 0.55rem; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 6px; font-weight: 700; display: flex; align-items: center; gap: 6px; }
   .id-row { display: flex; align-items: flex-start; gap: 8px; padding: 6px 0; border-bottom: 1px solid var(--border); }
   .id-row:last-child { border-bottom: none; }
-  .id-n { font-size: 0.56rem; color: var(--muted); width: 16px; font-family: 'DM Mono', monospace; flex-shrink: 0; }
-  .id-name { flex: 1; font-size: 0.68rem; font-weight: 600; line-height: 1.4; }
-  .id-conf { font-size: 0.56rem; color: var(--muted); flex-shrink: 0; }
-  .reason-box { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-xs); padding: 6px 10px; font-size: 0.6rem; color: var(--text2); line-height: 1.6; margin-top: 3px; }
-  .gv-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 0.6rem; color: var(--success); font-weight: 700; margin-top: 5px; }
-  .meta-row { font-size: 0.64rem; color: var(--text2); margin-top: 4px; line-height: 1.5; }
-  .meta-row span { color: rgba(164,148,255,0.9); font-weight: 600; }
+  .id-n { font-size: 0.55rem; color: var(--muted); width: 16px; font-family: 'DM Mono', monospace; flex-shrink: 0; }
+  .id-name { flex: 1; font-size: 0.67rem; font-weight: 600; line-height: 1.4; }
+  .id-conf { font-size: 0.55rem; color: var(--muted); flex-shrink: 0; }
+  .reason-box { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-xs); padding: 6px 10px; font-size: 0.59rem; color: var(--text2); line-height: 1.6; margin-top: 3px; }
+  .gv-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 0.59rem; color: var(--success); font-weight: 700; margin-top: 4px; }
+  .meta-row { font-size: 0.63rem; color: var(--text2); margin-top: 4px; line-height: 1.5; }
+  .meta-row span { color: rgba(164,148,255,0.85); font-weight: 600; }
 
-  /* FORM */
-  .f-label { font-size: 0.58rem; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 5px; margin-top: 16px; font-weight: 700; display: flex; align-items: center; justify-content: space-between; }
-  .f-label:first-child { margin-top: 0; }
-  .f-input { width: 100%; background: var(--surface2); border: 1px solid var(--border); color: var(--text); font-family: 'Inter', sans-serif; font-size: 0.9rem; font-weight: 700; padding: 10px 12px; border-radius: var(--radius-sm); outline: none; -webkit-appearance: none; transition: border-color 0.15s; letter-spacing: -0.02em; }
-  .f-input:focus { border-color: rgba(124,92,255,0.5); }
-  .f-price-input { width: 140px; font-size: 1.35rem; font-weight: 900; letter-spacing: -0.04em; }
-  .f-price-meta { font-size: 0.6rem; color: var(--muted); margin-top: 3px; }
-  .f-textarea { width: 100%; background: var(--surface2); border: 1px solid var(--border); color: var(--text); font-family: 'DM Mono', monospace; font-size: 0.67rem; line-height: 1.7; padding: 10px 12px; border-radius: var(--radius-sm); resize: vertical; outline: none; min-height: 150px; -webkit-appearance: none; transition: border-color 0.15s; }
-  .f-textarea:focus { border-color: rgba(124,92,255,0.5); }
-  .tone-row { display: flex; justify-content: space-between; font-size: 0.58rem; color: var(--muted); font-weight: 600; margin-bottom: 6px; }
+  .f-lbl { font-size: 0.57rem; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 5px; margin-top: 15px; font-weight: 700; display: flex; align-items: center; justify-content: space-between; }
+  .f-lbl:first-child { margin-top: 0; }
+  .f-input { width: 100%; background: var(--surface2); border: 1px solid var(--border); color: var(--text); font-family: 'Inter', sans-serif; font-size: 0.88rem; font-weight: 700; padding: 10px 12px; border-radius: var(--radius-sm); outline: none; -webkit-appearance: none; transition: border-color 0.15s; letter-spacing: -0.02em; }
+  .f-input:focus { border-color: rgba(124,92,255,0.45); }
+  .f-price { width: 135px; font-size: 1.3rem; font-weight: 900; letter-spacing: -0.04em; }
+  .f-price-meta { font-size: 0.59rem; color: var(--muted); margin-top: 3px; }
+  .f-textarea { width: 100%; background: var(--surface2); border: 1px solid var(--border); color: var(--text); font-family: 'DM Mono', monospace; font-size: 0.66rem; line-height: 1.7; padding: 10px 12px; border-radius: var(--radius-sm); resize: vertical; outline: none; min-height: 148px; -webkit-appearance: none; transition: border-color 0.15s; }
+  .f-textarea:focus { border-color: rgba(124,92,255,0.45); }
+  .tone-row { display: flex; justify-content: space-between; font-size: 0.57rem; color: var(--muted); font-weight: 600; margin-bottom: 6px; }
   .tone-slider { width: 100%; -webkit-appearance: none; appearance: none; height: 3px; border-radius: 2px; background: linear-gradient(90deg, var(--success), var(--accent), var(--warning)); outline: none; cursor: pointer; }
   .tone-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%; background: #fff; box-shadow: 0 1px 6px rgba(0,0,0,0.35); cursor: pointer; }
-  .tone-label { text-align: center; font-size: 0.65rem; color: var(--accent); font-weight: 700; margin-top: 4px; }
+  .tone-lbl { text-align: center; font-size: 0.63rem; color: var(--accent); font-weight: 700; margin-top: 4px; }
   .tools-row { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
-  .tool-btn { display: flex; align-items: center; gap: 4px; background: var(--surface2); border: 1px solid var(--border2); color: var(--text2); font-family: 'Inter', sans-serif; font-size: 0.65rem; font-weight: 600; padding: 6px 12px; border-radius: var(--radius-xs); cursor: pointer; touch-action: manipulation; transition: all 0.15s; white-space: nowrap; }
+  .tool-btn { display: flex; align-items: center; gap: 4px; background: var(--surface2); border: 1px solid var(--border2); color: var(--text2); font-family: 'Inter', sans-serif; font-size: 0.63rem; font-weight: 600; padding: 6px 11px; border-radius: var(--radius-xs); cursor: pointer; touch-action: manipulation; transition: all 0.15s; white-space: nowrap; }
   .tool-btn:hover { border-color: var(--accent); color: var(--accent); }
   .tool-btn:disabled { opacity: 0.45; cursor: not-allowed; }
   .seo-tog { display: flex; align-items: center; gap: 6px; }
-  .tog { position: relative; width: 32px; height: 18px; background: var(--border2); border-radius: 100px; cursor: pointer; transition: background 0.15s; flex-shrink: 0; }
+  .tog { position: relative; width: 30px; height: 17px; background: var(--border2); border-radius: 100px; cursor: pointer; transition: background 0.15s; flex-shrink: 0; }
   .tog.on { background: var(--accent); }
-  .tog::after { content: ''; position: absolute; top: 3px; left: 3px; width: 12px; height: 12px; background: #fff; border-radius: 50%; transition: transform 0.15s; }
-  .tog.on::after { transform: translateX(14px); }
-  .exp-act-row { display: flex; gap: 7px; margin-top: 16px; flex-wrap: wrap; }
-  .btn-copy { background: var(--accent); color: #fff; font-family: 'Inter', sans-serif; font-size: 0.78rem; font-weight: 700; padding: 11px 18px; border-radius: var(--radius-sm); border: none; cursor: pointer; touch-action: manipulation; flex: 1; text-align: center; min-width: 90px; transition: background 0.15s; }
-  .btn-copy:hover { background: var(--accent-hover); }
-  .btn-dl { background: var(--surface2); color: var(--text); font-family: 'Inter', sans-serif; font-size: 0.78rem; font-weight: 600; padding: 11px 16px; border-radius: var(--radius-sm); border: 1px solid var(--border2); cursor: pointer; touch-action: manipulation; flex: 1; text-align: center; min-width: 90px; transition: border-color 0.15s; }
-  .btn-dl:hover { border-color: rgba(124,92,255,0.4); }
+  .tog::after { content: ''; position: absolute; top: 3px; left: 3px; width: 11px; height: 11px; background: #fff; border-radius: 50%; transition: transform 0.15s; }
+  .tog.on::after { transform: translateX(13px); }
+  .exp-acts { display: flex; gap: 7px; margin-top: 15px; flex-wrap: wrap; }
+  .btn-copy { background: var(--accent); color: #fff; font-family: 'Inter', sans-serif; font-size: 0.76rem; font-weight: 700; padding: 11px 17px; border-radius: var(--radius-sm); border: none; cursor: pointer; touch-action: manipulation; flex: 1; text-align: center; min-width: 88px; transition: background 0.15s; }
+  .btn-copy:hover { background: var(--accent-h); }
+  .btn-dl { background: var(--surface2); color: var(--text); font-family: 'Inter', sans-serif; font-size: 0.76rem; font-weight: 600; padding: 11px 15px; border-radius: var(--radius-sm); border: 1px solid var(--border2); cursor: pointer; touch-action: manipulation; flex: 1; text-align: center; min-width: 88px; transition: border-color 0.15s; }
+  .btn-dl:hover { border-color: rgba(124,92,255,0.35); }
   .btn-dl:disabled { opacity: 0.45; cursor: not-allowed; }
-  .btn-collapse { background: transparent; color: var(--muted); border: 1px solid var(--border); font-family: 'Inter', sans-serif; font-size: 0.75rem; font-weight: 500; padding: 11px 14px; border-radius: var(--radius-sm); cursor: pointer; touch-action: manipulation; transition: all 0.15s; }
+  .btn-collapse { background: transparent; color: var(--muted); border: 1px solid var(--border); font-family: 'Inter', sans-serif; font-size: 0.73rem; font-weight: 500; padding: 11px 13px; border-radius: var(--radius-sm); cursor: pointer; touch-action: manipulation; transition: all 0.15s; }
   .btn-collapse:hover { color: var(--text); }
-  .btn-delete { background: transparent; color: rgba(239,68,68,0.65); border: 1px solid rgba(239,68,68,0.15); font-family: 'Inter', sans-serif; font-size: 0.75rem; font-weight: 500; padding: 11px 14px; border-radius: var(--radius-sm); cursor: pointer; touch-action: manipulation; transition: all 0.15s; }
+  .btn-delete { background: transparent; color: rgba(239,68,68,0.62); border: 1px solid rgba(239,68,68,0.15); font-family: 'Inter', sans-serif; font-size: 0.73rem; font-weight: 500; padding: 11px 13px; border-radius: var(--radius-sm); cursor: pointer; touch-action: manipulation; transition: all 0.15s; }
   .btn-delete:hover { color: var(--danger); border-color: rgba(239,68,68,0.35); }
-  .pkg-note { font-size: 0.58rem; color: var(--muted); margin-top: 8px; line-height: 1.6; }
+  .pkg-note { font-size: 0.57rem; color: var(--muted); margin-top: 8px; line-height: 1.6; }
 
-  /* POST TAB */
-  .post-wrap { max-width: 600px; margin: 0 auto; padding: 32px 18px 80px; }
-  .post-hdr { text-align: center; margin-bottom: 30px; }
-  .post-h { font-size: 1.55rem; font-weight: 900; letter-spacing: -0.04em; margin-bottom: 7px; }
-  .post-sub { font-size: 0.78rem; color: var(--text2); }
-  .p-cards { display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; }
-  .p-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; display: flex; align-items: center; gap: 13px; transition: border-color 0.15s; }
-  .p-card.posting { border-color: rgba(124,92,255,0.35); }
-  .p-icon { width: 42px; height: 42px; border-radius: 11px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; }
+  .post-wrap { max-width: 580px; margin: 0 auto; padding: 30px 18px 80px; }
+  .post-hdr { text-align: center; margin-bottom: 28px; }
+  .post-h { font-size: 1.5rem; font-weight: 900; letter-spacing: -0.04em; margin-bottom: 7px; }
+  .post-sub { font-size: 0.76rem; color: var(--text2); }
+  .p-cards { display: flex; flex-direction: column; gap: 10px; margin-bottom: 22px; }
+  .p-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 15px; display: flex; align-items: center; gap: 12px; transition: border-color 0.15s; }
+  .p-card.posting { border-color: rgba(124,92,255,0.3); }
+  .p-icon { width: 40px; height: 40px; border-radius: 11px; display: flex; align-items: center; justify-content: center; font-size: 1.15rem; flex-shrink: 0; }
   .p-info { flex: 1; }
-  .p-name { font-size: 0.88rem; font-weight: 700; margin-bottom: 2px; letter-spacing: -0.01em; }
-  .p-desc { font-size: 0.65rem; color: var(--text2); }
+  .p-name { font-size: 0.86rem; font-weight: 700; margin-bottom: 2px; letter-spacing: -0.01em; }
+  .p-desc { font-size: 0.63rem; color: var(--text2); }
   .p-status { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
-  .p-badge { font-size: 0.58rem; font-weight: 700; padding: 2px 8px; border-radius: 100px; }
+  .p-badge { font-size: 0.57rem; font-weight: 700; padding: 2px 8px; border-radius: 100px; }
   .p-badge.ready { background: rgba(34,197,94,0.1); color: var(--success); border: 1px solid rgba(34,197,94,0.2); }
   .p-badge.posting { background: rgba(124,92,255,0.1); color: var(--accent); border: 1px solid rgba(124,92,255,0.2); }
   .p-badge.done { background: rgba(34,197,94,0.1); color: var(--success); border: 1px solid rgba(34,197,94,0.2); }
-  .p-bar-wrap { width: 68px; height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; }
+  .p-bar-wrap { width: 65px; height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; }
   .p-bar { height: 100%; background: var(--accent); border-radius: 2px; transition: width 0.4s ease; }
-  .post-btn { width: 100%; background: var(--accent); color: #fff; font-family: 'Inter', sans-serif; font-size: 0.95rem; font-weight: 800; padding: 16px; border-radius: var(--radius-sm); border: none; cursor: pointer; touch-action: manipulation; transition: background 0.15s; }
-  .post-btn:hover { background: var(--accent-hover); }
+  .post-btn { width: 100%; background: var(--accent); color: #fff; font-family: 'Inter', sans-serif; font-size: 0.93rem; font-weight: 800; padding: 15px; border-radius: var(--radius-sm); border: none; cursor: pointer; touch-action: manipulation; transition: background 0.15s; }
+  .post-btn:hover { background: var(--accent-h); }
   .post-btn:disabled { opacity: 0.45; cursor: not-allowed; }
 
-  /* DASHBOARD */
-  .dash-wrap { max-width: 1000px; margin: 0 auto; padding: 24px 18px 80px; }
-  .dash-stats { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; margin-bottom: 22px; }
-  @media(min-width:620px){.dash-stats{grid-template-columns:repeat(4,1fr)}}
-  .stat-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 16px; }
-  .stat-lbl { font-size: 0.58rem; color: var(--muted); font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 6px; }
-  .stat-val { font-size: 1.6rem; font-weight: 900; letter-spacing: -0.04em; }
+  .dash-wrap { max-width: 1000px; margin: 0 auto; padding: 22px 18px 80px; }
+  .dash-stats { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; margin-bottom: 20px; }
+  @media(min-width:600px){.dash-stats{grid-template-columns:repeat(4,1fr)}}
+  .stat-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 15px; }
+  .stat-lbl { font-size: 0.57rem; color: var(--muted); font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 6px; }
+  .stat-val { font-size: 1.55rem; font-weight: 900; letter-spacing: -0.04em; }
   .stat-val.g { color: var(--success); }
   .stat-val.p { color: var(--accent); }
-  .stat-sub { font-size: 0.6rem; color: var(--text2); margin-top: 2px; }
-  .dash-sec { font-size: 0.88rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 12px; }
-  .insights { display: flex; flex-direction: column; gap: 8px; margin-bottom: 22px; }
-  .insight { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 13px 15px; display: flex; align-items: center; gap: 11px; }
-  .insight-icon { width: 36px; height: 36px; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 0.95rem; flex-shrink: 0; }
+  .stat-sub { font-size: 0.59rem; color: var(--text2); margin-top: 2px; }
+  .dash-sec { font-size: 0.86rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 11px; }
+  .insights { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+  .insight { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px 14px; display: flex; align-items: center; gap: 11px; }
+  .insight-icon { width: 34px; height: 34px; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; flex-shrink: 0; }
   .insight-body { flex: 1; }
-  .insight-title { font-size: 0.78rem; font-weight: 700; margin-bottom: 2px; }
-  .insight-sub { font-size: 0.63rem; color: var(--text2); }
-  .insight-btn { font-size: 0.65rem; font-weight: 700; color: var(--accent); background: rgba(124,92,255,0.1); border: 1px solid rgba(124,92,255,0.2); padding: 5px 11px; border-radius: var(--radius-xs); cursor: pointer; white-space: nowrap; touch-action: manipulation; }
-  .dash-listings { display: flex; flex-direction: column; gap: 8px; }
-  .dash-row { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 11px 14px; display: flex; align-items: center; gap: 11px; }
-  .dash-thumb { width: 44px; height: 44px; border-radius: 8px; object-fit: cover; background: var(--surface3); flex-shrink: 0; }
+  .insight-title { font-size: 0.76rem; font-weight: 700; margin-bottom: 2px; }
+  .insight-sub { font-size: 0.61rem; color: var(--text2); }
+  .insight-btn { font-size: 0.63rem; font-weight: 700; color: var(--accent); background: rgba(124,92,255,0.1); border: 1px solid rgba(124,92,255,0.2); padding: 4px 10px; border-radius: var(--radius-xs); cursor: pointer; white-space: nowrap; touch-action: manipulation; }
+  .dash-list { display: flex; flex-direction: column; gap: 8px; }
+  .dash-row { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 13px; display: flex; align-items: center; gap: 10px; }
+  .dash-thumb { width: 42px; height: 42px; border-radius: 8px; object-fit: cover; background: var(--surface3); flex-shrink: 0; }
   .dash-info { flex: 1; }
-  .dash-t { font-size: 0.78rem; font-weight: 700; margin-bottom: 2px; }
-  .dash-m { font-size: 0.6rem; color: var(--text2); }
-  .dash-price { font-size: 1rem; font-weight: 900; letter-spacing: -0.02em; }
-  .dash-empty { text-align: center; padding: 36px 20px; color: var(--muted); font-size: 0.78rem; }
+  .dash-t { font-size: 0.76rem; font-weight: 700; margin-bottom: 2px; }
+  .dash-m { font-size: 0.59rem; color: var(--text2); }
+  .dash-price { font-size: 0.98rem; font-weight: 900; letter-spacing: -0.02em; }
+  .dash-empty { text-align: center; padding: 34px 20px; color: var(--muted); font-size: 0.76rem; }
 
-  /* MISC */
   .lightbox { position: fixed; inset: 0; background: rgba(4,4,8,0.97); z-index: 500; display: flex; align-items: center; justify-content: center; padding: 20px; }
   .lb-img { max-width: 100%; max-height: 90vh; border-radius: var(--radius-sm); object-fit: contain; }
   .lb-video { max-width: 100%; max-height: 90vh; border-radius: var(--radius-sm); }
-  .lb-close { position: absolute; top: 16px; right: 16px; background: rgba(255,255,255,0.08); color: #fff; border: 1px solid rgba(255,255,255,0.12); font-size: 0.9rem; width: 38px; height: 38px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-  .err-box { background: rgba(239,68,68,0.07); border: 1px solid rgba(239,68,68,0.2); color: var(--danger); padding: 11px 14px; border-radius: var(--radius-sm); font-size: 0.74rem; margin-top: 12px; line-height: 1.5; }
-  .empty-state { text-align: center; padding: 72px 24px; }
-  .empty-icon { font-size: 2.8rem; margin-bottom: 14px; }
-  .empty-title { font-size: 1.1rem; font-weight: 800; margin-bottom: 8px; letter-spacing: -0.02em; }
-  .empty-sub { font-size: 0.78rem; color: var(--text2); margin-bottom: 22px; }
+  .lb-close { position: absolute; top: 15px; right: 15px; background: rgba(255,255,255,0.08); color: #fff; border: 1px solid rgba(255,255,255,0.12); font-size: 0.88rem; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+  .err-box { background: rgba(239,68,68,0.07); border: 1px solid rgba(239,68,68,0.2); color: var(--danger); padding: 10px 13px; border-radius: var(--radius-sm); font-size: 0.72rem; margin-top: 12px; line-height: 1.5; }
+  .empty-state { text-align: center; padding: 68px 24px; }
+  .empty-icon { font-size: 2.6rem; margin-bottom: 13px; }
+  .empty-title { font-size: 1.05rem; font-weight: 800; margin-bottom: 7px; letter-spacing: -0.02em; }
+  .empty-sub { font-size: 0.76rem; color: var(--text2); margin-bottom: 20px; }
 `;
 
 const BBOX_COLORS = [
-  { border:"#7c5cff", bg:"rgba(124,92,255,0.18)" },
-  { border:"#ec4899", bg:"rgba(236,72,153,0.18)" },
-  { border:"#22c55e", bg:"rgba(34,197,94,0.18)" },
-  { border:"#f59e0b", bg:"rgba(245,158,11,0.18)" },
-  { border:"#3b82f6", bg:"rgba(59,130,246,0.18)" },
-  { border:"#ef4444", bg:"rgba(239,68,68,0.18)" },
-  { border:"#8b5cf6", bg:"rgba(139,92,246,0.18)" },
-  { border:"#10b981", bg:"rgba(16,185,129,0.18)" },
+  {border:"#7c5cff",bg:"rgba(124,92,255,0.18)"},
+  {border:"#ec4899",bg:"rgba(236,72,153,0.18)"},
+  {border:"#22c55e",bg:"rgba(34,197,94,0.18)"},
+  {border:"#f59e0b",bg:"rgba(245,158,11,0.18)"},
+  {border:"#3b82f6",bg:"rgba(59,130,246,0.18)"},
+  {border:"#ef4444",bg:"rgba(239,68,68,0.18)"},
+  {border:"#8b5cf6",bg:"rgba(139,92,246,0.18)"},
+  {border:"#10b981",bg:"rgba(16,185,129,0.18)"},
 ];
 
 const PLATFORMS = [
-  { id:"ebay", name:"eBay", icon:"🛒", desc:"Electronics, collectibles, branded items", color:"#e53238" },
-  { id:"facebook", name:"Facebook Marketplace", icon:"📘", desc:"Furniture, local pickup, general items", color:"#1877f2" },
-  { id:"offerup", name:"OfferUp", icon:"🟠", desc:"Quick local sales, all categories", color:"#ff5a35" },
+  {id:"ebay",name:"eBay",icon:"🛒",desc:"Electronics, collectibles, branded items",color:"#e53238"},
+  {id:"facebook",name:"Facebook Marketplace",icon:"📘",desc:"Furniture, local pickup, general items",color:"#1877f2"},
+  {id:"offerup",name:"OfferUp",icon:"🟠",desc:"Quick local sales, all categories",color:"#ff5a35"},
 ];
 
-// ── STEP BAR ─────────────────────────────────────────────
-function StepBar({ step }) {
-  // step: 0=scan, 1=review, 2=crop, 3=generate
-  const steps = ["Scan", "Review", "Crop", "Generate"];
+function StepBar({step}) {
+  const steps = ["Scan","Review","Crop","Generate"];
   return (
     <div className="step-bar">
-      {steps.map((s, i) => {
-        const state = i < step ? "done" : i === step ? "active" : "pending";
+      {steps.map((s,i) => {
+        const st = i<step?"done":i===step?"active":"pending";
         return (
           <div key={s} className="step-item">
-            <div className={`step-dot ${state}`}>{state === "done" ? "✓" : i + 1}</div>
-            <div className={`step-text ${state}`}>{s}</div>
-            {i < steps.length - 1 && <div className="step-arrow">›</div>}
+            <div className={`step-dot ${st}`}>{st==="done"?"✓":i+1}</div>
+            <div className={`step-text ${st}`}>{s}</div>
+            {i<steps.length-1&&<div className="step-arrow">›</div>}
           </div>
         );
       })}
@@ -378,38 +354,35 @@ function StepBar({ step }) {
   );
 }
 
-// ── HELPERS ───────────────────────────────────────────────
 function compressImage(file) {
-  return new Promise(resolve => {
+  return new Promise(res => {
     const reader = new FileReader();
     reader.onload = e => {
       const img = new Image();
       img.onload = () => {
-        const max = 1600;
-        let { width: w, height: h } = img;
-        if (w > max || h > max) { const r = Math.min(max/w, max/h); w = Math.round(w*r); h = Math.round(h*r); }
-        const c = document.createElement("canvas"); c.width = w; c.height = h;
-        c.getContext("2d").drawImage(img, 0, 0, w, h);
-        const url = c.toDataURL("image/jpeg", 0.85);
-        resolve({ dataUrl: url, name: file.name, size: (url.length/1024).toFixed(1)+" KB" });
+        const max=1600; let {width:w,height:h}=img;
+        if(w>max||h>max){const r=Math.min(max/w,max/h);w=Math.round(w*r);h=Math.round(h*r);}
+        const c=document.createElement("canvas");c.width=w;c.height=h;
+        c.getContext("2d").drawImage(img,0,0,w,h);
+        const url=c.toDataURL("image/jpeg",0.85);
+        res({dataUrl:url,name:file.name,size:(url.length/1024).toFixed(1)+" KB"});
       };
-      img.src = e.target.result;
+      img.src=e.target.result;
     };
     reader.readAsDataURL(file);
   });
 }
 
-function cropCanvas(imgEl, box) {
-  const { x, y, w, h } = box;
-  const p = 0.03;
-  const sx = Math.max(0, x-w*p), sy = Math.max(0, y-h*p);
-  const sw = Math.min(imgEl.naturalWidth-sx, w*(1+p*2));
-  const sh = Math.min(imgEl.naturalHeight-sy, h*(1+p*2));
-  const sc = 2;
-  const cc = document.createElement("canvas"); cc.width = sw*sc; cc.height = sh*sc;
-  const cx = cc.getContext("2d"); cx.imageSmoothingEnabled = true; cx.imageSmoothingQuality = "high";
-  cx.drawImage(imgEl, sx, sy, sw, sh, 0, 0, sw*sc, sh*sc);
-  const id = cx.getImageData(0,0,cc.width,cc.height), d = id.data;
+function cropCanvas(imgEl,box) {
+  const{x,y,w,h}=box,p=0.03;
+  const sx=Math.max(0,x-w*p),sy=Math.max(0,y-h*p);
+  const sw=Math.min(imgEl.naturalWidth-sx,w*(1+p*2));
+  const sh=Math.min(imgEl.naturalHeight-sy,h*(1+p*2));
+  const sc=2,cc=document.createElement("canvas");
+  cc.width=sw*sc;cc.height=sh*sc;
+  const cx=cc.getContext("2d");cx.imageSmoothingEnabled=true;cx.imageSmoothingQuality="high";
+  cx.drawImage(imgEl,sx,sy,sw,sh,0,0,sw*sc,sh*sc);
+  const id=cx.getImageData(0,0,cc.width,cc.height),d=id.data;
   let mnR=255,mxR=0,mnG=255,mxG=0,mnB=255,mxB=0;
   for(let i=0;i<d.length;i+=4){mnR=Math.min(mnR,d[i]);mxR=Math.max(mxR,d[i]);mnG=Math.min(mnG,d[i+1]);mxG=Math.max(mxG,d[i+1]);mnB=Math.min(mnB,d[i+2]);mxB=Math.max(mxB,d[i+2]);}
   for(let i=0;i<d.length;i+=4){d[i]=Math.min(255,((d[i]-mnR)/(mxR-mnR||1))*255);d[i+1]=Math.min(255,((d[i+1]-mnG)/(mxG-mnG||1))*255);d[i+2]=Math.min(255,((d[i+2]-mnB)/(mxB-mnB||1))*255);}
@@ -422,14 +395,13 @@ function cropCanvas(imgEl, box) {
   return oc.toDataURL("image/jpeg",0.95);
 }
 
-function hiResCrop(imgEl, box) {
-  const { x, y, w, h } = box;
-  const p = 0.03;
-  const sx = Math.max(0,x-w*p), sy = Math.max(0,y-h*p);
-  const sw = Math.min(imgEl.naturalWidth-sx,w*(1+p*2));
-  const sh = Math.min(imgEl.naturalHeight-sy,h*(1+p*2));
-  const c = document.createElement("canvas"); c.width=Math.round(sw*3); c.height=Math.round(sh*3);
-  const ctx = c.getContext("2d"); ctx.imageSmoothingEnabled=true; ctx.imageSmoothingQuality="high";
+function hiResCrop(imgEl,box) {
+  const{x,y,w,h}=box,p=0.03;
+  const sx=Math.max(0,x-w*p),sy=Math.max(0,y-h*p);
+  const sw=Math.min(imgEl.naturalWidth-sx,w*(1+p*2));
+  const sh=Math.min(imgEl.naturalHeight-sy,h*(1+p*2));
+  const c=document.createElement("canvas");c.width=Math.round(sw*3);c.height=Math.round(sh*3);
+  const ctx=c.getContext("2d");ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality="high";
   ctx.drawImage(imgEl,sx,sy,sw,sh,0,0,c.width,c.height);
   return c.toDataURL("image/jpeg",0.99).split(",")[1];
 }
@@ -441,8 +413,7 @@ function getPos(e) {
 }
 
 function toBlob(dataUrl) {
-  const [h,d]=dataUrl.split(",");
-  const mime=h.match(/:(.*?);/)[1];
+  const[h,d]=dataUrl.split(","),mime=h.match(/:(.*?);/)[1];
   const bin=atob(d),arr=new Uint8Array(bin.length);
   for(let i=0;i<bin.length;i++)arr[i]=bin.charCodeAt(i);
   return new Blob([arr],{type:mime});
@@ -454,27 +425,24 @@ function confColor(s) {
   return{bg:"rgba(239,68,68,0.12)",color:"#ef4444"};
 }
 
-// ── CROP EDITOR ───────────────────────────────────────────
-function CropEditor({ src, box, onChange }) {
-  const ref = useRef(); const drag = useRef(null); const raf = useRef(null);
-  const rel = (cx,cy) => { const r=ref.current.getBoundingClientRect(); return{x:(cx-r.left)/r.width,y:(cy-r.top)/r.height}; };
-  const start = (e,type) => {
-    e.preventDefault(); e.stopPropagation();
-    const {clientX,clientY}=getPos(e);
+function CropEditor({src,box,onChange}) {
+  const ref=useRef(),drag=useRef(null),raf=useRef(null);
+  const rel=(cx,cy)=>{const r=ref.current.getBoundingClientRect();return{x:(cx-r.left)/r.width,y:(cy-r.top)/r.height};};
+  const start=(e,type)=>{
+    e.preventDefault();e.stopPropagation();
+    const{clientX,clientY}=getPos(e);
     drag.current={type,...rel(clientX,clientY),box:{...box}};
     window.addEventListener("mousemove",move,{passive:false});window.addEventListener("mouseup",stop);
     window.addEventListener("touchmove",move,{passive:false});window.addEventListener("touchend",stop);
   };
-  const move = e => {
-    if(!drag.current)return; e.preventDefault();
-    const {clientX,clientY}=getPos(e);
+  const move=e=>{
+    if(!drag.current)return;e.preventDefault();
+    const{clientX,clientY}=getPos(e);
     if(raf.current)cancelAnimationFrame(raf.current);
     raf.current=requestAnimationFrame(()=>{
       if(!drag.current||!ref.current)return;
-      const r=rel(clientX,clientY);
-      const{type,x:sx,y:sy,box:b}=drag.current;
-      const dx=r.x-sx,dy=r.y-sy;
-      let{x,y,w,h}=b; const mn=0.06;
+      const r=rel(clientX,clientY),{type,x:sx,y:sy,box:b}=drag.current;
+      const dx=r.x-sx,dy=r.y-sy;let{x,y,w,h}=b;const mn=0.06;
       if(type==="move"){x=Math.max(0,Math.min(1-w,x+dx));y=Math.max(0,Math.min(1-h,y+dy));}
       else if(type==="br"){w=Math.max(mn,Math.min(1-x,w+dx));h=Math.max(mn,Math.min(1-y,h+dy));}
       else if(type==="tl"){const nx=Math.max(0,Math.min(x+w-mn,x+dx)),ny=Math.max(0,Math.min(y+h-mn,y+dy));w=w+(x-nx);h=h+(y-ny);x=nx;y=ny;}
@@ -484,149 +452,129 @@ function CropEditor({ src, box, onChange }) {
       onChange({x,y,w,h});
     });
   };
-  const stop = () => {
-    drag.current=null; if(raf.current)cancelAnimationFrame(raf.current);
+  const stop=()=>{
+    drag.current=null;if(raf.current)cancelAnimationFrame(raf.current);
     window.removeEventListener("mousemove",move);window.removeEventListener("mouseup",stop);
     window.removeEventListener("touchmove",move);window.removeEventListener("touchend",stop);
   };
-  const p = v=>(v*100).toFixed(2)+"%";
-  return (
+  const p=v=>(v*100).toFixed(2)+"%";
+  return(
     <div ref={ref} className="crop-editor">
-      <img src={src} className="crop-bg" alt="" draggable={false} />
+      <img src={src} className="crop-bg" alt="" draggable={false}/>
       <div className="crop-sel" style={{left:p(box.x),top:p(box.y),width:p(box.w),height:p(box.h)}}
         onMouseDown={e=>start(e,"move")} onTouchStart={e=>start(e,"move")}>
-        <div className="crop-handle tl" onMouseDown={e=>start(e,"tl")} onTouchStart={e=>start(e,"tl")} />
-        <div className="crop-handle tr" onMouseDown={e=>start(e,"tr")} onTouchStart={e=>start(e,"tr")} />
-        <div className="crop-handle bl" onMouseDown={e=>start(e,"bl")} onTouchStart={e=>start(e,"bl")} />
-        <div className="crop-handle br" onMouseDown={e=>start(e,"br")} onTouchStart={e=>start(e,"br")} />
+        <div className="crop-handle tl" onMouseDown={e=>start(e,"tl")} onTouchStart={e=>start(e,"tl")}/>
+        <div className="crop-handle tr" onMouseDown={e=>start(e,"tr")} onTouchStart={e=>start(e,"tr")}/>
+        <div className="crop-handle bl" onMouseDown={e=>start(e,"bl")} onTouchStart={e=>start(e,"bl")}/>
+        <div className="crop-handle br" onMouseDown={e=>start(e,"br")} onTouchStart={e=>start(e,"br")}/>
       </div>
     </div>
   );
 }
 
-// ── APP ───────────────────────────────────────────────────
 export default function App() {
-  const [tab, setTab] = useState("scan");
-  // phase: home | loading | review | crop | results
-  const [phase, setPhase] = useState("home");
-  const [cameraOn, setCameraOn] = useState(false);
-  const [captured, setCaptured] = useState(null);
-  const [loadStep, setLoadStep] = useState(0);
-  const [objects, setObjects] = useState([]);
-  const [boxes, setBoxes] = useState([]);
-  const [skipped, setSkipped] = useState([]);
-  const [previews, setPreviews] = useState([]);
-  const [selected, setSelected] = useState([]);
-  const [items, setItems] = useState([]);
-  const [expanded, setExpanded] = useState(null);
-  const [error, setError] = useState(null);
-  const [dragOver, setDragOver] = useState(false);
-  const [copied, setCopied] = useState(null);
-  const [downloading, setDownloading] = useState(null);
-  const [lightbox, setLightbox] = useState(null);
-  const [tones, setTones] = useState({});
-  const [seo, setSeo] = useState({});
-  const [rewriting, setRewriting] = useState(null);
-  const [postStatus, setPostStatus] = useState({});
-  const [postProg, setPostProg] = useState({});
-  const [posting, setPosting] = useState(false);
-  const [camErr, setCamErr] = useState(null);
+  const[tab,setTab]=useState("scan");
+  const[phase,setPhase]=useState("home");
+  const[camOn,setCamOn]=useState(false);
+  const[captured,setCaptured]=useState(null);
+  const[loadStep,setLoadStep]=useState(0);
+  const[objects,setObjects]=useState([]);
+  const[boxes,setBoxes]=useState([]);
+  const[skipped,setSkipped]=useState([]);
+  const[previews,setPreviews]=useState([]);
+  const[selected,setSelected]=useState([]);
+  const[items,setItems]=useState([]);
+  const[expanded,setExpanded]=useState(null);
+  const[error,setError]=useState(null);
+  const[dragOver,setDragOver]=useState(false);
+  const[copied,setCopied]=useState(null);
+  const[downloading,setDownloading]=useState(null);
+  const[lightbox,setLightbox]=useState(null);
+  const[tones,setTones]=useState({});
+  const[seo,setSeo]=useState({});
+  const[rewriting,setRewriting]=useState(null);
+  const[postStatus,setPostStatus]=useState({});
+  const[postProg,setPostProg]=useState({});
+  const[posting,setPosting]=useState(false);
+  const[camErr,setCamErr]=useState(null);
 
-  const videoRef = useRef(null);
-  const streamRef = useRef(null);
-  const camInputRef = useRef();
-  const galleryRef = useRef();
-  const photoRefs = useRef({});
-  const vidRefs = useRef({});
+  const videoRef=useRef(null),streamRef=useRef(null);
+  const camInputRef=useRef(),galleryRef=useRef();
+  const photoRefs=useRef({}),vidRefs=useRef({});
 
-  // ── CAMERA ──
-  const startCam = useCallback(async () => {
-    setCamErr(null); setCameraOn(true);
-    await new Promise(r => setTimeout(r, 200));
-    const v = videoRef.current;
-    if (!v) { setCamErr("Camera unavailable. Please upload a photo instead."); setCameraOn(false); return; }
+  const startCam=useCallback(async()=>{
+    setCamErr(null);setCamOn(true);
+    await new Promise(r=>setTimeout(r,200));
+    const v=videoRef.current;
+    if(!v){setCamErr("Camera unavailable. Please upload a photo instead.");setCamOn(false);return;}
     let stream;
-    try {
-      try { stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: "environment" } } }); }
-      catch { stream = await navigator.mediaDevices.getUserMedia({ video: true }); }
-    } catch(err) {
-      const msgs = { NotAllowedError:"Camera permission denied. Allow access in browser settings.", NotFoundError:"No camera found. Please upload a photo instead.", NotReadableError:"Camera in use by another app." };
-      setCamErr(msgs[err.name] || "Camera error. Please upload a photo instead.");
-      setCameraOn(false); return;
+    try{
+      try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:"environment"}}});}
+      catch{stream=await navigator.mediaDevices.getUserMedia({video:true});}
+    }catch(err){
+      const msgs={NotAllowedError:"Camera permission denied. Allow access in browser settings.",NotFoundError:"No camera found. Please upload a photo instead.",NotReadableError:"Camera in use by another app."};
+      setCamErr(msgs[err.name]||"Camera error. Please upload a photo instead.");setCamOn(false);return;
     }
-    streamRef.current = stream;
-    v.srcObject = stream; v.muted = true;
-    v.setAttribute("muted",""); v.setAttribute("playsinline",""); v.setAttribute("webkit-playsinline","");
-    try { await v.play(); } catch {}
-  }, []);
+    streamRef.current=stream;v.srcObject=stream;v.muted=true;
+    v.setAttribute("muted","");v.setAttribute("playsinline","");v.setAttribute("webkit-playsinline","");
+    try{await v.play();}catch{}
+  },[]);
 
-  const stopCam = useCallback(() => {
+  const stopCam=useCallback(()=>{
     if(streamRef.current){streamRef.current.getTracks().forEach(t=>t.stop());streamRef.current=null;}
     if(videoRef.current)videoRef.current.srcObject=null;
-    setCameraOn(false);
-  }, []);
+    setCamOn(false);
+  },[]);
 
-  const capture = useCallback(() => {
-    const v = videoRef.current; if(!v||!streamRef.current)return;
-    const c = document.createElement("canvas");
-    c.width = v.videoWidth||1280; c.height = v.videoHeight||720;
+  const capture=useCallback(()=>{
+    const v=videoRef.current;if(!v||!streamRef.current)return;
+    const c=document.createElement("canvas");c.width=v.videoWidth||1280;c.height=v.videoHeight||720;
     c.getContext("2d").drawImage(v,0,0,c.width,c.height);
-    const url = c.toDataURL("image/jpeg",0.92);
-    stopCam();
-    const img = { dataUrl:url, name:"capture.jpg", size:(url.length/1024).toFixed(1)+" KB" };
-    setCaptured(img); detect(url);
-  }, [stopCam]);
+    const url=c.toDataURL("image/jpeg",0.92);stopCam();
+    const img={dataUrl:url,name:"capture.jpg",size:(url.length/1024).toFixed(1)+" KB"};
+    setCaptured(img);detect(url);
+  },[stopCam]);
 
-  useEffect(() => { return () => stopCam(); }, [stopCam]);
+  useEffect(()=>{return()=>stopCam();},[stopCam]);
 
-  // ── FILE ──
-  const handleFile = useCallback(async (file) => {
+  const handleFile=useCallback(async file=>{
     if(!file||!file.type.startsWith("image/"))return;
-    stopCam();
-    const c = await compressImage(file);
-    setCaptured(c); setError(null);
-    detect(c.dataUrl);
-  }, [stopCam]);
+    stopCam();const c=await compressImage(file);
+    setCaptured(c);setError(null);detect(c.dataUrl);
+  },[stopCam]);
 
-  const onDrop = useCallback(e => { e.preventDefault(); setDragOver(false); handleFile(e.dataTransfer.files[0]); }, [handleFile]);
+  const onDrop=useCallback(e=>{e.preventDefault();setDragOver(false);handleFile(e.dataTransfer.files[0]);},[handleFile]);
 
-  // ── DETECT ──
-  const detect = async (dataUrl) => {
-    setPhase("loading"); setLoadStep(1); setError(null);
-    try {
-      const b64 = dataUrl.split(",")[1];
-      const mt = dataUrl.split(";")[0].split(":")[1];
-      const res = await fetch("/api/analyze",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({imageBase64:b64,mediaType:mt,mode:"detect"})});
-      const data = await res.json();
-      if(data.error)throw new Error(data.error);
-      setObjects(data.objects);
-      setBoxes(data.objects.map(o=>({x:o.xFrac,y:o.yFrac,w:o.wFrac,h:o.hFrac})));
-      setSkipped([]); setSelected(data.objects.map((_,i)=>i));
-      setLoadStep(2); setPhase("review");
-    } catch(err) { setError(err.message); setPhase("home"); }
+  const detect=async dataUrl=>{
+    setPhase("loading");setLoadStep(1);setError(null);
+    try{
+      const b64=dataUrl.split(",")[1],mt=dataUrl.split(";")[0].split(":")[1];
+      const res=await fetch("/api/analyze",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({imageBase64:b64,mediaType:mt,mode:"detect"})});
+      const data=await res.json();if(data.error)throw new Error(data.error);
+      setObjects(data.objects);setBoxes(data.objects.map(o=>({x:o.xFrac,y:o.yFrac,w:o.wFrac,h:o.hFrac})));
+      setSkipped([]);setSelected(data.objects.map((_,i)=>i));
+      setLoadStep(2);setPhase("review");
+    }catch(err){setError(err.message);setPhase("home");}
   };
 
-  // ── PREVIEWS ──
-  useEffect(() => {
+  useEffect(()=>{
     if((phase!=="review"&&phase!=="crop")||!captured)return;
-    const img = new Image();
-    img.onload = () => {
+    const img=new Image();
+    img.onload=()=>{
       const nw=img.naturalWidth,nh=img.naturalHeight;
       setPreviews(boxes.map(b=>cropCanvas(img,{x:b.x*nw,y:b.y*nh,w:b.w*nw,h:b.h*nh})));
     };
-    img.src = captured.dataUrl;
-  }, [boxes, phase, captured]);
+    img.src=captured.dataUrl;
+  },[boxes,phase,captured]);
 
-  // ── GENERATE ──
-  const generate = async () => {
-    setPhase("loading"); setLoadStep(3);
-    if(!captured)return;
-    const tmp = new Image(); tmp.src = captured.dataUrl;
+  const generate=async()=>{
+    setPhase("loading");setLoadStep(3);if(!captured)return;
+    const tmp=new Image();tmp.src=captured.dataUrl;
     await new Promise(r=>{tmp.onload=r;if(tmp.complete)r();});
     const nw=tmp.naturalWidth,nh=tmp.naturalHeight;
-    try {
-      const active = objects.map((_,i)=>i).filter(i=>!skipped.includes(i)&&selected.includes(i));
-      const results = await Promise.all(active.map(async i=>{
+    try{
+      const active=objects.map((_,i)=>i).filter(i=>!skipped.includes(i)&&selected.includes(i));
+      const results=await Promise.all(active.map(async i=>{
         const obj=objects[i],b=boxes[i];
         const px={x:b.x*nw,y:b.y*nh,w:b.w*nw,h:b.h*nh};
         const cd=cropCanvas(tmp,px);
@@ -634,41 +582,33 @@ export default function App() {
         const data=await res.json();
         return{id:i,label:obj.label,cropDataUrl:cd,extraPhotos:[],video:null,...(data.error?{title:obj.label,priceSuggested:20,priceMin:10,priceMax:40,listing:"Unable to generate listing.",identifications:[{name:obj.label,confidence:"medium"}],confidenceScore:0,tags:[]}:data)};
       }));
-      setLoadStep(4); await new Promise(r=>setTimeout(r,300));
-      setItems(results); setPhase("results");
-    } catch(err){setError(err.message);setPhase("crop");}
+      setLoadStep(4);await new Promise(r=>setTimeout(r,300));
+      setItems(results);setPhase("results");
+    }catch(err){setError(err.message);setPhase("crop");}
   };
 
-  // ── REWRITE ──
-  const rewrite = async (id) => {
-    const item=items.find(it=>it.id===id); if(!item)return;
-    setRewriting(id);
-    try {
-      const tv=tones[id]!==undefined?tones[id]:50;
-      const tone=tv<33?"fast":tv>66?"profit":"balanced";
+  const rewrite=async id=>{
+    const item=items.find(it=>it.id===id);if(!item)return;setRewriting(id);
+    try{
+      const tv=tones[id]!==undefined?tones[id]:50,tone=tv<33?"fast":tv>66?"profit":"balanced";
       const res=await fetch("/api/analyze",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({mode:"rewrite",currentTitle:item.title,currentListing:item.listing,rewriteTone:tone})});
       const data=await res.json();
-      if(data.title)updItem(id,"title",data.title);
-      if(data.listing)updItem(id,"listing",data.listing);
-    } catch(e){console.error(e);}
+      if(data.title)updItem(id,"title",data.title);if(data.listing)updItem(id,"listing",data.listing);
+    }catch(e){console.error(e);}
     setRewriting(null);
   };
 
-  // ── POST ──
-  const simulatePost = async () => {
-    if(!items.length)return; setPosting(true);
-    const ns={},np={};
-    PLATFORMS.forEach(p=>{ns[p.id]="posting";np[p.id]=0;});
+  const simulatePost=async()=>{
+    if(!items.length)return;setPosting(true);
+    const ns={},np={};PLATFORMS.forEach(p=>{ns[p.id]="posting";np[p.id]=0;});
     setPostStatus(ns);setPostProg(np);
     for(const pl of PLATFORMS){
       for(let i=0;i<=100;i+=10){await new Promise(r=>setTimeout(r,110));setPostProg(prev=>({...prev,[pl.id]:i}));}
-      await new Promise(r=>setTimeout(r,180));
-      setPostStatus(prev=>({...prev,[pl.id]:"done"}));
+      await new Promise(r=>setTimeout(r,180));setPostStatus(prev=>({...prev,[pl.id]:"done"}));
     }
     setPosting(false);
   };
 
-  // ── ITEM HELPERS ──
   const addPhotos=(id,files)=>{Array.from(files).filter(f=>f.type.startsWith("image/")).forEach(f=>{const r=new FileReader();r.onload=e=>setItems(prev=>prev.map(it=>it.id===id?{...it,extraPhotos:[...(it.extraPhotos||[]),{dataUrl:e.target.result,name:f.name}]}:it));r.readAsDataURL(f);});};
   const addVideo=(id,f)=>{if(!f||!f.type.startsWith("video/"))return;setItems(prev=>prev.map(it=>it.id===id?{...it,video:{url:URL.createObjectURL(f),name:f.name}}:it));};
   const rmPhoto=(id,pi)=>setItems(prev=>prev.map(it=>it.id===id?{...it,extraPhotos:it.extraPhotos.filter((_,i)=>i!==pi)}:it));
@@ -682,17 +622,15 @@ export default function App() {
   const reset=()=>{stopCam();setCaptured(null);setItems([]);setPhase("home");setError(null);setExpanded(null);setObjects([]);setBoxes([]);setSkipped([]);setSelected([]);setCamErr(null);};
   const toneLabel=v=>v<33?"⚡ Sell Fast":v>66?"💰 Max Profit":"⚖️ Balanced";
   const total=items.reduce((s,it)=>s+(parseFloat(it.priceSuggested)||0),0);
-  const loadSteps=["Uploading","Detecting Objects","Ready","Generating Listings","Done!"];
+  const loadSteps=["Uploading","Detecting","Ready","Generating","Done!"];
   const activeCount=selected.filter(i=>!skipped.includes(i)).length;
 
   const dlPackage=async item=>{
     setDownloading(item.id);
     try{
-      const zip=new JSZip();
-      const folder=zip.folder(item.title.replace(/[^a-z0-9]/gi,"_").slice(0,40));
+      const zip=new JSZip(),folder=zip.folder(item.title.replace(/[^a-z0-9]/gi,"_").slice(0,40));
       const txt=[`TITLE: ${item.title}`,`PRICE: $${item.priceSuggested} ($${item.priceMin}-$${item.priceMax})`,item.confidenceScore?`CONFIDENCE: ${item.confidenceScore}%`:"",item.condition?`CONDITION: ${item.condition}`:"",`\nTAGS: ${(item.tags||[]).join(", ")}`,`\nDESCRIPTION:\n${item.listing}`].filter(Boolean).join("\n");
-      folder.file("listing.txt",txt);
-      folder.file("photo_main.jpg",toBlob(item.cropDataUrl));
+      folder.file("listing.txt",txt);folder.file("photo_main.jpg",toBlob(item.cropDataUrl));
       (item.extraPhotos||[]).forEach((p,i)=>folder.file(`photo_${i+2}.${p.name.split(".").pop()||"jpg"}`,toBlob(p.dataUrl)));
       if(item.video){const vb=await fetch(item.video.url).then(r=>r.blob());folder.file(`video.${item.video.name.split(".").pop()||"mp4"}`,vb);}
       const blob=await zip.generateAsync({type:"blob"});
@@ -701,12 +639,9 @@ export default function App() {
     setDownloading(null);
   };
 
-  // ── CARD RENDERER ──
-  const renderCard = item => {
-    const isExp=expanded===item.id;
-    const tm=1+(item.extraPhotos?.length||0)+(item.video?1:0);
-    const cc=item.confidenceScore?confColor(item.confidenceScore):null;
-    const tv=tones[item.id]!==undefined?tones[item.id]:50;
+  const renderCard=item=>{
+    const isExp=expanded===item.id,tm=1+(item.extraPhotos?.length||0)+(item.video?1:0);
+    const cc=item.confidenceScore?confColor(item.confidenceScore):null,tv=tones[item.id]!==undefined?tones[item.id]:50;
     return(
       <div key={item.id} className={`listing-card${isExp?" exp":""}`} onClick={()=>!isExp&&setExpanded(item.id)}>
         {!isExp?(
@@ -723,7 +658,7 @@ export default function App() {
                 {item.identifications?.slice(0,2).map((d,i)=><span key={i} className={`lc-tag${i===0?" p":""}`}>{d.name}</span>)}
                 {(item.tags||[]).slice(0,2).map((t,i)=><span key={`t${i}`} className="lc-tag">{t}</span>)}
               </div>
-              <div className="lc-price-row"><div className="lc-price">${item.priceSuggested}</div><div className="lc-price-range">${item.priceMin}–${item.priceMax}</div></div>
+              <div className="lc-price-row"><div className="lc-price">${item.priceSuggested}</div><div className="lc-range">${item.priceMin}–${item.priceMax}</div></div>
               <div className="lc-preview">{item.listing}</div>
               <div className="platform-row">{PLATFORMS.map(p=><div key={p.id} className="platform-chip">{p.icon} {p.name.split(" ")[0]}</div>)}</div>
             </div>
@@ -743,12 +678,12 @@ export default function App() {
                 <div className="media-lbl">Photos & Video ({tm})</div>
                 <div className="media-row">
                   {(item.extraPhotos||[]).map((ph,pi)=>(
-                    <div className="media-th-w" key={pi}>
+                    <div className="media-tw" key={pi}>
                       <img className="media-th" src={ph.dataUrl} alt="" onClick={()=>setLightbox({type:"image",src:ph.dataUrl})}/>
                       <button className="media-rm" onClick={()=>rmPhoto(item.id,pi)}>✕</button>
                     </div>
                   ))}
-                  {item.video&&(<div className="media-th-w"><video className="media-vid" src={item.video.url} muted playsInline onClick={()=>setLightbox({type:"video",src:item.video.url})}/><div className="vid-badge">VID</div><button className="media-rm" onClick={()=>rmVideo(item.id)}>✕</button></div>)}
+                  {item.video&&(<div className="media-tw"><video className="media-vid" src={item.video.url} muted playsInline onClick={()=>setLightbox({type:"video",src:item.video.url})}/><div className="vid-badge">VID</div><button className="media-rm" onClick={()=>rmVideo(item.id)}>✕</button></div>)}
                 </div>
                 <div className="add-row">
                   <button className="add-btn" onClick={()=>photoRefs.current[item.id]?.click()}>+ Photos</button>
@@ -758,7 +693,7 @@ export default function App() {
                 </div>
               </div>
               <div className="id-sec">
-                <div className="id-lbl">AI Identification {cc&&<span style={{color:cc.color}}>{item.confidenceScore}%</span>}{item.googleVerified&&<span className="gv-badge">✓ Google</span>}</div>
+                <div className="id-lbl">AI ID {cc&&<span style={{color:cc.color}}>{item.confidenceScore}%</span>}{item.googleVerified&&<span className="gv-badge">✓ Google</span>}</div>
                 {item.identifications?.map((d,i)=>(
                   <div key={i}><div className="id-row"><span className="id-n">{i+1}</span><span className="id-name">{d.name}</span><span className="id-conf">{d.confidence}</span></div>
                   {d.reasoning&&<div className="reason-box">{d.reasoning}</div>}</div>
@@ -769,33 +704,33 @@ export default function App() {
               {item.estimatedDimensions&&<div className="meta-row">Size: <span>{item.estimatedDimensions}</span></div>}
             </div>
             <div>
-              <div className="f-label">Title</div>
+              <div className="f-lbl">Title</div>
               <input className="f-input" value={item.title} onChange={e=>updItem(item.id,"title",e.target.value)}/>
-              <div className="f-label">Price</div>
-              <input className="f-input f-price-input" value={item.priceSuggested} onChange={e=>updItem(item.id,"priceSuggested",e.target.value)}/>
+              <div className="f-lbl">Price</div>
+              <input className="f-input f-price" value={item.priceSuggested} onChange={e=>updItem(item.id,"priceSuggested",e.target.value)}/>
               <div className="f-price-meta">Range: ${item.priceMin} – ${item.priceMax}</div>
-              <div style={{marginTop:14}}>
-                <div className="f-label">Pricing Strategy</div>
+              <div style={{marginTop:13}}>
+                <div className="f-lbl">Pricing Strategy</div>
                 <div className="tone-row"><span>⚡ Sell Fast</span><span>💰 Max Profit</span></div>
                 <input type="range" className="tone-slider" min="0" max="100" value={tv} onChange={e=>setTones(prev=>({...prev,[item.id]:parseInt(e.target.value)}))}/>
-                <div className="tone-label">{toneLabel(tv)}</div>
+                <div className="tone-lbl">{toneLabel(tv)}</div>
               </div>
-              <div className="f-label" style={{marginTop:14}}>
+              <div className="f-lbl" style={{marginTop:13}}>
                 <span>Description</span>
-                <div className="seo-tog"><span style={{fontSize:"0.56rem",color:"var(--muted)"}}>SEO</span><div className={`tog${seo[item.id]?" on":""}`} onClick={()=>setSeo(prev=>({...prev,[item.id]:!prev[item.id]}))}/></div>
+                <div className="seo-tog"><span style={{fontSize:"0.55rem",color:"var(--muted)"}}>SEO</span><div className={`tog${seo[item.id]?" on":""}`} onClick={()=>setSeo(prev=>({...prev,[item.id]:!prev[item.id]}))}/></div>
               </div>
               <textarea className="f-textarea" value={item.listing} onChange={e=>updItem(item.id,"listing",e.target.value)} rows={6}/>
               <div className="tools-row">
                 <button className="tool-btn" onClick={()=>rewrite(item.id)} disabled={rewriting===item.id}>{rewriting===item.id?"Rewriting...":"✨ Rewrite"}</button>
-                <button className="tool-btn" onClick={()=>{setSeo(prev=>({...prev,[item.id]:true}));rewrite(item.id);}}>🔍 SEO Optimize</button>
+                <button className="tool-btn" onClick={()=>{setSeo(prev=>({...prev,[item.id]:true}));rewrite(item.id);}}>🔍 SEO</button>
               </div>
-              <div className="exp-act-row">
+              <div className="exp-acts">
                 <button className="btn-copy" onClick={()=>copyListing(item)}>{copied===item.id?"✓ Copied!":"Copy Listing"}</button>
                 <button className="btn-dl" onClick={()=>dlPackage(item)} disabled={downloading===item.id}>{downloading===item.id?"Zipping...":"⬇ Download"}</button>
                 <button className="btn-collapse" onClick={()=>setExpanded(null)}>Collapse</button>
                 <button className="btn-delete" onClick={()=>delItem(item.id)}>Delete</button>
               </div>
-              <div className="pkg-note">Package includes photo + extras{item.video?" + video":""} + listing text</div>
+              <div className="pkg-note">Package: photo + extras{item.video?" + video":""} + listing text</div>
             </div>
           </div>
         )}
@@ -803,8 +738,7 @@ export default function App() {
     );
   };
 
-  // ── RENDER ──
-  return (
+  return(
     <>
       <style>{STYLES}</style>
       <input ref={camInputRef} type="file" accept="image/*" capture="environment" style={{position:"absolute",left:"-9999px"}} onChange={e=>handleFile(e.target.files[0])}/>
@@ -817,9 +751,8 @@ export default function App() {
         </div>
       )}
 
-      {/* NAV */}
       <nav className="nav">
-        <div className="nav-logo">Multi<span className="accent">Snap</span></div>
+        <div className="nav-logo">Flip<span className="acc">ly</span></div>
         <div className="nav-right">
           {["scan","listings","post","dashboard"].map(t=>(
             <button key={t} className={`nav-tab${tab===t?" active":""}`} onClick={()=>setTab(t)}>
@@ -830,112 +763,86 @@ export default function App() {
         </div>
       </nav>
 
-      {/* ── SCAN TAB ── */}
       {tab==="scan"&&(
         <>
-          {/* Camera always in DOM when on */}
-          <div style={{display:cameraOn?"block":"none"}}>
+          <div style={{display:camOn?"block":"none"}}>
             <div className="camera-screen" style={{height:"62vh"}}>
               <video ref={videoRef} autoPlay playsInline muted
                 style={{width:"100%",height:"100%",objectFit:"cover",background:"#000",display:"block"}}/>
-              <div className="cam-corners">
+              <div className="cam-overlay">
                 <div className="cam-corner tl"/><div className="cam-corner tr"/>
                 <div className="cam-corner bl"/><div className="cam-corner br"/>
-                <div className="cam-scan-line"/>
+                <div className="cam-line"/>
               </div>
               <div className="cam-controls">
                 <button className="cam-cancel" onClick={stopCam}>Cancel</button>
-                <button className="cam-scan-btn" onClick={capture}>📷 Scan Now</button>
+                <button className="cam-scan" onClick={capture}>📷 Scan Now</button>
                 <button className="cam-gallery" onClick={()=>{stopCam();galleryRef.current.value="";galleryRef.current.click();}}>Gallery</button>
               </div>
             </div>
           </div>
 
-          {/* LOADING */}
           {phase==="loading"&&(
             <div className="loading-screen">
-              <div className="loader"><div className="loader-ring1"/><div className="loader-ring2"/></div>
+              <div className="loader"><div className="loader-r1"/><div className="loader-r2"/></div>
               <div className="loading-title">{loadStep===3?"Generating listings...":"Detecting objects..."}</div>
               <div className="loading-sub">{loadStep===3?"Running two-pass AI identification with Google verification":"AI scanning every sellable item in your image"}</div>
               <div className="loading-pills">{loadSteps.map((s,i)=><span key={s} className={`loading-pill${i<loadStep?" done":i===loadStep?" active":""}`}>{i<loadStep?"✓ ":""}{s}</span>)}</div>
             </div>
           )}
 
-          {/* ── REVIEW SCREEN (Step 2) ── */}
           {phase==="review"&&captured&&(
             <>
               <StepBar step={1}/>
               <div className="page">
-                <div className="screen-header">
-                  <div className="screen-label">Step 2 — Review Items</div>
-                  <div className="screen-title">{objects.length} Item{objects.length!==1?"s":""} Detected</div>
-                  <div className="screen-sub">Select the items you want to list, then tap Next to adjust crops before generating listings.</div>
-                </div>
-
-                {/* Image with bboxes */}
+                <div className="screen-label">Step 2 — Review Items</div>
+                <div className="screen-title">{objects.length} Item{objects.length!==1?"s":""} Detected</div>
+                <div className="screen-sub">Select the items you want to list. Tap the image or the list to toggle selection.</div>
                 <div className="frame-wrap">
-                  <img src={captured.dataUrl} className="frame-img" alt="captured"/>
+                  <img src={captured.dataUrl} className="frame-img" alt=""/>
                   {objects.map((obj,i)=>{
-                    const col=BBOX_COLORS[i%BBOX_COLORS.length];
-                    const isSel=selected.includes(i);
+                    const col=BBOX_COLORS[i%BBOX_COLORS.length],isSel=selected.includes(i);
                     return(
-                      <div key={i} className={`bbox${isSel?" selected":""}`}
+                      <div key={i} className={`bbox${isSel?" sel":""}`}
                         style={{left:`${obj.xFrac*100}%`,top:`${obj.yFrac*100}%`,width:`${obj.wFrac*100}%`,height:`${obj.hFrac*100}%`,borderColor:col.border,background:isSel?col.bg:"rgba(0,0,0,0.03)",animationDelay:`${i*0.1}s`}}
                         onClick={()=>toggleSel(i)}>
-                        <div className="bbox-label" style={{background:col.border}}>{obj.label}</div>
+                        <div className="bbox-lbl" style={{background:col.border}}>{obj.label}</div>
                         <div className="bbox-num" style={{background:col.border}}>{i+1}</div>
                       </div>
                     );
                   })}
                 </div>
-
-                {/* Item list */}
                 <div className="item-list">
                   {objects.map((obj,i)=>(
                     <div key={i} className={`item-row${selected.includes(i)?" sel":""}`} onClick={()=>toggleSel(i)}>
-                      {previews[i]?<img className="item-row-thumb" src={previews[i]} alt=""/>:<div className="item-row-thumb-ph"/>}
-                      <div className="item-row-info">
-                        <div className="item-row-name">{obj.label}</div>
-                        <div className="item-row-sub">Item #{i+1} · {obj.confidence} confidence</div>
-                      </div>
-                      <div className="item-row-check">{selected.includes(i)?"✓":""}</div>
+                      {previews[i]?<img className="item-thumb" src={previews[i]} alt=""/>:<div className="item-thumb-ph"/>}
+                      <div className="item-info"><div className="item-name">{obj.label}</div><div className="item-sub">#{i+1} · {obj.confidence} confidence</div></div>
+                      <div className="item-check">{selected.includes(i)?"✓":""}</div>
                     </div>
                   ))}
                 </div>
-
-                {/* ACTION BAR — primary CTA is "Next: Crop Items" */}
                 <div className="action-bar">
-                  <div className="action-bar-info">
-                    <strong>{selected.length} item{selected.length!==1?"s":""} selected.</strong> Next you'll adjust the crop for each item before generating listings.
-                  </div>
-                  <div style={{display:"flex",gap:"8px",flexShrink:0}}>
+                  <div className="action-bar-info"><strong>{selected.length} item{selected.length!==1?"s":""} selected.</strong> Next, adjust the crop for each item before generating listings.</div>
+                  <div className="action-bar-btns">
                     <button className="btn-secondary" onClick={reset}>Re-Scan</button>
-                    <button className="btn-primary" onClick={()=>setPhase("crop")} disabled={selected.length===0}>
-                      Next: Crop Items →
-                    </button>
+                    <button className="btn-primary" onClick={()=>setPhase("crop")} disabled={selected.length===0}>Next: Crop Items →</button>
                   </div>
                 </div>
-
                 {error&&<div className="err-box">⚠ {error}</div>}
               </div>
             </>
           )}
 
-          {/* ── CROP SCREEN (Step 3) ── */}
           {phase==="crop"&&captured&&(
             <>
               <StepBar step={2}/>
               <div className="page">
-                <div className="screen-header">
-                  <div className="screen-label">Step 3 — Adjust Your Items</div>
-                  <div className="screen-title">Crop & Fine-Tune</div>
-                  <div className="screen-sub">Drag the handles to tighten each crop. Skip any items you don't want to list.</div>
-                </div>
-
+                <div className="screen-label">Step 3 — Adjust Your Items</div>
+                <div className="screen-title">Crop & Fine-Tune</div>
+                <div className="screen-sub">Drag the handles to tighten each crop. Skip items you don't want listed.</div>
                 <div className="crop-grid">
                   {objects.filter((_,i)=>selected.includes(i)).map(obj=>{
-                    const i=objects.indexOf(obj);
-                    const col=BBOX_COLORS[i%BBOX_COLORS.length];
+                    const i=objects.indexOf(obj),col=BBOX_COLORS[i%BBOX_COLORS.length];
                     return(
                       <div key={i} className="crop-card" style={{opacity:skipped.includes(i)?0.4:1}}>
                         <div className="crop-card-head">
@@ -943,7 +850,7 @@ export default function App() {
                           <div className="crop-card-num">#{i+1}</div>
                         </div>
                         <CropEditor src={captured.dataUrl} box={boxes[i]||{x:obj.xFrac,y:obj.yFrac,w:obj.wFrac,h:obj.hFrac}} onChange={b=>updBox(i,b)}/>
-                        {previews[i]&&<><div className="crop-prev-label">Preview</div><img className="crop-prev-img" src={previews[i]} alt=""/></>}
+                        {previews[i]&&<><div className="crop-prev-lbl">Preview</div><img className="crop-prev-img" src={previews[i]} alt=""/></>}
                         <div className="crop-card-foot">
                           <button className={`skip-btn${skipped.includes(i)?" skipped":""}`} onClick={()=>toggleSkip(i)}>{skipped.includes(i)?"✕ Skipped":"Skip Item"}</button>
                         </div>
@@ -951,25 +858,21 @@ export default function App() {
                     );
                   })}
                 </div>
-
-                {/* GENERATE CTA — only shows here */}
                 <div className="gen-cta">
                   <div className="gen-cta-title">Crops look good?</div>
-                  <div className="gen-cta-sub">AI will identify each item, suggest a realistic price, and write a full resale listing ready to post.</div>
+                  <div className="gen-cta-sub">AI will identify each item, suggest a realistic price, and write a full listing ready to post.</div>
                   <div className="gen-cta-btns">
                     <button className="btn-ghost" onClick={()=>setPhase("review")}>← Back to Review</button>
                     <button className="btn-primary" onClick={generate} disabled={activeCount===0}>
-                      ✨ Generate {activeCount} Listing{activeCount!==1?"s"}
+                      ✨ Generate {activeCount} Listing{activeCount!==1?"s":""}
                     </button>
                   </div>
                 </div>
-
                 {error&&<div className="err-box">⚠ {error}</div>}
               </div>
             </>
           )}
 
-          {/* ── RESULTS (Step 4) ── */}
           {phase==="results"&&items.length>0&&(
             <>
               <StepBar step={3}/>
@@ -986,8 +889,7 @@ export default function App() {
             </>
           )}
 
-          {/* ── HOME ── */}
-          {phase==="home"&&!cameraOn&&(
+          {phase==="home"&&!camOn&&(
             <>
               <div className="home-hero">
                 <div className="home-badge"><div className="home-badge-dot"/>AI-Powered Resale Lister</div>
@@ -998,14 +900,14 @@ export default function App() {
                 <div className={`upload-card${dragOver?" drag":""}`} onDragOver={e=>{e.preventDefault();setDragOver(true);}} onDragLeave={()=>setDragOver(false)} onDrop={onDrop}>
                   <div className="upload-icon">📷</div>
                   <div className="upload-title">Start Scanning</div>
-                  <div className="upload-sub">Use the live camera or upload a photo from your library. Works best with rooms, closets, and shelves.</div>
+                  <div className="upload-sub">Use the live camera or upload a photo. Works best with rooms, closets and shelves.</div>
                   <div className="upload-btns">
                     <button className="btn-primary" onClick={startCam}>📸 Open Camera</button>
                     <button className="btn-secondary" onClick={()=>{galleryRef.current.value="";galleryRef.current.click();}}>🖼 Upload Photo</button>
                   </div>
                   <div className="upload-hint">Drag and drop also works on desktop</div>
                 </div>
-                {camErr&&<div className="cam-error">⚠ {camErr}</div>}
+                {camErr&&<div className="cam-err">⚠ {camErr}</div>}
                 {error&&<div className="err-box">⚠ {error}</div>}
               </div>
             </>
@@ -1013,7 +915,6 @@ export default function App() {
         </>
       )}
 
-      {/* ── LISTINGS TAB ── */}
       {tab==="listings"&&(
         <div className="results-wrap">
           {items.length===0?(
@@ -1035,7 +936,6 @@ export default function App() {
         </div>
       )}
 
-      {/* ── POST TAB ── */}
       {tab==="post"&&(
         <div className="post-wrap">
           <div className="post-hdr"><div className="post-h">Post Listings</div><div className="post-sub">{items.length} listing{items.length!==1?"s":""} ready to post</div></div>
@@ -1050,8 +950,7 @@ export default function App() {
             <>
               <div className="p-cards">
                 {PLATFORMS.map(p=>{
-                  const st=postStatus[p.id]||"ready";
-                  const pr=postProg[p.id]||0;
+                  const st=postStatus[p.id]||"ready",pr=postProg[p.id]||0;
                   return(
                     <div key={p.id} className={`p-card${st==="posting"?" posting":""}`}>
                       <div className="p-icon" style={{background:`${p.color}18`}}>{p.icon}</div>
@@ -1062,7 +961,7 @@ export default function App() {
                       </div>
                       <div className="p-status">
                         <div className={`p-badge ${st}`}>{st==="ready"?"Ready":st==="posting"?"Posting...":"✓ Done"}</div>
-                        {st==="ready"&&<div style={{fontSize:"0.58rem",color:"var(--muted)"}}>{items.length} items</div>}
+                        {st==="ready"&&<div style={{fontSize:"0.57rem",color:"var(--muted)"}}>{items.length} items</div>}
                       </div>
                     </div>
                   );
@@ -1076,10 +975,9 @@ export default function App() {
         </div>
       )}
 
-      {/* ── DASHBOARD TAB ── */}
       {tab==="dashboard"&&(
         <div className="dash-wrap">
-          <div style={{marginBottom:22}}><div style={{fontSize:"1.3rem",fontWeight:900,letterSpacing:"-0.03em"}}>Dashboard</div><div style={{fontSize:"0.7rem",color:"var(--text2)",marginTop:3}}>Your reselling activity</div></div>
+          <div style={{marginBottom:20}}><div style={{fontSize:"1.25rem",fontWeight:900,letterSpacing:"-0.03em"}}>Dashboard</div><div style={{fontSize:"0.68rem",color:"var(--text2)",marginTop:3}}>Your reselling activity</div></div>
           <div className="dash-stats">
             <div className="stat-card"><div className="stat-lbl">Est. Value</div><div className="stat-val g">${total.toFixed(0)}</div><div className="stat-sub">active listings</div></div>
             <div className="stat-card"><div className="stat-lbl">Active</div><div className="stat-val p">{items.length}</div><div className="stat-sub">listings ready</div></div>
@@ -1093,13 +991,13 @@ export default function App() {
             ):(
               <>
                 <div className="insight"><div className="insight-icon" style={{background:"rgba(245,158,11,0.1)"}}>⚡</div><div className="insight-body"><div className="insight-title">Price 10-20% below market to sell 3x faster</div><div className="insight-sub">Competitive prices get significantly more inquiries</div></div><button className="insight-btn" onClick={()=>setTab("listings")}>Review</button></div>
-                <div className="insight"><div className="insight-icon" style={{background:"rgba(34,197,94,0.1)"}}>📸</div><div className="insight-body"><div className="insight-title">Add 3+ photos to boost views by 40%</div><div className="insight-sub">More photos = more buyer confidence</div></div><button className="insight-btn" onClick={()=>setTab("listings")}>Add Photos</button></div>
+                <div className="insight"><div className="insight-icon" style={{background:"rgba(34,197,94,0.1)"}}>📸</div><div className="insight-body"><div className="insight-title">Add 3+ photos to boost views by 40%</div><div className="insight-sub">More photos means more buyer confidence</div></div><button className="insight-btn" onClick={()=>setTab("listings")}>Add Photos</button></div>
                 <div className="insight"><div className="insight-icon" style={{background:"rgba(124,92,255,0.1)"}}>🚀</div><div className="insight-body"><div className="insight-title">Post to all 3 platforms for maximum reach</div><div className="insight-sub">Multi-platform listings sell faster</div></div><button className="insight-btn" onClick={()=>setTab("post")}>Post Now</button></div>
               </>
             )}
           </div>
           <div className="dash-sec">Active Listings</div>
-          <div className="dash-listings">
+          <div className="dash-list">
             {items.length===0?<div className="dash-empty">No listings yet</div>:items.map(item=>(
               <div key={item.id} className="dash-row">
                 <img className="dash-thumb" src={item.cropDataUrl} alt={item.label}/>
@@ -1113,3 +1011,4 @@ export default function App() {
     </>
   );
 }
+
